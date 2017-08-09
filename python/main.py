@@ -113,7 +113,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Perform initial FFT
             self.statusBar.showMessage("Performing FFT...")
             self.data.fid2fft()
+            # Plot the data
             self.statusBar.showMessage("Displaying plot.")
             self.update_plot()
+            # Update the scan details
+            self.labelTuning.setText(str(self.data.settings["Tuning voltage"]))
+            self.labelScanNum.setText(str(self.data.settings["ID"]))
+            self.labelShotCount.setText(str(self.data.settings["Shots"]))
+            self.labelAttenuation.setText(str(self.data.settings["Attenuation"]))
+
         except FileNotFoundError:
             self.statusBar.showMessage("File not found!")

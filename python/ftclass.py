@@ -45,7 +45,7 @@ class FTData:
                     elif "Tuning Voltage" in line:
                         # Read in tuning voltage; units of mV
                         self.settings["Tuning voltage"] = int(split_line[2])
-                    elif "Attenunation" in line:
+                    elif "Attenuation" in line:
                         # Read in the Attenuation; units of dB
                         self.settings["Attenuation"] = int(split_line[1])
                     elif "Cavity Voltage" in line:
@@ -76,13 +76,14 @@ class FTData:
             "hanning",
             "bartlett"
         ]
+        self.spectrum = None
+        self.fid_df = None
         # Make a copy of the original FID
-        self.proc_fid = np.zeros(self.fid.size)
-        self.proc_fid = self.fid
+        proc_fid = np.copy(self.fid)
         # Set the FID time points to zero
         if delay is not None:
             for index in range(delay):
-                self.proc_fid[index] = 0.
+                proc_fid[index] = 0.
         # Use a scipy.signal window function to process the FID signal
         if window_function is not None:
             if window_function not in available_windows:
@@ -90,12 +91,12 @@ class FTData:
                 print("Available:")
                 print(available_windows)
             else:
-                self.proc_fid *= spsig.get_window(window_function, self.proc_fid.size)
+                proc_fid *= spsig.get_window(window_function, proc_fid.size)
         # Apply the exponential filter to smooth
         if exp_filter is not None:
-            self.proc_fid *= spsig.exponential(self.proc_fid.size, tau=exp_filter)
+            proc_fid *= spsig.exponential(proc_fid.size, tau=exp_filter)
         # Perform the FFT
-        amplitude = np.fft.fft(self.proc_fid)
+        amplitude = np.fft.fft(proc_fid)
 
         time = np.linspace(
             0.,
@@ -103,8 +104,8 @@ class FTData:
             self.settings["FID points"]
         )
 
-        freq = np.arange(self.proc_fid.size / 2, dtype=float) / self.proc_fid.size / self.settings["FID spacing"]
-        amplitude = np.abs(amplitude[:int(self.proc_fid.size / 2)]) / self.proc_fid.size
+        freq = np.arange(proc_fid.size / 2, dtype=float) / proc_fid.size / self.settings["FID spacing"]
+        amplitude = np.abs(amplitude[:int(proc_fid.size / 2)]) / proc_fid.size
 
         # Calclate the frequency window
         frequency = np.linspace(
@@ -117,6 +118,6 @@ class FTData:
             columns=["Frequency", "Intensity"]
         )
         self.fid_df = pd.DataFrame(
-            data=list(zip(time * 1e6, self.proc_fid)),
+            data=list(zip(time * 1e6, proc_fid)),
             columns=["Time", "FID"]
         )
