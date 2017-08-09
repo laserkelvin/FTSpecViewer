@@ -66,7 +66,7 @@ class FTData:
                     # Start reading the FID in after this line is found
                     read_fid = True
 
-    def fid2fft(self, window_function=None, dc_offset=True, exp_filter=None):
+    def fid2fft(self, window_function=None, dc_offset=True, exp_filter=None, delay=None):
         """ Perform the DFT of an FID using NumPy's FFT package. """
         available_windows = [
             "blackmanharris",
@@ -76,26 +76,47 @@ class FTData:
             "hanning",
             "bartlett"
         ]
-        if window_function is not None:
+        # Make a copy of the original FID
+        self.proc_fid = np.zeros(self.fid.size)
+        self.proc_fid = self.fid
+        # Set the FID time points to zero
+        if delay is not None:
+            for index in range(delay):
+                self.proc_fid[index] = 0.
         # Use a scipy.signal window function to process the FID signal
+        if window_function is not None:
             if window_function not in available_windows:
                 print("Incorrect choice for window function.")
                 print("Available:")
                 print(available_windows)
             else:
-                self.fid *= spsig.get_window(window_function, self.fid.size)
-        # Perform the FFT
+                self.proc_fid *= spsig.get_window(window_function, self.proc_fid.size)
+        # Apply the exponential filter to smooth
         if exp_filter is not None:
-            self.fid *= spsig.exponential(self.fid.size, exp_filter)
-        amplitude = np.fft.fft(self.fid)
+            self.proc_fid *= spsig.exponential(self.proc_fid.size, tau=exp_filter)
+        # Perform the FFT
+        amplitude = np.fft.fft(self.proc_fid)
+
+        time = np.linspace(
+            0.,
+            self.settings["FID spacing"] * self.settings["FID points"],
+            self.settings["FID points"]
+        )
+
+        freq = np.arange(self.proc_fid.size / 2, dtype=float) / self.proc_fid.size / self.settings["FID spacing"]
+        amplitude = np.abs(amplitude[:int(self.proc_fid.size / 2)]) / self.proc_fid.size
+
         # Calclate the frequency window
         frequency = np.linspace(
             self.settings["Probe frequency"],
             self.settings["Probe frequency"] + 1.,
             amplitude.size
         )
-        print(frequency.size, amplitude.size)
         self.spectrum = pd.DataFrame(
             data=list(zip(frequency, amplitude)),
             columns=["Frequency", "Intensity"]
+        )
+        self.fid_df = pd.DataFrame(
+            data=list(zip(time * 1e6, self.proc_fid)),
+            columns=["Time", "FID"]
         )
