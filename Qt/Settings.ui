@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+ background-color: #d9d9d9
+}
+
+QMenuBar {
+ background-color: #66B9BF;
+ color: #d9d9d9
+}
+
+QMenuBar::item {
+ background: transparent;
+ border-radius: 4px;
+}
+
+QMenuBar::item:selected {
+ background: #E37222
+}
+
+QWidget {
+ background-color: #d9d9d9
+}
+
+QTabWidget {
+background-color: #66B9BF
+}
+
+QLabel {
+color: #07889B
+}
+
+QDoubleSpinBox {
+	background-color: #EEAA7B;
+	color: #d9d9d9;
+	font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QSpinBox {
+	background-color: #EEAA7B;
+	color: #d9d9d9;
+	font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QComboBox {
+background-color: #EEAA7B;
+color: #d9d9d9;
+font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+border-top: 2px solid #C2C7CB;
+}
+QTabWidget::tab-bar {
+left: 5px; /* move to the right by 5px */
+}
+/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+background: #EEAA7B;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+QTabBar::tab:selected, QTabBar::tab:hover {
+background: #E37222;
+color: #d9d9d9
+}
+QTabBar::tab:selected {
+border-color: #9B9B9B;
+border-bottom-color: #C2C7CB; /* same as pane color */
+}
+QTabBar::tab:!selected {
+margin-top: 2px; /* make non-selected tabs look smaller */
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QWidget" name="formLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>601</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>QtFTM Data Path</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEditQtFTMPath">
+         <property name="minimumSize">
+          <size>
+           <width>350</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Chirp Data Path</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEditChirpPath">
+         <property name="minimumSize">
+          <size>
+           <width>350</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>370</y>
+        <width>601</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButtonCloseSettings">
+         <property name="text">
+          <string>Close</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonSaveSettings">
+         <property name="text">
+          <string>Save Settings</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
