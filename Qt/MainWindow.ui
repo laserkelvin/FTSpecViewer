@@ -11,33 +11,39 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>FTSpecViewer</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#mainFrame {
-border: 3px solid gray;
-border-radius: 40px;
-background: white;
-}
-QPushButton {
-color: white;
-background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #88d, stop: 0.1 #99e, stop: 0.49 #77c, stop: 0.5 #66b, stop: 1 #77c);
-border-width: 1px;
-border-color: #339;
-border-style: solid;
-border-radius: 7;
-padding: 3px;
-font-size: 10px;
-padding-left: 5px;
-padding-right: 5px;
-min-width: 50px;
-max-width: 50px;
-min-height: 13px;
-max-height: 13px;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="Line" name="line">
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>3</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="PlotWidget" name="graphicsViewMain">
+      <property name="statusTip">
+       <string>Main spectrum window</string>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
@@ -46,153 +52,193 @@ max-height: 13px;
         <height>16777215</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
         <string>Details</string>
        </attribute>
-       <widget class="QWidget" name="formLayoutWidget_3">
+       <widget class="QWidget" name="verticalLayoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>0</x>
+          <x>10</x>
           <y>0</y>
-          <width>292</width>
-          <height>681</height>
+          <width>251</width>
+          <height>671</height>
          </rect>
         </property>
-        <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Scan number</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="labelScanNum">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_16">
            <property name="maximumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>16777215</width>
+             <height>24</height>
             </size>
            </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
+           <property name="font">
+            <font>
+             <pointsize>15</pointsize>
+            </font>
            </property>
-           <property name="lineWidth">
-            <number>1</number>
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+	background-color: #ffdaa1
+}</string>
            </property>
            <property name="text">
-            <string/>
+            <string>Scan Details</string>
            </property>
-           <property name="margin">
-            <number>50</number>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Shot count</string>
+         <item>
+          <widget class="Line" name="line_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="labelShotCount">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="margin">
-            <number>50</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Tuning voltage</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="labelTuning">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="margin">
-            <number>50</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Attenuation</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="labelAttenuation">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="margin">
-            <number>50</number>
-           </property>
-          </widget>
+         <item>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Scan number</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="labelScanNum">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWidth">
+              <number>1</number>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>Shot count</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="labelShotCount">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Tuning voltage</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="labelTuning">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Attenuation</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="labelAttenuation">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -216,7 +262,7 @@ max-height: 13px;
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>18</height>
+             <height>24</height>
             </size>
            </property>
            <property name="font">
@@ -360,6 +406,12 @@ max-height: 13px;
          </item>
          <item>
           <widget class="QLabel" name="label_11">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>15</pointsize>
@@ -408,12 +460,18 @@ max-height: 13px;
           <x>0</x>
           <y>0</y>
           <width>261</width>
-          <height>511</height>
+          <height>681</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QLabel" name="label">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>15</pointsize>
@@ -446,7 +504,11 @@ max-height: 13px;
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QSpinBox" name="spinBoxPeakSNRThres"/>
+            <widget class="QSpinBox" name="spinBoxPeakSNRThres">
+             <property name="statusTip">
+              <string>Minimum SNR value for peak detection</string>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_4">
@@ -456,7 +518,11 @@ max-height: 13px;
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QSpinBox" name="spinBoxPeakMinDist"/>
+            <widget class="QSpinBox" name="spinBoxPeakMinDist">
+             <property name="statusTip">
+              <string>Minimum distance between detected peaks</string>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
@@ -467,6 +533,9 @@ max-height: 13px;
            </item>
            <item row="0" column="1">
             <widget class="QCheckBox" name="checkBoxDetectPeaks">
+             <property name="statusTip">
+              <string>Check to automatically detect peaks</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -483,6 +552,12 @@ max-height: 13px;
          </item>
          <item>
           <widget class="QLabel" name="label_2">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>15</pointsize>
@@ -499,37 +574,15 @@ max-height: 13px;
           </widget>
          </item>
          <item>
-          <widget class="QTableView" name="tableViewPeakTable"/>
+          <widget class="QTableView" name="tableViewPeakTable">
+           <property name="statusTip">
+            <string>Table of detected peaks in the spectrum</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="Line" name="line">
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>3</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="PlotWidget" name="graphicsViewMain">
-      <property name="statusTip">
-       <string>Main spectrum window</string>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
      </widget>
     </item>
    </layout>
@@ -540,7 +593,7 @@ max-height: 13px;
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -579,6 +632,7 @@ QMenuBar::item:pressed {
     <addaction name="menuLoad"/>
     <addaction name="actionSave_spectrum"/>
     <addaction name="separator"/>
+    <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuFitting">
@@ -586,8 +640,22 @@ QMenuBar::item:pressed {
      <string>Fitting</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuOverlays">
+    <property name="title">
+     <string>Overlays</string>
+    </property>
+    <widget class="QMenu" name="menuLoad_overlay">
+     <property name="title">
+      <string>Load overlay...</string>
+     </property>
+     <addaction name="actionCAT_file"/>
+     <addaction name="actionPeaks"/>
+    </widget>
+    <addaction name="menuLoad_overlay"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFitting"/>
+   <addaction name="menuOverlays"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionLoad_spectrum">
@@ -628,6 +696,21 @@ QMenuBar::item:pressed {
   <action name="actionCAT">
    <property name="text">
     <string>CAT</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionCAT_file">
+   <property name="text">
+    <string>CAT file</string>
+   </property>
+  </action>
+  <action name="actionPeaks">
+   <property name="text">
+    <string>Peaks</string>
    </property>
   </action>
  </widget>

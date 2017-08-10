@@ -7,7 +7,7 @@ from ftclass import FTData
 
 # Qt related modules
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp
-from QtMain import Ui_MainWindow
+from qtmain import Ui_MainWindow
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
