@@ -165,7 +165,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -596,6 +596,47 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
           </widget>
          </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_17">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Center Frequency</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="labelCenterFrequency">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
         </layout>
        </widget>
       </widget>
@@ -818,6 +859,8 @@ QMenuBar::item:pressed {
     <property name="title">
      <string>Fitting</string>
     </property>
+    <addaction name="actionFit_Gaussian"/>
+    <addaction name="actionPick_Gaussians"/>
    </widget>
    <widget class="QMenu" name="menuOverlays">
     <property name="title">
@@ -900,6 +943,16 @@ QMenuBar::item:pressed {
   <action name="actionSave_peaks">
    <property name="text">
     <string>Save peaks</string>
+   </property>
+  </action>
+  <action name="actionFit_Gaussian">
+   <property name="text">
+    <string>Fit Gaussian</string>
+   </property>
+  </action>
+  <action name="actionPick_Gaussians">
+   <property name="text">
+    <string>Pick Gaussians</string>
    </property>
   </action>
  </widget>

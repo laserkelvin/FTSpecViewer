@@ -35,6 +35,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionSpectrum.triggered.connect(self.load_spectrum)
         self.actionFID.triggered.connect(self.load_FID)
         self.actionSave_spectrum.triggered.connect(self.save_spectrum)
+        self.actionSave_FID.triggered.connect(self.save_fid)
+        self.actionSave_peaks.triggered.connect(self.save_peaks)
 
         # Exiting the program
         self.actionExit.triggered.connect(qApp.quit)
@@ -170,6 +172,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
                 self.data.spectrum.to_csv(filepath)
+
+    def save_fid(self):
+        # Method for exporting a FID via Pandas dataframe method
+        if self.fid is True:
+            filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
+            if filepath:
+                self.data.fid.to_csv(filepath)
+
+    def save_peaks(self):
+        # Method for exporting the detected peaks via Pandas dataframe method
+        if self.peaks_df is not None:
+            filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
+            if filepath:
+                self.peaks.to_csv(filepath)
 
     def load_spectrum(self):
         # Method to load a general spectrum, with tab delimited
