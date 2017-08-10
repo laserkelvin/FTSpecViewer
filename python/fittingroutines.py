@@ -7,13 +7,14 @@ def find_peaks(xdata, ydata, thres=0.3):
     # corresponding frequencies
     indexes = peakutils.indexes(ydata, thres=thres)
     peak_frequencies = xdata[indexes]
-    return peak_frequencies
+    peak_intensities = ydata[indexes]
+    return peak_frequencies, peak_intensities
 
 def center_cavity(xdata, ydata, thres):
     # Calculates the center cavity frequency by taking the average
     # of the two Doppler horns
-    center = np.average(find_peaks(xdata, ydata, thres))
-    return center
+    center, intensity = np.average(find_peaks(xdata, ydata, thres), axis=1)
+    return center, intensity
 
 def gaussian_func(x, a, c, w, offset):
     # A stock Gaussian lineshape function

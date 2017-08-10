@@ -12,110 +12,239 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 780)
-        MainWindow.setStyleSheet("#mainFrame {\n"
-"border: 3px solid gray;\n"
-"border-radius: 40px;\n"
-"background: white;\n"
+        MainWindow.setStyleSheet("QMainWindow {\n"
+" background-color: #d9d9d9\n"
 "}\n"
-"QPushButton {\n"
-"color: white;\n"
-"background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #88d, stop: 0.1 #99e, stop: 0.49 #77c, stop: 0.5 #66b, stop: 1 #77c);\n"
-"border-width: 1px;\n"
-"border-color: #339;\n"
-"border-style: solid;\n"
-"border-radius: 7;\n"
-"padding: 3px;\n"
-"font-size: 10px;\n"
-"padding-left: 5px;\n"
-"padding-right: 5px;\n"
-"min-width: 50px;\n"
-"max-width: 50px;\n"
-"min-height: 13px;\n"
-"max-height: 13px;\n"
+"\n"
+"QMenuBar {\n"
+" background-color: #66B9BF;\n"
+" color: #d9d9d9\n"
+"}\n"
+"\n"
+"QMenuBar::item {\n"
+" background: transparent;\n"
+" border-radius: 4px;\n"
+"}\n"
+"\n"
+"QMenuBar::item:selected {\n"
+" background: #E37222\n"
+"}\n"
+"\n"
+"QWidget {\n"
+" background-color: #d9d9d9\n"
+"}\n"
+"\n"
+"QTabWidget {\n"
+"background-color: #66B9BF\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"color: #07889B\n"
+"}\n"
+"\n"
+"QDoubleSpinBox {\n"
+"    background-color: #EEAA7B;\n"
+"    color: #d9d9d9;\n"
+"    font-size: 15px;\n"
+"border: 2px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"border-top-left-radius: 4px;\n"
+"border-top-right-radius: 4px;\n"
+"min-width: 8ex;\n"
+"padding: 2px;\n"
+"}\n"
+"\n"
+"QSpinBox {\n"
+"    background-color: #EEAA7B;\n"
+"    color: #d9d9d9;\n"
+"    font-size: 15px;\n"
+"border: 2px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"border-top-left-radius: 4px;\n"
+"border-top-right-radius: 4px;\n"
+"min-width: 8ex;\n"
+"padding: 2px;\n"
+"}\n"
+"\n"
+"QComboBox {\n"
+"background-color: #EEAA7B;\n"
+"color: #d9d9d9;\n"
+"font-size: 15px;\n"
+"border: 2px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"border-top-left-radius: 4px;\n"
+"border-top-right-radius: 4px;\n"
+"min-width: 8ex;\n"
+"padding: 2px;\n"
+"}\n"
+"\n"
+"QTabWidget::pane { /* The tab widget frame */\n"
+"border-top: 2px solid #C2C7CB;\n"
+"}\n"
+"QTabWidget::tab-bar {\n"
+"left: 5px; /* move to the right by 5px */\n"
+"}\n"
+"/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */\n"
+"QTabBar::tab {\n"
+"background: #EEAA7B;\n"
+"border: 2px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"border-top-left-radius: 4px;\n"
+"border-top-right-radius: 4px;\n"
+"min-width: 8ex;\n"
+"padding: 2px;\n"
+"}\n"
+"QTabBar::tab:selected, QTabBar::tab:hover {\n"
+"background: #E37222;\n"
+"color: #d9d9d9\n"
+"}\n"
+"QTabBar::tab:selected {\n"
+"border-color: #9B9B9B;\n"
+"border-bottom-color: #C2C7CB; /* same as pane color */\n"
+"}\n"
+"QTabBar::tab:!selected {\n"
+"margin-top: 2px; /* make non-selected tabs look smaller */\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.line.setLineWidth(3)
+        self.line.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line.setObjectName("line")
+        self.gridLayout.addWidget(self.line, 0, 1, 1, 1)
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.graphicsViewMain = PlotWidget(self.centralwidget)
+        self.graphicsViewMain.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.graphicsViewMain.setLineWidth(2)
+        self.graphicsViewMain.setObjectName("graphicsViewMain")
+        self.verticalLayout_5.addWidget(self.graphicsViewMain)
+        self.graphicsViewOverview = QtWidgets.QGraphicsView(self.centralwidget)
+        self.graphicsViewOverview.setMaximumSize(QtCore.QSize(16777215, 150))
+        self.graphicsViewOverview.setObjectName("graphicsViewOverview")
+        self.verticalLayout_5.addWidget(self.graphicsViewOverview)
+        self.gridLayout.addLayout(self.verticalLayout_5, 0, 2, 1, 1)
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setMaximumSize(QtCore.QSize(270, 16777215))
+        self.tabWidget.setStyleSheet("")
         self.tabWidget.setObjectName("tabWidget")
         self.tabScansettings = QtWidgets.QWidget()
         self.tabScansettings.setObjectName("tabScansettings")
-        self.formLayoutWidget_3 = QtWidgets.QWidget(self.tabScansettings)
-        self.formLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 292, 681))
-        self.formLayoutWidget_3.setObjectName("formLayoutWidget_3")
-        self.formLayout_3 = QtWidgets.QFormLayout(self.formLayoutWidget_3)
-        self.formLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayoutWidget_3 = QtWidgets.QWidget(self.tabScansettings)
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(10, 0, 251, 671))
+        self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.line_6 = QtWidgets.QFrame(self.verticalLayoutWidget_3)
+        self.line_6.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_6.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_6.setObjectName("line_6")
+        self.verticalLayout_3.addWidget(self.line_6)
+        self.label_16 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.label_16.setMaximumSize(QtCore.QSize(16777215, 30))
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_16.setFont(font)
+        self.label_16.setStyleSheet("")
+        self.label_16.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_16.setObjectName("label_16")
+        self.verticalLayout_3.addWidget(self.label_16)
+        self.formLayout_3 = QtWidgets.QFormLayout()
         self.formLayout_3.setObjectName("formLayout_3")
-        self.label_12 = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.label_12 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_12.setFont(font)
         self.label_12.setObjectName("label_12")
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_12)
-        self.labelScanNum = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.labelScanNum = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.labelScanNum.setMinimumSize(QtCore.QSize(100, 0))
         self.labelScanNum.setMaximumSize(QtCore.QSize(100, 30))
         self.labelScanNum.setFrameShape(QtWidgets.QFrame.Box)
         self.labelScanNum.setLineWidth(1)
         self.labelScanNum.setText("")
         self.labelScanNum.setObjectName("labelScanNum")
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelScanNum)
-        self.label_13 = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.label_13 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_13.setFont(font)
         self.label_13.setObjectName("label_13")
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_13)
-        self.labelShotCount = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.labelShotCount = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.labelShotCount.setMinimumSize(QtCore.QSize(100, 0))
         self.labelShotCount.setMaximumSize(QtCore.QSize(100, 30))
         self.labelShotCount.setFrameShape(QtWidgets.QFrame.Box)
         self.labelShotCount.setText("")
         self.labelShotCount.setObjectName("labelShotCount")
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.labelShotCount)
-        self.label_14 = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.label_14 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_14.setFont(font)
         self.label_14.setObjectName("label_14")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_14)
-        self.labelTuning = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.labelTuning = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.labelTuning.setMinimumSize(QtCore.QSize(100, 0))
         self.labelTuning.setMaximumSize(QtCore.QSize(100, 30))
         self.labelTuning.setFrameShape(QtWidgets.QFrame.Box)
         self.labelTuning.setText("")
         self.labelTuning.setObjectName("labelTuning")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.labelTuning)
-        self.label_15 = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.label_15 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_15)
-        self.labelAttenuation = QtWidgets.QLabel(self.formLayoutWidget_3)
+        self.labelAttenuation = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.labelAttenuation.setMinimumSize(QtCore.QSize(100, 0))
         self.labelAttenuation.setMaximumSize(QtCore.QSize(100, 30))
         self.labelAttenuation.setFrameShape(QtWidgets.QFrame.Box)
         self.labelAttenuation.setText("")
         self.labelAttenuation.setObjectName("labelAttenuation")
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.labelAttenuation)
+        self.verticalLayout_3.addLayout(self.formLayout_3)
         self.tabWidget.addTab(self.tabScansettings, "")
         self.tabFIDsettings = QtWidgets.QWidget()
         self.tabFIDsettings.setObjectName("tabFIDsettings")
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.tabFIDsettings)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 258, 511))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 264, 511))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.line_3 = QtWidgets.QFrame(self.verticalLayoutWidget_2)
+        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.verticalLayout_2.addWidget(self.line_3)
         self.label_6 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
-        self.label_6.setMaximumSize(QtCore.QSize(16777215, 18))
+        self.label_6.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         self.label_6.setFont(font)
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
-        self.line_3 = QtWidgets.QFrame(self.verticalLayoutWidget_2)
-        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_3.setObjectName("line_3")
-        self.verticalLayout_2.addWidget(self.line_3)
         self.formLayout_2 = QtWidgets.QFormLayout()
         self.formLayout_2.setObjectName("formLayout_2")
         self.label_7 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
         self.comboBoxWindowFunction = QtWidgets.QComboBox(self.verticalLayoutWidget_2)
-        self.comboBoxWindowFunction.setMaximumSize(QtCore.QSize(120, 16777215))
+        self.comboBoxWindowFunction.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.comboBoxWindowFunction.setObjectName("comboBoxWindowFunction")
         self.comboBoxWindowFunction.addItem("")
         self.comboBoxWindowFunction.addItem("")
@@ -125,6 +254,9 @@ class Ui_MainWindow(object):
         self.comboBoxWindowFunction.addItem("")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.comboBoxWindowFunction)
         self.label_8 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_8)
         self.spinBoxExpFilter = QtWidgets.QSpinBox(self.verticalLayoutWidget_2)
@@ -135,6 +267,9 @@ class Ui_MainWindow(object):
         self.spinBoxExpFilter.setObjectName("spinBoxExpFilter")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxExpFilter)
         self.label_9 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_9)
         self.spinBoxHighPass = QtWidgets.QSpinBox(self.verticalLayoutWidget_2)
@@ -142,6 +277,9 @@ class Ui_MainWindow(object):
         self.spinBoxHighPass.setObjectName("spinBoxHighPass")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxHighPass)
         self.label_10 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_10)
         self.spinBoxDelay = QtWidgets.QSpinBox(self.verticalLayoutWidget_2)
@@ -150,20 +288,21 @@ class Ui_MainWindow(object):
         self.spinBoxDelay.setObjectName("spinBoxDelay")
         self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBoxDelay)
         self.verticalLayout_2.addLayout(self.formLayout_2)
+        self.line_4 = QtWidgets.QFrame(self.verticalLayoutWidget_2)
+        self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_4.setObjectName("line_4")
+        self.verticalLayout_2.addWidget(self.line_4)
         self.label_11 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        self.label_11.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         self.label_11.setFont(font)
         self.label_11.setAlignment(QtCore.Qt.AlignCenter)
         self.label_11.setObjectName("label_11")
         self.verticalLayout_2.addWidget(self.label_11)
-        self.line_4 = QtWidgets.QFrame(self.verticalLayoutWidget_2)
-        self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_4.setObjectName("line_4")
-        self.verticalLayout_2.addWidget(self.line_4)
         self.graphicsViewFID = PlotWidget(self.verticalLayoutWidget_2)
         self.graphicsViewFID.setFrameShadow(QtWidgets.QFrame.Raised)
         self.graphicsViewFID.setLineWidth(2)
@@ -173,46 +312,59 @@ class Ui_MainWindow(object):
         self.tabPeaksettings = QtWidgets.QWidget()
         self.tabPeaksettings.setObjectName("tabPeaksettings")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.tabPeaksettings)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 261, 511))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 261, 681))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.line_5 = QtWidgets.QFrame(self.verticalLayoutWidget)
+        self.line_5.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_5.setObjectName("line_5")
+        self.verticalLayout.addWidget(self.line_5)
         self.label = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.line_5 = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.line_5.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_5.setObjectName("line_5")
-        self.verticalLayout.addWidget(self.line_5)
         self.formLayout = QtWidgets.QFormLayout()
         self.formLayout.setObjectName("formLayout")
         self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_3)
-        self.spinBoxPeakSNRThres = QtWidgets.QSpinBox(self.verticalLayoutWidget)
-        self.spinBoxPeakSNRThres.setObjectName("spinBoxPeakSNRThres")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxPeakSNRThres)
         self.label_4 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_4)
         self.spinBoxPeakMinDist = QtWidgets.QSpinBox(self.verticalLayoutWidget)
         self.spinBoxPeakMinDist.setObjectName("spinBoxPeakMinDist")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxPeakMinDist)
         self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_5)
         self.checkBoxDetectPeaks = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.checkBoxDetectPeaks.setText("")
         self.checkBoxDetectPeaks.setObjectName("checkBoxDetectPeaks")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.checkBoxDetectPeaks)
+        self.doubleSpinBoxPeakSNRThres = QtWidgets.QDoubleSpinBox(self.verticalLayoutWidget)
+        self.doubleSpinBoxPeakSNRThres.setMaximum(10.0)
+        self.doubleSpinBoxPeakSNRThres.setSingleStep(0.1)
+        self.doubleSpinBoxPeakSNRThres.setProperty("value", 0.3)
+        self.doubleSpinBoxPeakSNRThres.setObjectName("doubleSpinBoxPeakSNRThres")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.doubleSpinBoxPeakSNRThres)
         self.verticalLayout.addLayout(self.formLayout)
         self.line_2 = QtWidgets.QFrame(self.verticalLayoutWidget)
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
@@ -220,30 +372,22 @@ class Ui_MainWindow(object):
         self.line_2.setObjectName("line_2")
         self.verticalLayout.addWidget(self.line_2)
         self.label_2 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_2.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.tableViewPeakTable = QtWidgets.QTableView(self.verticalLayoutWidget)
-        self.tableViewPeakTable.setObjectName("tableViewPeakTable")
-        self.verticalLayout.addWidget(self.tableViewPeakTable)
+        self.tableWidgetPeakTable = QtWidgets.QTableWidget(self.verticalLayoutWidget)
+        self.tableWidgetPeakTable.setObjectName("tableWidgetPeakTable")
+        self.tableWidgetPeakTable.setColumnCount(0)
+        self.tableWidgetPeakTable.setRowCount(0)
+        self.verticalLayout.addWidget(self.tableWidgetPeakTable)
         self.tabWidget.addTab(self.tabPeaksettings, "")
         self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.line.setLineWidth(3)
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setObjectName("line")
-        self.gridLayout.addWidget(self.line, 0, 1, 1, 1)
-        self.graphicsViewMain = PlotWidget(self.centralwidget)
-        self.graphicsViewMain.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.graphicsViewMain.setLineWidth(2)
-        self.graphicsViewMain.setObjectName("graphicsViewMain")
-        self.gridLayout.addWidget(self.graphicsViewMain, 0, 2, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 22))
@@ -273,6 +417,10 @@ class Ui_MainWindow(object):
         self.menuLoad.setObjectName("menuLoad")
         self.menuFitting = QtWidgets.QMenu(self.menubar)
         self.menuFitting.setObjectName("menuFitting")
+        self.menuOverlays = QtWidgets.QMenu(self.menubar)
+        self.menuOverlays.setObjectName("menuOverlays")
+        self.menuLoad_overlay = QtWidgets.QMenu(self.menuOverlays)
+        self.menuLoad_overlay.setObjectName("menuLoad_overlay")
         MainWindow.setMenuBar(self.menubar)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
@@ -293,23 +441,37 @@ class Ui_MainWindow(object):
         self.actionFID.setObjectName("actionFID")
         self.actionCAT = QtWidgets.QAction(MainWindow)
         self.actionCAT.setObjectName("actionCAT")
+        self.actionSettings = QtWidgets.QAction(MainWindow)
+        self.actionSettings.setObjectName("actionSettings")
+        self.actionCAT_file = QtWidgets.QAction(MainWindow)
+        self.actionCAT_file.setObjectName("actionCAT_file")
+        self.actionPeaks = QtWidgets.QAction(MainWindow)
+        self.actionPeaks.setObjectName("actionPeaks")
         self.menuLoad.addAction(self.actionSpectrum)
         self.menuLoad.addAction(self.actionFID)
         self.menuLoad.addAction(self.actionCAT)
         self.menuFile.addAction(self.menuLoad.menuAction())
         self.menuFile.addAction(self.actionSave_spectrum)
         self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionSettings)
         self.menuFile.addAction(self.actionExit)
+        self.menuLoad_overlay.addAction(self.actionCAT_file)
+        self.menuLoad_overlay.addAction(self.actionPeaks)
+        self.menuOverlays.addAction(self.menuLoad_overlay.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuFitting.menuAction())
+        self.menubar.addAction(self.menuOverlays.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "FTSpecViewer"))
+        self.graphicsViewMain.setStatusTip(_translate("MainWindow", "Main spectrum window"))
+        self.graphicsViewOverview.setStatusTip(_translate("MainWindow", "Overview window"))
+        self.label_16.setText(_translate("MainWindow", "Scan Details"))
         self.label_12.setText(_translate("MainWindow", "Scan number"))
         self.label_13.setText(_translate("MainWindow", "Shot count"))
         self.label_14.setText(_translate("MainWindow", "Tuning voltage"))
@@ -334,15 +496,20 @@ class Ui_MainWindow(object):
         self.graphicsViewFID.setStatusTip(_translate("MainWindow", "FID trace"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabFIDsettings), _translate("MainWindow", "FID details"))
         self.label.setText(_translate("MainWindow", "Detection Settings"))
-        self.label_3.setText(_translate("MainWindow", "SNR threshold"))
+        self.label_3.setText(_translate("MainWindow", "Threshold"))
         self.label_4.setText(_translate("MainWindow", "Minimum distance"))
+        self.spinBoxPeakMinDist.setStatusTip(_translate("MainWindow", "Minimum distance between detected peaks"))
         self.label_5.setText(_translate("MainWindow", "Detect peaks"))
+        self.checkBoxDetectPeaks.setStatusTip(_translate("MainWindow", "Check to automatically detect peaks"))
+        self.doubleSpinBoxPeakSNRThres.setStatusTip(_translate("MainWindow", "Minimum SNR value for peak detection"))
         self.label_2.setText(_translate("MainWindow", "Peak Table"))
+        self.tableWidgetPeakTable.setStatusTip(_translate("MainWindow", "Table of detected peaks in the spectrum"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabPeaksettings), _translate("MainWindow", "Peaks"))
-        self.graphicsViewMain.setStatusTip(_translate("MainWindow", "Main spectrum window"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuLoad.setTitle(_translate("MainWindow", "Load..."))
         self.menuFitting.setTitle(_translate("MainWindow", "Fitting"))
+        self.menuOverlays.setTitle(_translate("MainWindow", "Overlays"))
+        self.menuLoad_overlay.setTitle(_translate("MainWindow", "Load overlay..."))
         self.actionLoad_spectrum.setText(_translate("MainWindow", "Load spectrum"))
         self.actionSave_spectrum.setText(_translate("MainWindow", "Save spectrum"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
@@ -351,5 +518,8 @@ class Ui_MainWindow(object):
         self.actionSpectrum.setText(_translate("MainWindow", "Spectrum"))
         self.actionFID.setText(_translate("MainWindow", "FID"))
         self.actionCAT.setText(_translate("MainWindow", "CAT"))
+        self.actionSettings.setText(_translate("MainWindow", "Settings"))
+        self.actionCAT_file.setText(_translate("MainWindow", "CAT file"))
+        self.actionPeaks.setText(_translate("MainWindow", "Peaks"))
 
 from pyqtgraph import PlotWidget

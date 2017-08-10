@@ -14,7 +14,99 @@
    <string>FTSpecViewer</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QMainWindow {
+ background-color: #d9d9d9
+}
+
+QMenuBar {
+ background-color: #66B9BF;
+ color: #d9d9d9
+}
+
+QMenuBar::item {
+ background: transparent;
+ border-radius: 4px;
+}
+
+QMenuBar::item:selected {
+ background: #E37222
+}
+
+QWidget {
+ background-color: #d9d9d9
+}
+
+QTabWidget {
+background-color: #66B9BF
+}
+
+QLabel {
+color: #07889B
+}
+
+QDoubleSpinBox {
+	background-color: #EEAA7B;
+	color: #d9d9d9;
+	font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QSpinBox {
+	background-color: #EEAA7B;
+	color: #d9d9d9;
+	font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QComboBox {
+background-color: #EEAA7B;
+color: #d9d9d9;
+font-size: 15px;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+border-top: 2px solid #C2C7CB;
+}
+QTabWidget::tab-bar {
+left: 5px; /* move to the right by 5px */
+}
+/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+background: #EEAA7B;
+border: 2px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+min-width: 8ex;
+padding: 2px;
+}
+QTabBar::tab:selected, QTabBar::tab:hover {
+background: #E37222;
+color: #d9d9d9
+}
+QTabBar::tab:selected {
+border-color: #9B9B9B;
+border-bottom-color: #C2C7CB; /* same as pane color */
+}
+QTabBar::tab:!selected {
+margin-top: 2px; /* make non-selected tabs look smaller */
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -32,17 +124,34 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="PlotWidget" name="graphicsViewMain">
-      <property name="statusTip">
-       <string>Main spectrum window</string>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
-     </widget>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <widget class="PlotWidget" name="graphicsViewMain">
+        <property name="statusTip">
+         <string>Main spectrum window</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGraphicsView" name="graphicsViewOverview">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>150</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Overview window</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
@@ -56,7 +165,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -73,22 +182,29 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
+          <widget class="Line" name="line_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_16">
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>30</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <pointsize>15</pointsize>
+             <pointsize>25</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLabel {
-	background-color: #ffdaa1
-}</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Scan Details</string>
@@ -99,16 +215,14 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <layout class="QFormLayout" name="formLayout_3">
            <item row="0" column="0">
             <widget class="QLabel" name="label_12">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Scan number</string>
              </property>
@@ -144,6 +258,11 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_13">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Shot count</string>
              </property>
@@ -176,6 +295,11 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_14">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Tuning voltage</string>
              </property>
@@ -208,6 +332,11 @@
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_15">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Attenuation</string>
              </property>
@@ -252,22 +381,29 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>258</width>
+          <width>264</width>
           <height>511</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
+          <widget class="Line" name="line_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_6">
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>30</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <pointsize>15</pointsize>
+             <pointsize>25</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -281,16 +417,14 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <layout class="QFormLayout" name="formLayout_2">
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Window Function</string>
              </property>
@@ -300,7 +434,7 @@
             <widget class="QComboBox" name="comboBoxWindowFunction">
              <property name="maximumSize">
               <size>
-               <width>120</width>
+               <width>16777215</width>
                <height>16777215</height>
               </size>
              </property>
@@ -341,6 +475,11 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_8">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Exponential Filter</string>
              </property>
@@ -367,6 +506,11 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_9">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>High-Pass Filter</string>
              </property>
@@ -384,6 +528,11 @@
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_10">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Delay</string>
              </property>
@@ -405,16 +554,23 @@
           </layout>
          </item>
          <item>
+          <widget class="Line" name="line_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_11">
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>30</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <pointsize>15</pointsize>
+             <pointsize>25</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -424,13 +580,6 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="line_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -465,16 +614,23 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
+          <widget class="Line" name="line_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label">
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>30</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <pointsize>15</pointsize>
+             <pointsize>25</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -488,30 +644,26 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <layout class="QFormLayout" name="formLayout">
            <item row="1" column="0">
             <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>SNR threshold</string>
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
              </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="spinBoxPeakSNRThres">
-             <property name="statusTip">
-              <string>Minimum SNR value for peak detection</string>
+             <property name="text">
+              <string>Threshold</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Minimum distance</string>
              </property>
@@ -526,6 +678,11 @@
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
+             <property name="font">
+              <font>
+               <pointsize>15</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Detect peaks</string>
              </property>
@@ -538,6 +695,22 @@
              </property>
              <property name="text">
               <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxPeakSNRThres">
+             <property name="statusTip">
+              <string>Minimum SNR value for peak detection</string>
+             </property>
+             <property name="maximum">
+              <double>10.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.300000000000000</double>
              </property>
             </widget>
            </item>
@@ -555,12 +728,12 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>24</height>
+             <height>30</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <pointsize>15</pointsize>
+             <pointsize>25</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -574,7 +747,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableView" name="tableViewPeakTable">
+          <widget class="QTableWidget" name="tableWidgetPeakTable">
            <property name="statusTip">
             <string>Table of detected peaks in the spectrum</string>
            </property>
@@ -593,7 +766,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -630,7 +803,10 @@ QMenuBar::item:pressed {
      <addaction name="actionCAT"/>
     </widget>
     <addaction name="menuLoad"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_FID"/>
     <addaction name="actionSave_spectrum"/>
+    <addaction name="actionSave_peaks"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
@@ -711,6 +887,16 @@ QMenuBar::item:pressed {
   <action name="actionPeaks">
    <property name="text">
     <string>Peaks</string>
+   </property>
+  </action>
+  <action name="actionSave_FID">
+   <property name="text">
+    <string>Save FID</string>
+   </property>
+  </action>
+  <action name="actionSave_peaks">
+   <property name="text">
+    <string>Save peaks</string>
    </property>
   </action>
  </widget>
