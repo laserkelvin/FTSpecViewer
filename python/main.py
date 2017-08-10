@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 import pyqtgraph
+
 from ftclass import FTData
 import fittingroutines as fr
 
@@ -46,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Peak detection routines
         self.checkBoxDetectPeaks.stateChanged.connect(self.peak_detection_bool_update)
         self.doubleSpinBoxPeakSNRThres.valueChanged.connect(self.detect_peaks)
+        self.doubleSpinBoxPeakMinDist.valueChanged.connect(self.detect_peaks)
 
     def peak_detection_bool_update(self):
         # Toggles on and off
@@ -63,7 +65,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             peak_freqs, peak_intensities = fr.find_peaks(
                 self.data.spectrum["Frequency"],
                 self.data.spectrum["Intensity"],
-                thres=float(self.doubleSpinBoxPeakSNRThres.value())
+                thres=float(self.doubleSpinBoxPeakSNRThres.value()),
+                min_dist=float(self.doubleSpinBoxPeakMinDist.value())
             )
             self.peaks = list(zip(peak_freqs, peak_intensities))
             self.peaks_df = pd.DataFrame(
@@ -71,6 +74,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 columns=["Frequency", "Intensity"]
             )
             self.update_peak_table()
+            self.update_plot()
 
     def update_peak_table(self):
         # Method for updating the peak table widget
@@ -143,13 +147,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 pen=(227,114,34),
                 name="Fit"
             )
-        if self.peaks_df is not None and self.peak_detection_bool_update is True:
+        if self.peaks_df is not None and self.detect_peaks_bool is True:
             peak_plot = pyqtgraph.ScatterPlotItem(
                 x=self.peaks_df["Frequency"].astype(float),
                 y=self.peaks_df["Intensity"].astype(float),
                 pen=(238,170,123),
                 name="Peaks"
             )
+            self.graphicsViewMain.addItem(peak_plot)
+            self.statusBar.showMessage("Plotting the peaks...")
         if self.fid is True:
             self.graphicsViewFID.clear()
             self.graphicsViewFID.plot(

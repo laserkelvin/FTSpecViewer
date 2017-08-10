@@ -2,7 +2,7 @@ import peakutils
 from scipy.optimize import curve_fit
 import numpy as np
 
-def find_peaks(xdata, ydata, thres=0.3):
+def find_peaks(xdata, ydata, thres=0.3, min_dist=1):
     # Finds the peak intensities in ydata, and returns the
     # corresponding frequencies
     indexes = peakutils.indexes(ydata, thres=thres)

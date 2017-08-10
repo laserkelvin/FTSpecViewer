@@ -165,7 +165,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -669,13 +669,6 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QSpinBox" name="spinBoxPeakMinDist">
-             <property name="statusTip">
-              <string>Minimum distance between detected peaks</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
              <property name="font">
@@ -711,6 +704,16 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
              <property name="value">
               <double>0.300000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxPeakMinDist">
+             <property name="statusTip">
+              <string>Minimum distance between detected peaks</string>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
              </property>
             </widget>
            </item>
