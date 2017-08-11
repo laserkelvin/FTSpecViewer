@@ -469,6 +469,7 @@ class Ui_MainWindow(object):
         self.actionSave_peaks = QtWidgets.QAction(MainWindow)
         self.actionSave_peaks.setObjectName("actionSave_peaks")
         self.actionFit_Gaussian = QtWidgets.QAction(MainWindow)
+        self.actionFit_Gaussian.setCheckable(False)
         self.actionFit_Gaussian.setObjectName("actionFit_Gaussian")
         self.actionPick_Gaussians = QtWidgets.QAction(MainWindow)
         self.actionPick_Gaussians.setObjectName("actionPick_Gaussians")
@@ -554,7 +555,7 @@ class Ui_MainWindow(object):
         self.actionPeaks.setText(_translate("MainWindow", "Peaks"))
         self.actionSave_FID.setText(_translate("MainWindow", "Save FID"))
         self.actionSave_peaks.setText(_translate("MainWindow", "Save peaks"))
-        self.actionFit_Gaussian.setText(_translate("MainWindow", "Fit Gaussian"))
+        self.actionFit_Gaussian.setText(_translate("MainWindow", "Autofit FFT peaks"))
         self.actionPick_Gaussians.setText(_translate("MainWindow", "Pick Gaussians"))
 
 from pyqtgraph import PlotWidget

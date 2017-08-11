@@ -633,6 +633,9 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              <property name="margin">
               <number>50</number>
              </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
             </widget>
            </item>
           </layout>
@@ -946,8 +949,11 @@ QMenuBar::item:pressed {
    </property>
   </action>
   <action name="actionFit_Gaussian">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>Fit Gaussian</string>
+    <string>Autofit FFT peaks</string>
    </property>
   </action>
   <action name="actionPick_Gaussians">

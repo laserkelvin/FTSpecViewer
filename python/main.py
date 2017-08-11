@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 import yaml
+from uncertainties import ufloat, unumpy
 import pyqtgraph
 
 from ftclass import FTData
@@ -12,6 +13,8 @@ import fittingroutines as fr
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
 from qtmain import Ui_MainWindow
 from qtsettings import Ui_SettingsForm
+
+################# Main Window #################
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -50,6 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBoxWindowFunction.currentTextChanged.connect(self.process_fid)
         self.spinBoxExpFilter.valueChanged.connect(self.process_fid)
         self.spinBoxDelay.valueChanged.connect(self.process_fid)
+        self.actionFit_Gaussian.triggered.connect(self.fit_fft)
 
         # Peak detection routines
         self.checkBoxDetectPeaks.stateChanged.connect(self.peak_detection_bool_update)
@@ -93,7 +97,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for peak_num, peak in enumerate(self.peaks):
             self.tableWidgetPeakTable.insertRow(peak_num)
             for index, value in enumerate(peak):
-                self.tableWidgetPeakTable.setItem(peak_num, index, QTableWidgetItem("{:.4}".format(value)))
+                self.tableWidgetPeakTable.setItem(peak_num, index, QTableWidgetItem("{:.4f}".format(value)))
 
     def process_fid(self):
         # This routine is only run if a FID has been loaded
@@ -139,6 +143,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_plot(self):
         # Method to plot the current spectrum
         self.graphicsViewMain.clear()
+        self.graphicsViewFID.clear()
         self.graphicsViewMain.setAspectLocked(False)
         self.graphicsViewFID.setAspectLocked(False)
         self.graphicsViewMain.plot(
@@ -147,6 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 pen=(7,136,155),
                 name="Spectrum"
             )
+        # Plot the fitted data
         if "Fit" in list(self.data.spectrum.keys()):
             self.graphicsViewMain.plot(
                 self.data.spectrum["Frequency"].astype(float),
@@ -154,6 +160,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 pen=(227,114,34),
                 name="Fit"
             )
+        # Plot the peak locations
         if self.peaks_df is not None and self.detect_peaks_bool is True:
             peak_plot = pyqtgraph.ScatterPlotItem(
                 x=self.peaks_df["Frequency"].astype(float),
@@ -163,6 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
             self.graphicsViewMain.addItem(peak_plot)
             self.statusBar.showMessage("Plotting the peaks...")
+        # If we're looking at FID data
         if self.fid is True:
             self.graphicsViewFID.clear()
             self.graphicsViewFID.plot(
@@ -191,6 +199,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
                 self.peaks.to_csv(filepath)
+
+    def fit_fft(self):
+        if self.fid is True:
+            peakfreq, peakint = fr.find_peaks(
+                self.data.spectrum["Frequency"].astype(float),
+                self.data.spectrum["Intensity"].astype(float)
+            )
+            if len(peakfreq) < 2 or len(peakfreq) % 2 == 0 is False:
+                # Make sure number of detected peaks is even, and more than two.
+                peakfreq = None
+            # Call the fitting function
+            try:
+                popt, pcov = fr.fit_lineshape(
+                    fr.arb_gaussian_func,
+                    self.data.spectrum["Frequency"].astype(float),
+                    self.data.spectrum["Intensity"].astype(float),
+                    peakfreq
+                )
+                self.data.spectrum["Fit"] = fr.arb_gaussian_func(
+                    self.data.spectrum["Frequency"].astype(float),
+                    *popt
+                )
+                # Package the fitted parameters, and their uncertainties
+                # Calculate the center frequency
+                center_freq = np.average([popt[1] + popt[4]])
+                self.labelCenterFrequency.setText(str(round(center_freq, 4)))
+                self.update_plot()
+
+            except RuntimeError:
+                self.statusBar.showMessage("Fit not converged.")
+
+    def format_uncertainty(self, ufloat_type):
+        # This function will be used enough to format the uncertainty output
+        return "{:.3uS}".format(ufloat_type)
 
     def load_spectrum(self):
         # Method to load a general spectrum, with tab delimited
@@ -240,6 +282,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_settings(self):
         # Show the settings dialog
         self.settings_dialog.show()
+
+
+
+################# Settings Window Dialog #################
 
 class SettingsWindow(QMainWindow, Ui_SettingsForm):
     def __init__(self, parent=None):
