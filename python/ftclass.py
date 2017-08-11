@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy import signal as spsig
 import peakutils
+import parser
 
 class FTData:
     """ A general class for processing FTMW and FTCP data.
@@ -18,12 +19,16 @@ class FTData:
             self.read_fid_settings()
             self.fid = np.array(self.fid)
         else:
-            self.spectrum = pd.read_csv(
-                filepath,
-                delimiter="\t",
-                skiprows=1,
-                names=["Frequency", "Intensity"]
-            )
+            try:
+                self.spectrum = pd.read_csv(
+                    filepath,
+                    sep=None,
+                    delimiter=None,
+                    skiprows=1,
+                    names=["Frequency", "Intensity"]
+                )
+            except ValueError:
+                raise FileParseError("Cannot parse spectrum!")
 
     def read_fid_settings(self):
         """ Function to read in the settings in an FID from QtFTM """

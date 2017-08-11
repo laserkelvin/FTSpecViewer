@@ -2,6 +2,7 @@ import sys
 import os
 import pandas as pd
 import numpy as np
+import yaml
 import pyqtgraph
 
 from ftclass import FTData
@@ -10,6 +11,7 @@ import fittingroutines as fr
 # Qt related modules
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
 from qtmain import Ui_MainWindow
+from qtsettings import Ui_SettingsForm
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -22,6 +24,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.peaks_df = None
 
         self.setupUi(self)
+        self.settings_dialog = SettingsWindow(self)         # Settings Window
+
         self.menubar.setNativeMenuBar(False)
         self.link_ui_actions()
         self.initialize_plot()
@@ -38,7 +42,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionSave_FID.triggered.connect(self.save_fid)
         self.actionSave_peaks.triggered.connect(self.save_peaks)
 
-        # Exiting the program
+        # Top level program interactions
+        self.actionSettings.triggered.connect(self.open_settings)
         self.actionExit.triggered.connect(qApp.quit)
 
         # Processing the FIDs
@@ -231,3 +236,65 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         except FileNotFoundError:
             self.statusBar.showMessage("File not found!")
+
+    def open_settings(self):
+        # Show the settings dialog
+        self.settings_dialog.show()
+
+class SettingsWindow(QMainWindow, Ui_SettingsForm):
+    def __init__(self, parent=None):
+        super(SettingsWindow, self).__init__(parent)
+
+        self.config = dict()
+
+        self.setupUi(self)
+        self.read_settings()
+
+        # Save and close buttons
+        self.pushButtonCloseSettings.clicked.connect(self.close_dialog)
+        self.pushButtonSaveSettings.clicked.connect(self.write_settings)
+
+        self.commandLinkButtonQTFTMPath.clicked.connect(self.browse_qtftm)
+
+    def read_settings(self):
+        # Read in the settings from the config.yaml file in the same directory
+        if os.path.isfile("config.yaml") is False:
+            with open("config.yaml", "w+") as write_file:
+                write_file.write("# Automatically generated config.yaml for FTSpecViewer")
+        with open("config.yaml", "r") as read_file:
+            self.config = yaml.safe_load(read_file)
+        try:
+            self.lineEditChirpPath.setText(self.config["paths"]["chirp_path"])
+            self.lineEditQtFTMPath.setText(self.config["paths"]["qtftm_path"])
+        except KeyError:
+            pass
+
+    def browse_qtftm(self):
+        # Open a file dialog to navigate to the QtFTM folder
+        folderpath = QFileDialog.getExistingDirectory(self, "Navigate to QtFTM root folder")
+
+        if folderpath:
+            self.config["paths"]["qtftm_path"] = folderpath
+            self.lineEditQtFTMPath.setText(folderpath)
+
+    def browse_chirp(self):
+        # Open a file dialog to navigate to the blackchirp folder
+        folderpath = QFileDialog.getExistingDirectory(self, "Navigate to QtFTM root folder")
+
+        if folderpath:
+            self.config["paths"]["chirp_path"] = folderpath
+            self.lineEditChirpPath.setText(folderpath)
+
+    def write_settings(self):
+        # Update the settings first
+        self.config["paths"]["chirp_path"] = self.lineEditChirpPath.text()
+        self.config["paths"]["qtftm_path"] = self.lineEditQtFTMPath.text()
+        with open("config.yaml", "w+") as write_file:
+            yaml.safe_dump(
+                self.config,
+                write_file
+            )
+
+    def close_dialog(self):
+        # Shut down the settings dialog
+        self.close()
