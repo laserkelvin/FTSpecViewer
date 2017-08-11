@@ -90,10 +90,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_peak_table(self):
         # Method for updating the peak table widget
         self.tableWidgetPeakTable.clear()
+        # Set the number of rows
         self.tableWidgetPeakTable.setRowCount(len(self.peaks))
+        # Set two columns
         self.tableWidgetPeakTable.setColumnCount(2)
+        # Set the column headers
         for index, header in enumerate(["Frequency", "Intensity"]):
             self.tableWidgetPeakTable.setHorizontalHeaderItem(index, QTableWidgetItem(header))
+        # Loop over all peaks, and populate the table
         for peak_num, peak in enumerate(self.peaks):
             self.tableWidgetPeakTable.insertRow(peak_num)
             for index, value in enumerate(peak):
@@ -201,6 +205,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.peaks.to_csv(filepath)
 
     def fit_fft(self):
+        # Function to perform an automatic fit to the FFT spectrum
         if self.fid is True:
             peakfreq, peakint = fr.find_peaks(
                 self.data.spectrum["Frequency"].astype(float),
@@ -282,7 +287,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_settings(self):
         # Show the settings dialog
         self.settings_dialog.show()
-
 
 
 ################# Settings Window Dialog #################

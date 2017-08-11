@@ -165,7 +165,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -847,7 +847,9 @@ QMenuBar::item:pressed {
      </property>
      <addaction name="actionSpectrum"/>
      <addaction name="actionFID"/>
-     <addaction name="actionCAT"/>
+     <addaction name="separator"/>
+     <addaction name="actionBatch_scan"/>
+     <addaction name="actionDR_scan"/>
     </widget>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
@@ -863,7 +865,9 @@ QMenuBar::item:pressed {
      <string>Fitting</string>
     </property>
     <addaction name="actionFit_Gaussian"/>
+    <addaction name="actionManual_FFT_peaks"/>
     <addaction name="actionPick_Gaussians"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuOverlays">
     <property name="title">
@@ -959,6 +963,26 @@ QMenuBar::item:pressed {
   <action name="actionPick_Gaussians">
    <property name="text">
     <string>Pick Gaussians</string>
+   </property>
+  </action>
+  <action name="actionBatch_scan">
+   <property name="text">
+    <string>Batch scan</string>
+   </property>
+  </action>
+  <action name="actionDR_scan">
+   <property name="text">
+    <string>DR scan</string>
+   </property>
+  </action>
+  <action name="actionManual_FFT_peaks">
+   <property name="text">
+    <string>Manual FFT peaks</string>
+   </property>
+  </action>
+  <action name="actionFFT_fits">
+   <property name="text">
+    <string>FFT fitting</string>
    </property>
   </action>
  </widget>
