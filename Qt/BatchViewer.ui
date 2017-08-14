@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1144</width>
-    <height>687</height>
+    <width>1083</width>
+    <height>656</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Batch Viewer</string>
@@ -118,13 +124,13 @@ margin-top: 2px; /* make non-selected tabs look smaller */
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="GraphicsLayoutWidget" name="graphicsView">
+   <widget class="DockArea" name="graphicsViewDockArea">
     <property name="geometry">
      <rect>
       <x>270</x>
       <y>10</y>
-      <width>861</width>
-      <height>631</height>
+      <width>800</width>
+      <height>600</height>
      </rect>
     </property>
    </widget>
@@ -134,7 +140,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
       <x>10</x>
       <y>10</y>
       <width>241</width>
-      <height>631</height>
+      <height>601</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -157,7 +163,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
       <x>250</x>
       <y>10</y>
       <width>20</width>
-      <height>631</height>
+      <height>601</height>
      </rect>
     </property>
     <property name="orientation">
@@ -170,7 +176,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1144</width>
+     <width>1083</width>
      <height>22</height>
     </rect>
    </property>
@@ -234,7 +240,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphicsLayoutWidget</class>
+   <class>DockArea</class>
    <extends>QGraphicsView</extends>
    <header>pyqtgraph</header>
   </customwidget>

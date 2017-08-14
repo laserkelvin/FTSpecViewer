@@ -128,7 +128,7 @@ class FTData:
         )
 
 class FTBatch:
-    def __init__(self, settings=None, batchtype="survey"):
+    def __init__(self, filepath=None, settings=None):
         self.settings = {
             "Date": None,
             "Scan number": 0,
@@ -136,8 +136,10 @@ class FTBatch:
             "Step size": 0.,
             "Calibration count": 0,
             "Calibration": False,
+            "Type": None,                        # The batch file type
+            "Scan list": list(),                 # List of scan numbers
+            "Scan objects": dict()               # Dictionary of scan objects
         }
-        self.batchtype = batchtype
 
     def parse_batch(self):
         # General method for parsing details about a batch run
