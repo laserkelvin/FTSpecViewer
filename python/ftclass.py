@@ -126,3 +126,19 @@ class FTData:
             data=list(zip(time * 1e6, proc_fid)),
             columns=["Time", "FID"]
         )
+
+class FTBatch:
+    def __init__(self, settings=None, batchtype="survey"):
+        self.settings = {
+            "Date": None,
+            "Scan number": 0,
+            "Scan count": 0,
+            "Step size": 0.,
+            "Calibration count": 0,
+            "Calibration": False,
+        }
+        self.batchtype = batchtype
+
+    def parse_batch(self):
+        # General method for parsing details about a batch run
+        print(None)

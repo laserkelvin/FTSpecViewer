@@ -5,6 +5,7 @@ import numpy as np
 import yaml
 from uncertainties import ufloat, unumpy
 import pyqtgraph
+from glob import glob
 
 from ftclass import FTData
 import fittingroutines as fr
@@ -29,6 +30,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
         self.settings_dialog = SettingsWindow(self)         # Settings Window
+        self.batch_dialog = ScanChooserWindow(
+            self, self.settings_dialog.config["paths"]["qtftm_path"]
+        )         # Batch dialog
 
         self.menubar.setNativeMenuBar(False)
         self.link_ui_actions()
@@ -48,6 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Top level program interactions
         self.actionSettings.triggered.connect(self.open_settings)
+        self.actionBatch.triggered.connect(self.open_batch)
         self.actionExit.triggered.connect(qApp.quit)
 
         # Processing the FIDs
@@ -289,6 +294,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Show the settings dialog
         self.settings_dialog.show()
 
+    def open_batch(self):
+        self.batch_dialog.show()
+
 
 ################# Settings Window Dialog #################
 
@@ -296,7 +304,12 @@ class SettingsWindow(QMainWindow, Ui_SettingsForm):
     def __init__(self, parent=None):
         super(SettingsWindow, self).__init__(parent)
 
-        self.config = dict()
+        self.config = {
+            "paths": {
+                "qtftm_path": None,
+                "chirp_path": None
+            }
+        }
 
         self.setupUi(self)
         self.init_actions()
@@ -356,12 +369,12 @@ class SettingsWindow(QMainWindow, Ui_SettingsForm):
 ################# Settings Window Dialog #################
 
 class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
-    def __init__(self, parent=None, root_path=None):
+    def __init__(self, parent=None, qtftm_root=None):
         super(ScanChooserWindow, self).__init__(parent)
 
         self.config = dict()
         self.active_control = None
-        self.root_path = root_path
+        self.root_path = qtftm_root
         self.dir = {"dr": list(), "survey": list(), "batch": list()}
 
         self.setupUi(self)
@@ -374,7 +387,8 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.tableWidgetScanChooser.currentItemChanged.connect(self.select_scan)
 
     def select_scan(self):
-        scan_number = int(self.tableWidgetScanChooser.currentItem())
+        selected = self.tableWidgetScanChooser.currentItem()
+        scan_number = int(selected.text())
         self.spinBoxBatchNumber.setValue(scan_number)
 
     def read_latest(self):
@@ -391,6 +405,8 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         # type.
         self.tableWidgetScanChooser.clear()
         choice = str(self.comboBoxScanChooser.currentText()).lower()
+        if choice == "dr batch":
+            choice = "dr"
         self.tableWidgetScanChooser.setRowCount(len(self.dir[choice]))
         self.tableWidgetScanChooser.setColumnCount(1)
 
@@ -398,7 +414,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             filename = file.split("/")[-1]      # Get the filename with extension
             filename = filename.split(".")[0]   # Strip extension
             self.tableWidgetScanChooser.insertRow(index)
-            self.tableWidgetScanChooser.setItem(index, 0, filename)
+            self.tableWidgetScanChooser.setItem(index, 0, QTableWidgetItem(filename))
 
     def close_dialog(self):
         self.close()
