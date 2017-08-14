@@ -13,6 +13,7 @@ import fittingroutines as fr
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
 from qtmain import Ui_MainWindow
 from qtsettings import Ui_SettingsForm
+from qtchooser import Ui_ScanChooser
 
 ################# Main Window #################
 
@@ -298,8 +299,11 @@ class SettingsWindow(QMainWindow, Ui_SettingsForm):
         self.config = dict()
 
         self.setupUi(self)
+        self.init_actions()
         self.read_settings()
 
+    def init_actions(self):
+        # Method for connecting signals to events
         # Save and close buttons
         self.pushButtonCloseSettings.clicked.connect(self.close_dialog)
         self.pushButtonSaveSettings.clicked.connect(self.write_settings)
@@ -347,4 +351,54 @@ class SettingsWindow(QMainWindow, Ui_SettingsForm):
 
     def close_dialog(self):
         # Shut down the settings dialog
+        self.close()
+
+################# Settings Window Dialog #################
+
+class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
+    def __init__(self, parent=None, root_path=None):
+        super(ScanChooserWindow, self).__init__(parent)
+
+        self.config = dict()
+        self.active_control = None
+        self.root_path = root_path
+        self.dir = {"dr": list(), "survey": list(), "batch": list()}
+
+        self.setupUi(self)
+        self.init_actions()
+        self.read_latest()
+
+    def init_actions(self):
+        self.pushButtonCloseChooser.clicked.connect(self.close_dialog)
+        self.comboBoxScanChooser.currentTextChanged.connect(self.update_scan_table)
+        self.tableWidgetScanChooser.currentItemChanged.connect(self.select_scan)
+
+    def select_scan(self):
+        scan_number = int(self.tableWidgetScanChooser.currentItem())
+        self.spinBoxBatchNumber.setValue(scan_number)
+
+    def read_latest(self):
+        # Method for finding out what the most recent scan is for each Batch
+        if self.root_path is not None and os.path.isdir(self.root_path) is True:
+            for batch_type in ["dr", "survey", "batch"]:
+                subdir = os.path.join(self.root_path, batch_type)
+                self.dir[batch_type] = glob(
+                    subdir + "/*/*.txt"
+                )
+
+    def update_scan_table(self):
+        # Method for updating the scan table, depending on the choice of batch
+        # type.
+        self.tableWidgetScanChooser.clear()
+        choice = str(self.comboBoxScanChooser.currentText()).lower()
+        self.tableWidgetScanChooser.setRowCount(len(self.dir[choice]))
+        self.tableWidgetScanChooser.setColumnCount(1)
+
+        for index, file in enumerate(self.dir[choice]):
+            filename = file.split("/")[-1]      # Get the filename with extension
+            filename = filename.split(".")[0]   # Strip extension
+            self.tableWidgetScanChooser.insertRow(index)
+            self.tableWidgetScanChooser.setItem(index, 0, filename)
+
+    def close_dialog(self):
         self.close()

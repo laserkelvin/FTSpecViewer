@@ -13,67 +13,75 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 780)
         MainWindow.setStyleSheet("QMainWindow {\n"
-" background-color: #d9d9d9\n"
+" background-color: #ffffff\n"
 "}\n"
 "\n"
 "QMenuBar {\n"
-" background-color: #66B9BF;\n"
-" color: #d9d9d9\n"
+" background-color: #ffffff;\n"
+" color: #ffffff\n"
 "}\n"
 "\n"
 "QMenuBar::item {\n"
 " background: transparent;\n"
+" color: #2c7fb8;\n"
 " border-radius: 4px;\n"
 "}\n"
 "\n"
 "QMenuBar::item:selected {\n"
-" background: #E37222\n"
+" background: #edf8b1;\n"
+" color: #2c7fb8\n"
 "}\n"
 "\n"
 "QWidget {\n"
-" background-color: #d9d9d9\n"
+" background-color: #ffffff\n"
 "}\n"
 "\n"
 "QTabWidget {\n"
-"background-color: #66B9BF\n"
+"background-color: #ffffff\n"
 "}\n"
 "\n"
 "QLabel {\n"
-"color: #07889B\n"
+"color: #2c7fb8\n"
 "}\n"
 "\n"
 "QDoubleSpinBox {\n"
-"    background-color: #EEAA7B;\n"
-"    color: #d9d9d9;\n"
+"    background-color: #FFFFFF;\n"
+"    color: #2c7fb8;\n"
 "    font-size: 15px;\n"
-"border: 2px solid #C4C4C3;\n"
+"border: 1.5px solid #C4C4C3;\n"
 "border-bottom-color: #C2C7CB; /* same as the pane color */\n"
-"border-top-left-radius: 4px;\n"
-"border-top-right-radius: 4px;\n"
-"min-width: 8ex;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"min-width: 10ex;\n"
 "padding: 2px;\n"
 "}\n"
 "\n"
 "QSpinBox {\n"
-"    background-color: #EEAA7B;\n"
-"    color: #d9d9d9;\n"
+"    background-color: #FFFFFF;\n"
+"    color: #2c7fb8;\n"
 "    font-size: 15px;\n"
-"border: 2px solid #C4C4C3;\n"
+"border: 1.5px solid #C4C4C3;\n"
 "border-bottom-color: #C2C7CB; /* same as the pane color */\n"
-"border-top-left-radius: 4px;\n"
-"border-top-right-radius: 4px;\n"
-"min-width: 8ex;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"min-width: 10ex;\n"
 "padding: 2px;\n"
 "}\n"
 "\n"
 "QComboBox {\n"
-"background-color: #EEAA7B;\n"
-"color: #d9d9d9;\n"
+"background-color: #FFFFFF;\n"
+"color: #2c7fb8;\n"
 "font-size: 15px;\n"
 "border: 2px solid #C4C4C3;\n"
 "border-bottom-color: #C2C7CB; /* same as the pane color */\n"
-"border-top-left-radius: 4px;\n"
-"border-top-right-radius: 4px;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
 "}\n"
@@ -86,8 +94,9 @@ class Ui_MainWindow(object):
 "}\n"
 "/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */\n"
 "QTabBar::tab {\n"
-"background: #EEAA7B;\n"
-"border: 2px solid #C4C4C3;\n"
+"background: #FFFFFF;\n"
+"color: #2c7fb8;\n"
+"border: 2px solid #FFFFFF;\n"
 "border-bottom-color: #C2C7CB; /* same as the pane color */\n"
 "border-top-left-radius: 4px;\n"
 "border-top-right-radius: 4px;\n"
@@ -95,11 +104,11 @@ class Ui_MainWindow(object):
 "padding: 2px;\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
-"background: #E37222;\n"
-"color: #d9d9d9\n"
+"background: #edf8b1;\n"
+"color: #2c7fb8\n"
 "}\n"
 "QTabBar::tab:selected {\n"
-"border-color: #9B9B9B;\n"
+"border-color: #edf8b1;\n"
 "border-bottom-color: #C2C7CB; /* same as pane color */\n"
 "}\n"
 "QTabBar::tab:!selected {\n"
@@ -321,6 +330,7 @@ class Ui_MainWindow(object):
         self.labelCenterFrequency.setMaximumSize(QtCore.QSize(100, 30))
         self.labelCenterFrequency.setFrameShape(QtWidgets.QFrame.Box)
         self.labelCenterFrequency.setText("")
+        self.labelCenterFrequency.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.labelCenterFrequency.setObjectName("labelCenterFrequency")
         self.formLayout_4.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelCenterFrequency)
         self.verticalLayout_2.addLayout(self.formLayout_4)
@@ -473,9 +483,20 @@ class Ui_MainWindow(object):
         self.actionFit_Gaussian.setObjectName("actionFit_Gaussian")
         self.actionPick_Gaussians = QtWidgets.QAction(MainWindow)
         self.actionPick_Gaussians.setObjectName("actionPick_Gaussians")
+        self.actionBatch = QtWidgets.QAction(MainWindow)
+        self.actionBatch.setObjectName("actionBatch")
+        self.actionDR_scan = QtWidgets.QAction(MainWindow)
+        self.actionDR_scan.setObjectName("actionDR_scan")
+        self.actionManual_FFT_peaks = QtWidgets.QAction(MainWindow)
+        self.actionManual_FFT_peaks.setObjectName("actionManual_FFT_peaks")
+        self.actionFFT_fits = QtWidgets.QAction(MainWindow)
+        self.actionFFT_fits.setObjectName("actionFFT_fits")
+        self.actionOverlay_settings = QtWidgets.QAction(MainWindow)
+        self.actionOverlay_settings.setObjectName("actionOverlay_settings")
         self.menuLoad.addAction(self.actionSpectrum)
         self.menuLoad.addAction(self.actionFID)
-        self.menuLoad.addAction(self.actionCAT)
+        self.menuLoad.addSeparator()
+        self.menuLoad.addAction(self.actionBatch)
         self.menuFile.addAction(self.menuLoad.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionSave_FID)
@@ -485,16 +506,19 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionSettings)
         self.menuFile.addAction(self.actionExit)
         self.menuFitting.addAction(self.actionFit_Gaussian)
+        self.menuFitting.addAction(self.actionManual_FFT_peaks)
         self.menuFitting.addAction(self.actionPick_Gaussians)
+        self.menuFitting.addSeparator()
         self.menuLoad_overlay.addAction(self.actionCAT_file)
         self.menuLoad_overlay.addAction(self.actionPeaks)
         self.menuOverlays.addAction(self.menuLoad_overlay.menuAction())
+        self.menuOverlays.addAction(self.actionOverlay_settings)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuFitting.menuAction())
         self.menubar.addAction(self.menuOverlays.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -552,10 +576,17 @@ class Ui_MainWindow(object):
         self.actionCAT.setText(_translate("MainWindow", "CAT"))
         self.actionSettings.setText(_translate("MainWindow", "Settings"))
         self.actionCAT_file.setText(_translate("MainWindow", "CAT file"))
+        self.actionCAT_file.setStatusTip(_translate("MainWindow", "Load an SPCAT catalog file."))
         self.actionPeaks.setText(_translate("MainWindow", "Peaks"))
+        self.actionPeaks.setStatusTip(_translate("MainWindow", "Load a plain text file containing frequencies and intensities"))
         self.actionSave_FID.setText(_translate("MainWindow", "Save FID"))
         self.actionSave_peaks.setText(_translate("MainWindow", "Save peaks"))
         self.actionFit_Gaussian.setText(_translate("MainWindow", "Autofit FFT peaks"))
         self.actionPick_Gaussians.setText(_translate("MainWindow", "Pick Gaussians"))
+        self.actionBatch.setText(_translate("MainWindow", "Batch"))
+        self.actionDR_scan.setText(_translate("MainWindow", "DR scan"))
+        self.actionManual_FFT_peaks.setText(_translate("MainWindow", "Manual FFT peaks"))
+        self.actionFFT_fits.setText(_translate("MainWindow", "FFT fitting"))
+        self.actionOverlay_settings.setText(_translate("MainWindow", "Overlay settings"))
 
 from pyqtgraph import PlotWidget
