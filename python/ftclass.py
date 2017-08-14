@@ -128,6 +128,18 @@ class FTData:
         )
 
 class FTBatch:
+    """
+        A general class for batch/surveys. The parent batch file dialog will
+        pass the filepath to a batch file upon serialization, and the class
+        parser method will then determine the settings and parameters used in
+        the particular scan.
+
+        Each scan is then loaded into memory as `scan` objects, and processed
+        with the same filtering and window functions.
+
+        This FTBatch object is intended to then be passed into the BatchViewerWindow
+        which will then initialize a plot window for that particular scan.
+    """
     def __init__(self, filepath=None, settings=None):
         self.settings = {
             "Date": None,
