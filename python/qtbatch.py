@@ -194,4 +194,4 @@ class Ui_BatchViewer(object):
         self.actionPeaks.setText(_translate("BatchViewer", "Peaks"))
         self.actionOverlay_settings.setText(_translate("BatchViewer", "Overlay settings"))
 
-from pyqtgraph import DockArea
+from pyqtgraph.dockarea import DockArea

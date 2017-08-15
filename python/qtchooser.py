@@ -241,7 +241,7 @@ class Ui_ScanChooser(object):
     def retranslateUi(self, ScanChooser):
         _translate = QtCore.QCoreApplication.translate
         ScanChooser.setWindowTitle(_translate("ScanChooser", "Scan Chooser"))
-        self.comboBoxScanChooser.setItemText(0, _translate("ScanChooser", "Survey"))
+        self.comboBoxScanChooser.setItemText(0, _translate("ScanChooser", "Surveys"))
         self.comboBoxScanChooser.setItemText(1, _translate("ScanChooser", "Batch"))
         self.comboBoxScanChooser.setItemText(2, _translate("ScanChooser", "DR Batch"))
         self.tableWidgetScanChooser.setToolTip(_translate("ScanChooser", "Specify the scan/batch number"))

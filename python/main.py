@@ -7,11 +7,12 @@ from uncertainties import ufloat, unumpy
 import pyqtgraph
 from glob import glob
 
-from ftclass import FTData
+from ftclass import FTData, FTBatch
 import fittingroutines as fr
 
 # Qt related modules
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
+from batchviewer import BatchViewerWindow
 from qtmain import Ui_MainWindow
 from qtsettings import Ui_SettingsForm
 from qtchooser import Ui_ScanChooser
@@ -375,26 +376,29 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.config = dict()
         self.active_control = None
         self.root_path = qtftm_root
-        self.dir = {"dr": list(), "survey": list(), "batch": list()}
+        self.dir = {"dr": list(), "surveys": list(), "batch": list()}
 
         self.setupUi(self)
         self.init_actions()
         self.read_latest()
+        self.update_scan_table()
 
     def init_actions(self):
         self.pushButtonCloseChooser.clicked.connect(self.close_dialog)
+        self.pushButtonOpenScan.clicked.connect(self.create_batch_object)
         self.comboBoxScanChooser.currentTextChanged.connect(self.update_scan_table)
         self.tableWidgetScanChooser.currentItemChanged.connect(self.select_scan)
 
     def select_scan(self):
         selected = self.tableWidgetScanChooser.currentItem()
-        scan_number = int(selected.text())
-        self.spinBoxBatchNumber.setValue(scan_number)
+        if selected:
+            scan_number = int(selected.text())
+            self.spinBoxBatchNumber.setValue(scan_number)
 
     def read_latest(self):
         # Method for finding out what the most recent scan is for each Batch
         if self.root_path is not None and os.path.isdir(self.root_path) is True:
-            for batch_type in ["dr", "survey", "batch"]:
+            for batch_type in ["dr", "surveys", "batch"]:
                 subdir = os.path.join(self.root_path, batch_type)
                 self.dir[batch_type] = glob(
                     subdir + "/*/*.txt"
@@ -407,6 +411,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         choice = str(self.comboBoxScanChooser.currentText()).lower()
         if choice == "dr batch":
             choice = "dr"
+        self.batch_type = choice
         self.tableWidgetScanChooser.setRowCount(len(self.dir[choice]))
         self.tableWidgetScanChooser.setColumnCount(1)
 
@@ -415,6 +420,21 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             filename = filename.split(".")[0]   # Strip extension
             self.tableWidgetScanChooser.insertRow(index)
             self.tableWidgetScanChooser.setItem(index, 0, QTableWidgetItem(filename))
+
+    def create_batch_object(self):
+        # Create a filepath string for the ID and scan type
+        id = int(self.spinBoxBatchNumber.value())
+        for batch in self.dir[self.batch_type]:
+            if "/" + str(id) + ".txt" in batch:
+                filepath = batch
+                # Once we've found our target, break out of loop
+                break
+        #filepath = self.root_path + "/" + self.batch_type + "/" + str(id) + ".txt"
+        self.batch_object = FTBatch(filepath, self.config)
+        self.batch_window = BatchViewerWindow(self, batch_object=self.batch_object)
+        self.batch_window.show()
+
+        self.close_dialog()
 
     def close_dialog(self):
         self.close()

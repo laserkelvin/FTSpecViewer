@@ -139,7 +139,9 @@ class FTBatch:
         This FTBatch object is intended to then be passed into the BatchViewerWindow
         which will then initialize a plot window for that particular scan.
     """
-    def __init__(self, filepath=None, settings=None):
+    def __init__(self, filepath=None, fidsettings=None):
+        self.fidsettings = dict()
+
         self.settings = {
             "Date": None,
             "Scan number": 0,
@@ -149,9 +151,73 @@ class FTBatch:
             "Calibration": False,
             "Type": None,                        # The batch file type
             "Scan list": list(),                 # List of scan numbers
-            "Scan objects": dict()               # Dictionary of scan objects
+            "Scan objects": dict(),              # Dictionary of scan objects
+            "Calibration list": list(),          # List of calibration scans
+            "Calibration objects": dict()        # Dictionary of calibration objects
         }
+        if fidsettings is not None:
+            # Take the FID processing settings
+            self.fidsettings.update(fidsettings)
 
-    def parse_batch(self):
-        # General method for parsing details about a batch run
-        print(None)
+        if filepath is not None:
+            # Open and parse the batch file
+            self.parse_batch(filepath)
+
+    def parse_batch(self, filepath):
+        """ Generic parser for QtFTM batch files """
+        comments = list()
+        spectrum = list()
+        read_spectrum = False
+        read_scans = False
+        read_calscans = False
+        with open(filepath, "r") as read_file:
+            # General method for parsing details about a batch run
+            # Continue statements are used because each line will have one and
+            # only one condition satisfactory
+            for line in read_file:
+                if "#" in line:
+                    comments.append(line)
+                    continue
+                if line == "\n":
+                    # If we encounter a blank line, stop reading everything
+                    read_spectrum = False
+                    read_scans = False
+                    read_calscans = False
+                    continue
+                if read_scans is True:
+                    try:
+                        self.settings["Scan list"].append(int(line))
+                    except ValueError:
+                        pass
+                if read_calscans is True:
+                    try:
+                        self.settings["Calibration list"].append(int(line))
+                    except ValueError:
+                        pass
+                if read_spectrum is True:
+                    # Start reading the spectrum in
+                    try:
+                        split_line = line.split()
+                        values = [float(value) for value in split_line]
+                        #print(values)
+                        spectrum.append(values)
+                    except ValueError:
+                        pass
+                if "surveyfreq" in line or "drfreq" in line:
+                    # Detect that the frequency spectrum has begun
+                    read_spectrum = True
+                if "surveyscans" in line or "drscans" in line:
+                    # Flag the scan number reading
+                    read_scans = True
+                if "surveycal" in line or "drcal" in line:
+                    # Flag the calibration scan numbers to be read
+                    read_calscans = True
+            # Convert the parsed data into a pandas dataframe
+            self.spectrum = pd.DataFrame(
+                data=spectrum,
+                #columns=["Frequency"] + ["Intensity" + str(index) for index in range(1,len(spectrum[0]))]
+            )
+
+    def convert_objects(self, root_path, object_class):
+        """ Method for converting all of the scan numbers into scan objects """
+        return None

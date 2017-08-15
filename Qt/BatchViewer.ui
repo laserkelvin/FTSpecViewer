@@ -242,7 +242,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
   <customwidget>
    <class>DockArea</class>
    <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
+   <header>pyqtgraph.dockarea</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -155,7 +155,7 @@ padding: 2px;
      <widget class="QComboBox" name="comboBoxScanChooser">
       <item>
        <property name="text">
-        <string>Survey</string>
+        <string>Surveys</string>
        </property>
       </item>
       <item>
