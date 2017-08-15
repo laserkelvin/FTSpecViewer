@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 from scipy import signal as spsig
 import peakutils
-import parser
 
 class FTData:
     """ A general class for processing FTMW and FTCP data.
