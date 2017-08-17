@@ -753,7 +753,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
               <double>10.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <double>0.010000000000000</double>
              </property>
              <property name="value">
               <double>0.300000000000000</double>
@@ -858,12 +858,20 @@ QMenuBar::item:pressed {
      <addaction name="actionFID"/>
      <addaction name="separator"/>
      <addaction name="actionBatch"/>
+     <addaction name="actionLegacy_mmw"/>
+    </widget>
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
+      <string>Export peaks...</string>
+     </property>
+     <addaction name="actionFTB"/>
+     <addaction name="actionSave_peaks_2"/>
     </widget>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
     <addaction name="actionSave_FID"/>
     <addaction name="actionSave_spectrum"/>
-    <addaction name="actionSave_peaks"/>
+    <addaction name="menuExport"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
@@ -1003,6 +1011,21 @@ QMenuBar::item:pressed {
   <action name="actionOverlay_settings">
    <property name="text">
     <string>Overlay settings</string>
+   </property>
+  </action>
+  <action name="actionLegacy_mmw">
+   <property name="text">
+    <string>Legacy mmw</string>
+   </property>
+  </action>
+  <action name="actionFTB">
+   <property name="text">
+    <string>FTB</string>
+   </property>
+  </action>
+  <action name="actionSave_peaks_2">
+   <property name="text">
+    <string>ASCII</string>
    </property>
   </action>
  </widget>

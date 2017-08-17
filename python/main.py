@@ -50,6 +50,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionSave_spectrum.triggered.connect(self.save_spectrum)
         self.actionSave_FID.triggered.connect(self.save_fid)
         self.actionSave_peaks.triggered.connect(self.save_peaks)
+        self.actionFTB.triggered.connect(self.export_ftb)
 
         # Top level program interactions
         self.actionSettings.triggered.connect(self.open_settings)
@@ -209,7 +210,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.peaks_df is not None:
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
-                self.peaks.to_csv(filepath)
+                self.peaks_df.to_csv(filepath)
+
+    def export_ftb(self):
+        if self.peaks_df is not None:
+            filepath = QFileDialog.getSaveFileName(self, "Export peaks to FTB file.")
+            self.peaks_df.sort_values(["Intensity"], ascending=False, inplace=True)
+            if filepath:
+                freq = self.peaks_df["Frequency"].astype(float)
+                # normalize the intensities
+                intensities = self.peaks_df["Intensity"].astype(float) / self.peaks_df["Intensity"].max()
+                # Number of shots for strongest line is 10 shots
+                shots = [10. / (value**2.) for value in intensities]
+                merged = np.column_stack((freq, shots))
+                np.savetxt(
+                    fname=str(filepath[0]),
+                    X=merged,
+                    fmt=("ftm:%5.3f", " shots:%4i")
+                )
 
     def fit_fft(self):
         # Function to perform an automatic fit to the FFT spectrum

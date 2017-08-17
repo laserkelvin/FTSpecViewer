@@ -8,8 +8,11 @@ class FTData:
         A file is specified, with the argument `fid` that will determine
         whether or not the data being loaded is an FID, or a tab delimited
         frequency/intensity spectrum.
+
+        This class needs serious cleaning up and reorganizing. Ideally, the
+        parsing should be done in a separate, general function.
     """
-    def __init__(self, filepath=None, fid=False):
+    def __init__(self, filepath=None, fid=False, mmw=False):
         self.settings = dict()
         if fid is True:
             self.fid = list()
@@ -29,46 +32,81 @@ class FTData:
             except ValueError:
                 raise FileParseError("Cannot parse spectrum!")
 
-    def read_fid_settings(self):
+    def read_fid_settings(self, mmw=False):
         """ Function to read in the settings in an FID from QtFTM """
         read_fid = False
-        for line in self.parsed_data:
-            split_line = line.split()
-            if len(split_line) != 0:
-                if "#" in split_line[0]:
-                    # Settings lines are commented with "#"
-                    if "Scan" in line:
-                        # Read in the scan ID
-                        self.settings["ID"] = "-".join(split_line[1:])
-                    elif "Shots" in line:
-                        # Read in the number of Shots
-                        self.settings["Shots"] = int(split_line[1])
-                    elif "Cavity freq" in line:
-                        # Read in the cavity frequency; units of MHz
-                        self.settings["Frequency"] = float(split_line[2])
-                    elif "Tuning Voltage" in line:
-                        # Read in tuning voltage; units of mV
-                        self.settings["Tuning voltage"] = int(split_line[2])
-                    elif "Attenuation" in line:
-                        # Read in the Attenuation; units of dB
-                        self.settings["Attenuation"] = int(split_line[1])
-                    elif "Cavity Voltage" in line:
-                        # Read in cavity voltage; units of mV
-                        self.settings["Cavity voltage"] = int(split_line[2])
-                    elif "FID spacing" in line:
-                        # Read in the FID spacing, units of seconds
-                        self.settings["FID spacing"] = float(split_line[2])
-                    elif "FID points" in line:
-                        # Read in the number of points we expect for the FID
-                        self.settings["FID points"] = int(split_line[2])
-                    elif "Probe" in line:
-                        # The probe frequency, in MHz
-                        self.settings["Probe frequency"] = float(split_line[2])
-                if read_fid is True:
-                    self.fid.append(float(line))
-                if "fid" in line:
-                    # Start reading the FID in after this line is found
-                    read_fid = True
+        if mmw is False:
+            for line in self.parsed_data:
+                split_line = line.split()
+                if len(split_line) != 0:
+                    if "#" in split_line[0]:
+                        # Settings lines are commented with "#"
+                        if "Scan" in line:
+                            # Read in the scan ID
+                            self.settings["ID"] = "-".join(split_line[1:])
+                        elif "Shots" in line:
+                            # Read in the number of Shots
+                            self.settings["Shots"] = int(split_line[1])
+                        elif "Cavity freq" in line:
+                            # Read in the cavity frequency; units of MHz
+                            self.settings["Frequency"] = float(split_line[2])
+                        elif "Tuning Voltage" in line:
+                            # Read in tuning voltage; units of mV
+                            self.settings["Tuning voltage"] = int(split_line[2])
+                        elif "Attenuation" in line:
+                            # Read in the Attenuation; units of dB
+                            self.settings["Attenuation"] = int(split_line[1])
+                        elif "Cavity Voltage" in line:
+                            # Read in cavity voltage; units of mV
+                            self.settings["Cavity voltage"] = int(split_line[2])
+                        elif "FID spacing" in line:
+                            # Read in the FID spacing, units of seconds
+                            self.settings["FID spacing"] = float(split_line[2])
+                        elif "FID points" in line:
+                            # Read in the number of points we expect for the FID
+                            self.settings["FID points"] = int(split_line[2])
+                        elif "Probe" in line:
+                            # The probe frequency, in MHz
+                            self.settings["Probe frequency"] = float(split_line[2])
+                    if read_fid is True:
+                        self.fid.append(float(line))
+                    if "fid" in line:
+                        # Start reading the FID in after this line is found
+                        read_fid = True
+        elif mmw is True:
+            read_params = False
+            read_int = False
+            for line in self.parsed_data:
+                if "SURVEY" in line:
+                    scan_details = line.split()
+                    self.settings["ID"] = int(scan_details[1])
+                    self.settings["Date"] = str(scan_details[4])
+                    read_params = True
+                    read_int = False
+                    intensities = list()
+                    continue
+                if read_params is True:
+                    # Read in the frequency step, frequency, and other info
+                    # needed to reconstruct the frequency data
+                    scan_params = self.parsed_data[1].split()
+                    shift = 1
+                    self.settings["Frequency"] = float(scan_params[0])
+                    self.settings["Frequency step"] = float(scan_params[1])
+                    if len(scan_params) == 4:
+                        self.settings["Multiplier"] = 1
+                        shift = 0
+                    # If the multiplier data is there, we don't shift the read
+                    # index over by one
+                    else:
+                        self.settings["Multiplier"] = int(scan_params[2])
+                    self.settings["Center"] = float(scan_params[2 + i])
+                    self.settings["Points"] = int(scan_params[3 + i])
+                    read_params = False
+                    # Start reading intensities immediately afterwards
+                    read_int = True
+                    continue
+                if read_int is True:
+                    intensities += line.split()
 
     def fid2fft(self, window_function=None, dc_offset=True, exp_filter=None, delay=None):
         """ Perform the DFT of an FID using NumPy's FFT package. """
