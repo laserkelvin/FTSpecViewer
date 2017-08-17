@@ -121,9 +121,9 @@ class Ui_BatchViewer(object):
 "}")
         self.centralwidget = QtWidgets.QWidget(BatchViewer)
         self.centralwidget.setObjectName("centralwidget")
-        self.graphicsViewDockArea = DockArea(self.centralwidget)
-        self.graphicsViewDockArea.setGeometry(QtCore.QRect(270, 10, 800, 600))
-        self.graphicsViewDockArea.setObjectName("graphicsViewDockArea")
+        self.graphicsViewLayoutWidget = GraphicsLayoutWidget(self.centralwidget)
+        self.graphicsViewLayoutWidget.setGeometry(QtCore.QRect(270, 10, 800, 600))
+        self.graphicsViewLayoutWidget.setObjectName("graphicsViewLayoutWidget")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 241, 601))
         self.tabWidget.setObjectName("tabWidget")
@@ -194,4 +194,4 @@ class Ui_BatchViewer(object):
         self.actionPeaks.setText(_translate("BatchViewer", "Peaks"))
         self.actionOverlay_settings.setText(_translate("BatchViewer", "Overlay settings"))
 
-from pyqtgraph.dockarea import DockArea
+from pyqtgraph import GraphicsLayoutWidget

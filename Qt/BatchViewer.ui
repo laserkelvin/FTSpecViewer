@@ -124,7 +124,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="DockArea" name="graphicsViewDockArea">
+   <widget class="GraphicsLayoutWidget" name="graphicsViewLayoutWidget">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -240,9 +240,9 @@ margin-top: 2px; /* make non-selected tabs look smaller */
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DockArea</class>
+   <class>GraphicsLayoutWidget</class>
    <extends>QGraphicsView</extends>
-   <header>pyqtgraph.dockarea</header>
+   <header>pyqtgraph</header>
   </customwidget>
  </customwidgets>
  <resources/>

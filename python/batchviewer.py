@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import yaml
 from uncertainties import ufloat, unumpy
-from pyqtgraph import dockarea, PlotWidget, LinearRegionItem, GraphicsLayoutWidget
+from pyqtgraph import PlotWidget, LinearRegionItem, GraphicsLayoutWidget
 from glob import glob
 
 from ftclass import FTData
@@ -40,29 +40,34 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
 
     def initialize_plot(self):
         # Add two main docks
-        self.MainDock = dockarea.Dock(name="Main plot", size=(800,400))
-        self.FFTDock = dockarea.Dock(name="FFT", size=(150,150))
-        self.graphicsViewDockArea.addDock(self.MainDock)
-        self.graphicsViewDockArea.addDock(self.FFTDock, "top", self.MainDock)
-
-        self.MainPlotWidget = GraphicsLayoutWidget()
-        self.ROI = self.MainPlotWidget.addPlot(row=1, col=1, colspan=1, title="ROI")
-        self.Overview = self.MainPlotWidget.addPlot(row=2, col=1, colspan=2, title="Overview")
-        self.MainPlotRegion = LinearRegionItem()
-        self.Overview.addItem(self.MainPlotRegion, ignoreBounds = True)
-
-        self.MainDock.addWidget(self.MainPlotWidget)
-        self.MainPlotRegion.sigRegionChanged.connect(self.update_roi)
-
-        qGraphicsGridLayout = self.MainPlotWidget.ci.layout
-        qGraphicsGridLayout.setColumnStretchFactor(0, 2)
-        qGraphicsGridLayout.setColumnStretchFactor(1, 1)
-
-        self.FFTPlot = PlotWidget()
-        self.FFTPlot.plot(np.random.normal(size=50))
-        self.FFTDock.addWidget(self.FFTPlot)
+        self.Overview = self.graphicsViewLayoutWidget.addPlot(
+            row=1,
+            col=0,
+            rowspan=2
+        )
+        self.ROI = self.graphicsViewLayoutWidget.addPlot(
+            title="Region of interest",
+            row=3,
+            col=0,
+        )
+        # Set up the region-of-interest
+        self.PlotRegion = LinearRegionItem()
+        self.PlotRegion.setZValue(10)
+        self.Overview.addItem(self.PlotRegion, ignoreBounds = True)
+        center_freq = self.batch_object.spectrum[0].mean()
+        # Set the region to +/- 5% in the center
+        self.PlotRegion.setRegion(
+            [
+                center_freq - center_freq*0.01,
+                center_freq + center_freq*0.01
+            ]
+        )
+        # Connect the ROI signal event to action
+        self.PlotRegion.sigRegionChanged.connect(self.update_roi)
+        self.Overview.setAutoVisible(y=True)
 
     def update_plot(self):
+        # ROI updating
         self.Overview.plot(
             self.batch_object.spectrum[0].astype(float),
             self.batch_object.spectrum[1].astype(float),
@@ -75,11 +80,12 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
     def update_roi(self):
         # Update the region-of-interest plot when the region is changed in the
         # overview plot
-        minX, maxX = self.MainPlotRegion.getRegion()
+        self.PlotRegion.setZValue(10)
+        minX, maxX = self.PlotRegion.getRegion()
         self.ROI.setXRange(minX, maxX, padding=0)
 
     def update_region(self, window, viewRange):
         # Updates the region indicator in the overview plot when the focus is
         # changed in the ROI plot
         rgn = viewRange[0]
-        self.MainPlotRegion.setRegion(rgn)
+        self.PlotRegion.setRegion(rgn)
