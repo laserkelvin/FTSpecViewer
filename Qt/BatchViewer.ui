@@ -121,6 +121,19 @@ border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
 margin-top: 2px; /* make non-selected tabs look smaller */
+}
+QPushButton {
+	background-color: #FFFFFF;
+	color: #2c7fb8;
+	font-size: 15px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+min-width: 10ex;
+padding: 2px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
