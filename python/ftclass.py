@@ -177,8 +177,9 @@ class FTBatch:
         This FTBatch object is intended to then be passed into the BatchViewerWindow
         which will then initialize a plot window for that particular scan.
     """
-    def __init__(self, filepath=None, fidsettings=None):
+    def __init__(self, filepath=None, batch_type=None, fidsettings=None, rootpath=None):
         self.fidsettings = dict()
+        self.root_path = rootpath
 
         self.settings = {
             "Date": None,
@@ -187,7 +188,7 @@ class FTBatch:
             "Step size": 0.,
             "Calibration count": 0,
             "Calibration": False,
-            "Type": None,                        # The batch file type
+            "Type": batch_type,                  # The batch file type
             "Scan list": list(),                 # List of scan numbers
             "Scan objects": dict(),              # Dictionary of scan objects
             "Calibration list": list(),          # List of calibration scans
@@ -195,11 +196,16 @@ class FTBatch:
         }
         if fidsettings is not None:
             # Take the FID processing settings
+            self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
             self.fidsettings.update(fidsettings)
 
         if filepath is not None:
             # Open and parse the batch file
             self.parse_batch(filepath)
+
+        if len(fidsettings) != 0:
+            # If the FID config was changed, reload and reprocess all the FIDs
+            self.convert_objects()
 
     def parse_batch(self, filepath):
         """ Generic parser for QtFTM batch files """
@@ -256,6 +262,37 @@ class FTBatch:
                 #columns=["Frequency"] + ["Intensity" + str(index) for index in range(1,len(spectrum[0]))]
             )
 
-    def convert_objects(self, root_path, object_class):
-        """ Method for converting all of the scan numbers into scan objects """
-        return None
+    def build_dir_paths(self):
+        # Build up the directory paths for all of the scans
+        self.settings["Scan paths"] = dict()
+        for scan_id in self.settings["Scan list"]:
+            self.settings[scan_id] = self.root_path + "/" + self.batch_type + "/*/" + str(scan_id) + ".txt"
+
+    def convert_objects(self):
+        self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
+        for scan_id in self.settings["Scan list"]:
+            if os.path.isfile(self.settings["Scan paths"][scan_id]) is False:
+                pass
+            else:
+                instance = FTData(self.settings["Scan paths"][scan_id], fid=True)
+                instance.fid2fft(
+                    window_function = self.fidsettings["window function"],
+                    delay = self.fidsettings["delay"],
+                    exp_filter = self.fidsettings["exponential"],
+                )
+                self.spectrum = self.spectrum.append(instance.spectrum, ignore_index=True)
+                self.settings["Scan objects"][scan_id] = instance
+
+    def process_all_fids(self):
+        # This routine will reprocess all of the FIDs
+        self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
+        for scan in self.settings["Scan objects"]:
+            self.settings["Scan objects"][scan].fid2fft(
+                window_function = self.fidsettings["window function"],
+                delay = self.fidsettings["delay"],
+                exp_filter = self.fidsettings["exponential"],
+            )
+            self.spectrum = self.spectrum.append(
+                self.settings["Scan objects"][scan].spectrum,
+                ignore_index=True
+            )

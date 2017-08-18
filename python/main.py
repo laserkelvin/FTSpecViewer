@@ -406,6 +406,18 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.pushButtonOpenScan.clicked.connect(self.create_batch_object)
         self.comboBoxScanChooser.currentTextChanged.connect(self.update_scan_table)
         self.tableWidgetScanChooser.currentItemChanged.connect(self.select_scan)
+        # FID processing config
+        self.comboBoxWindowFunction.currentTextChanged.connect(self.update_config)
+        self.spinBoxDelay.valueChanged.connect(self.update_config)
+        self.spinBoxHighPass.valueChanged.connect(self.update_config)
+        self.spinBoxExpFilter.valueChanged.connect(self.update_config)
+
+    def update_config(self):
+        for key, box in zip(["exponential", "high pass", "delay"],
+                            [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxDelay]
+                            ):
+            self.config[key] = float(box.value())
+        self.config["window function"] = str(self.comboBoxWindowFunction.currentText())
 
     def select_scan(self):
         selected = self.tableWidgetScanChooser.currentItem()
@@ -448,7 +460,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
                 # Once we've found our target, break out of loop
                 break
         #filepath = self.root_path + "/" + self.batch_type + "/" + str(id) + ".txt"
-        self.batch_object = FTBatch(filepath, self.config)
+        self.batch_object = FTBatch(filepath, self.batch_type, self.config, self.root_path)
         self.batch_window = BatchViewerWindow(self, batch_object=self.batch_object)
         self.batch_window.show()
 
