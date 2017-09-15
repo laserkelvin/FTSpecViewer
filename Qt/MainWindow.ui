@@ -15,67 +15,75 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
- background-color: #d9d9d9
+ background-color: #ffffff
 }
 
 QMenuBar {
- background-color: #66B9BF;
- color: #d9d9d9
+ background-color: #ffffff;
+ color: #ffffff
 }
 
 QMenuBar::item {
  background: transparent;
+ color: #2c7fb8;
  border-radius: 4px;
 }
 
 QMenuBar::item:selected {
- background: #E37222
+ background: #edf8b1;
+ color: #2c7fb8
 }
 
 QWidget {
- background-color: #d9d9d9
+ background-color: #ffffff
 }
 
 QTabWidget {
-background-color: #66B9BF
+background-color: #ffffff
 }
 
 QLabel {
-color: #07889B
+color: #2c7fb8
 }
 
 QDoubleSpinBox {
-	background-color: #EEAA7B;
-	color: #d9d9d9;
+	background-color: #FFFFFF;
+	color: #2c7fb8;
 	font-size: 15px;
-border: 2px solid #C4C4C3;
+border: 1.5px solid #C4C4C3;
 border-bottom-color: #C2C7CB; /* same as the pane color */
-border-top-left-radius: 4px;
-border-top-right-radius: 4px;
-min-width: 8ex;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+min-width: 10ex;
 padding: 2px;
 }
 
 QSpinBox {
-	background-color: #EEAA7B;
-	color: #d9d9d9;
+	background-color: #FFFFFF;
+	color: #2c7fb8;
 	font-size: 15px;
-border: 2px solid #C4C4C3;
+border: 1.5px solid #C4C4C3;
 border-bottom-color: #C2C7CB; /* same as the pane color */
-border-top-left-radius: 4px;
-border-top-right-radius: 4px;
-min-width: 8ex;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+min-width: 10ex;
 padding: 2px;
 }
 
 QComboBox {
-background-color: #EEAA7B;
-color: #d9d9d9;
+background-color: #FFFFFF;
+color: #2c7fb8;
 font-size: 15px;
 border: 2px solid #C4C4C3;
 border-bottom-color: #C2C7CB; /* same as the pane color */
-border-top-left-radius: 4px;
-border-top-right-radius: 4px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
 min-width: 8ex;
 padding: 2px;
 }
@@ -88,8 +96,9 @@ left: 5px; /* move to the right by 5px */
 }
 /* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
 QTabBar::tab {
-background: #EEAA7B;
-border: 2px solid #C4C4C3;
+background: #FFFFFF;
+color: #2c7fb8;
+border: 2px solid #FFFFFF;
 border-bottom-color: #C2C7CB; /* same as the pane color */
 border-top-left-radius: 4px;
 border-top-right-radius: 4px;
@@ -97,11 +106,11 @@ min-width: 8ex;
 padding: 2px;
 }
 QTabBar::tab:selected, QTabBar::tab:hover {
-background: #E37222;
-color: #d9d9d9
+background: #edf8b1;
+color: #2c7fb8
 }
 QTabBar::tab:selected {
-border-color: #9B9B9B;
+border-color: #edf8b1;
 border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
@@ -597,6 +606,20 @@ margin-top: 2px; /* make non-selected tabs look smaller */
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButtonPickDoppler">
+           <property name="text">
+            <string>Manual Doppler fit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonAutofit">
+           <property name="text">
+            <string>Autofit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QFormLayout" name="formLayout_4">
            <item row="0" column="0">
             <widget class="QLabel" name="label_17">
@@ -744,7 +767,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
               <double>10.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <double>0.010000000000000</double>
              </property>
              <property name="value">
               <double>0.300000000000000</double>
@@ -848,14 +871,22 @@ QMenuBar::item:pressed {
      <addaction name="actionSpectrum"/>
      <addaction name="actionFID"/>
      <addaction name="separator"/>
-     <addaction name="actionBatch_scan"/>
-     <addaction name="actionDR_scan"/>
+     <addaction name="actionBatch"/>
+     <addaction name="actionLegacy_mmw"/>
+    </widget>
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
+      <string>Export peaks...</string>
+     </property>
+     <addaction name="actionFTB"/>
+     <addaction name="actionSave_peaks_2"/>
+     <addaction name="actionStick_spectrum"/>
     </widget>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
     <addaction name="actionSave_FID"/>
     <addaction name="actionSave_spectrum"/>
-    <addaction name="actionSave_peaks"/>
+    <addaction name="menuExport"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
@@ -881,6 +912,7 @@ QMenuBar::item:pressed {
      <addaction name="actionPeaks"/>
     </widget>
     <addaction name="menuLoad_overlay"/>
+    <addaction name="actionOverlay_settings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFitting"/>
@@ -936,10 +968,16 @@ QMenuBar::item:pressed {
    <property name="text">
     <string>CAT file</string>
    </property>
+   <property name="statusTip">
+    <string>Load an SPCAT catalog file.</string>
+   </property>
   </action>
   <action name="actionPeaks">
    <property name="text">
     <string>Peaks</string>
+   </property>
+   <property name="statusTip">
+    <string>Load a plain text file containing frequencies and intensities</string>
    </property>
   </action>
   <action name="actionSave_FID">
@@ -965,9 +1003,9 @@ QMenuBar::item:pressed {
     <string>Pick Gaussians</string>
    </property>
   </action>
-  <action name="actionBatch_scan">
+  <action name="actionBatch">
    <property name="text">
-    <string>Batch scan</string>
+    <string>Batch</string>
    </property>
   </action>
   <action name="actionDR_scan">
@@ -983,6 +1021,31 @@ QMenuBar::item:pressed {
   <action name="actionFFT_fits">
    <property name="text">
     <string>FFT fitting</string>
+   </property>
+  </action>
+  <action name="actionOverlay_settings">
+   <property name="text">
+    <string>Overlay settings</string>
+   </property>
+  </action>
+  <action name="actionLegacy_mmw">
+   <property name="text">
+    <string>Legacy mmw</string>
+   </property>
+  </action>
+  <action name="actionFTB">
+   <property name="text">
+    <string>FTB</string>
+   </property>
+  </action>
+  <action name="actionSave_peaks_2">
+   <property name="text">
+    <string>ASCII</string>
+   </property>
+  </action>
+  <action name="actionStick_spectrum">
+   <property name="text">
+    <string>Stick spectrum</string>
    </property>
   </action>
  </widget>
