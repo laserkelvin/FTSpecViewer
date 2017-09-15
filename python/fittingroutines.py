@@ -1,5 +1,6 @@
 import peakutils
 from scipy.optimize import curve_fit
+from uncertainties import ufloat, unumpy
 import numpy as np
 
 def find_peaks(xdata, ydata, thres=0.3, min_dist=1):
@@ -20,6 +21,10 @@ def gaussian_func(x, amplitude, center, width, offset):
     # Stock Gaussian
     return amplitude / np.sqrt(width**2. * 2. * np.pi) * (np.exp(-(x - center)**2. / (2. * width**2.))) + offset
 
+def lorentzian_func(x, amplitude, center, width, offset):
+    # Stock Lorenztian
+    return amplitude / np.pi * (0.5 * width)/((x - center)**2. + (0.5 * width)**2.)
+
 def arb_gaussian_func(x, *params):
     """ Fit an arbtirary number of Gaussian line profiles to data.
         The parameters are given in lots of three; the amplitude,
@@ -33,6 +38,42 @@ def arb_gaussian_func(x, *params):
         offset = params[i+3]
         y += gaussian_func(x, amplitude, center, width, offset)
     return y
+
+def doppler_pair(x, a1, a2, w1, w2, center, doppler_splitting, offset):
+    """ Function for a pair of Doppler peaks """
+    return lorentzian_func(x, a1, center - doppler_splitting, w1, offset) + \
+           lorentzian_func(x, a2, center + doppler_splitting, w2, offset)
+
+def fit_doppler_pair(fft_df, center=None):
+    if "Fit" not in list(fft_df.keys()):
+        fft_df["Fit"] = np.zeros(len(fft_df["Frequency"]))
+    if center is not None:
+        # If a center is provided as a list of frequencies, take the average
+        center = np.average(center)
+    elif center is None:
+        # If no center guess, take center of the frequency window
+        center = (fft_df["Frequency"].min() + fft_df["Frequency"].max()) / 2.
+    initial = [0.5, 0.5, 0.01, 0.01, center, 0.001, 0.]
+    bounds = (
+        [0., 0., 1e-4, 1e-4, center - 0.1, 0., -np.inf],
+        [np.inf, np.inf, 0.05, 0.05, center + 0.1, 0.1, np.inf]
+    )
+    # Call the scipy fitting wrapper
+    popt, pcov = curve_fit(
+        doppler_pair,
+        fft_df["Frequency"],
+        fft_df["Intensity"],
+        p0=initial,
+        bounds=bounds
+    )
+
+    fft_df["Fit"] += doppler_pair(fft_df["Frequency"], *popt)
+    fit_results = dict()
+    sigmas = np.sqrt(np.diag(pcov))
+    names = ["A1", "A2", "W1", "W2", "Frequency", "Doppler-width", "Offset"]
+    for name, value, sigma in zip(names, popt, sigmas):
+        fit_results[name] = ufloat(value, sigma)
+    return fit_results
 
 def fit_lineshape(func, xdata, ydata, peak_guesses=None):
     """ A wrapper for curve_fit function of SciPy.
@@ -53,7 +94,7 @@ def fit_lineshape(func, xdata, ydata, peak_guesses=None):
         )
         bounds = (
             flatten_list([value for value in [[1e-3, center - 0.5, 1e-5, -1e-3] for center in peak_guesses]]),
-      flatten_list([value for value in [[np.infty, center + 0.5, 0.05, 1e3] for center in peak_guesses]])
+           flatten_list([value for value in [[np.infty, center + 0.5, 0.05, 1e3] for center in peak_guesses]])
          )
     else:
         initial = None

@@ -174,7 +174,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -606,6 +606,20 @@ margin-top: 2px; /* make non-selected tabs look smaller */
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButtonPickDoppler">
+           <property name="text">
+            <string>Manual Doppler fit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonAutofit">
+           <property name="text">
+            <string>Autofit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QFormLayout" name="formLayout_4">
            <item row="0" column="0">
             <widget class="QLabel" name="label_17">
@@ -866,6 +880,7 @@ QMenuBar::item:pressed {
      </property>
      <addaction name="actionFTB"/>
      <addaction name="actionSave_peaks_2"/>
+     <addaction name="actionStick_spectrum"/>
     </widget>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
@@ -1026,6 +1041,11 @@ QMenuBar::item:pressed {
   <action name="actionSave_peaks_2">
    <property name="text">
     <string>ASCII</string>
+   </property>
+  </action>
+  <action name="actionStick_spectrum">
+   <property name="text">
+    <string>Stick spectrum</string>
    </property>
   </action>
  </widget>

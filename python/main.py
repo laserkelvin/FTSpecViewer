@@ -25,6 +25,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # initialize some class data
         self.detect_peaks_bool = False
+        self.pick_peaks = False
+        self.doppler_count = 0
+        self.doppler_param = dict()
         self.data = None
         self.peaks = None
         self.peaks_df = None
@@ -51,6 +54,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionSave_FID.triggered.connect(self.save_fid)
         self.actionSave_peaks.triggered.connect(self.save_peaks)
         self.actionFTB.triggered.connect(self.export_ftb)
+        self.actionStick_spectrum.triggered.connect(self.export_sticks)
 
         # Top level program interactions
         self.actionSettings.triggered.connect(self.open_settings)
@@ -67,11 +71,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.checkBoxDetectPeaks.stateChanged.connect(self.peak_detection_bool_update)
         self.doubleSpinBoxPeakSNRThres.valueChanged.connect(self.detect_peaks)
         self.doubleSpinBoxPeakMinDist.valueChanged.connect(self.detect_peaks)
+        self.pushButtonAutofit.clicked.connect(self.auto_doppler)
+
+        # Peak picking routine
+        if self.pick_peaks is True:
+            self.doppler_count = 0
+            self.graphcsViewMain.scene().sigMouseClicked.connect(self.manual_doppler_fit)
 
     def peak_detection_bool_update(self):
         # Toggles on and off
         self.detect_peaks_bool = not self.detect_peaks_bool
         self.detect_peaks()
+
+    def pick_peaks_bool_update(self):
+        # Toggles peak picking on and off
+        self.pick_peaks = not self.pick_peaks
+
+    def manual_doppler_fit(self):
+        self.doppler_count = 0
+        self.graphicsViewMain.scene()
+
+    def auto_doppler(self):
+        # Detect peaks Automatically
+        self.doppler_sets = list()
+        # Perform peak detection to do a quick search for frequencies
+        self.detect_peaks_bool = True
+        self.detect_peaks()
+        self.detect_peaks_bool = False
+        while (len(self.peaks) / 2.) >= 1:
+            pair = list()
+            for i in range(2):
+                pair.append(self.peaks.pop())
+            self.doppler_sets.append(pair)
+        self.peaks = list()
+        self.peaks_df.drop(self.peaks_df.index, inplace=True)
+        for index, pair in enumerate(self.doppler_sets):
+            frequencies = [pair[0][0], pair[1][0]]
+            intensity = np.average([pair[0][1], pair[1][1]])
+            self.doppler_param[index] = fr.fit_doppler_pair(self.data.spectrum, frequencies)
+            self.peaks_df = self.peaks_df.append(
+                {"Frequency": self.doppler_param[index]["Frequency"].n,
+                 "Intensity": intensity},
+                ignore_index=True
+            )
+            self.peaks.append([self.doppler_param[index]["Frequency"].n, intensity])
+        self.update_peak_table()
+        self.update_plot()
+        print(self.peaks_df)
 
     def detect_peaks(self):
         # Peak detection signal event. If the checkbox for peak detection is
@@ -131,6 +177,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 delay=delay
             )
             self.update_plot()
+
+    def export_sticks(self):
+        """ Function to export a stick spectrum """
+        try:
+            intensities = np.zeros(len(self.data.spectrum["Frequency"]))
+            self.stick_spectrum = pd.DataFrame(
+                list(zip(self.data.spectrum["Frequency"].astype(float), intensities)),
+                columns=["Frequency", "Intensity"]
+            )
+            self.stick_spectrum = pd.concat([self.stick_spectrum, self.peaks_df])
+            self.stick_spectrum.sort_values(["Frequency"], ascending=True, inplace=True)
+            filepath = QFileDialog.getSaveFileName(self, "Save the stick spectrum")
+            if len(filepath[0]) > 1:
+                self.stick_spectrum.to_csv(filepath[0], index=False)
+        except NameError:
+            self.statusBar.showMessage("No sticks to spectrum!")
 
     def initialize_plot(self):
         # Method that will set up the PlotWidget settings
@@ -196,21 +258,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.data:
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
-                self.data.spectrum.to_csv(filepath)
+                self.data.spectrum.to_csv(filepath[0], index=False)
 
     def save_fid(self):
         # Method for exporting a FID via Pandas dataframe method
         if self.fid is True:
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
-                self.data.fid.to_csv(filepath)
+                self.data.fid.to_csv(filepath[0], index=False)
 
     def save_peaks(self):
         # Method for exporting the detected peaks via Pandas dataframe method
         if self.peaks_df is not None:
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
-                self.peaks_df.to_csv(filepath)
+                self.peaks_df.to_csv(filepath[0])
 
     def export_ftb(self):
         if self.peaks_df is not None:
