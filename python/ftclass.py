@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy import signal as spsig
 import peakutils
+from utils import FTDateTime
 
 class FTData:
     """ A general class for processing FTMW and FTCP data.
@@ -176,8 +177,13 @@ class FTBatch:
 
         This FTBatch object is intended to then be passed into the BatchViewerWindow
         which will then initialize a plot window for that particular scan.
+
+        The peek argument is given as an option whether or not just to simply
+        look at the settings contained in the batch file and not actually process
+        the data.
     """
-    def __init__(self, filepath=None, batch_type=None, fidsettings=None, rootpath=None):
+    def __init__(self, filepath=None, batch_type=None,
+                 fidsettings=None, rootpath=None, peek=True):
         self.fidsettings = dict()
         self.root_path = rootpath
 
@@ -185,7 +191,10 @@ class FTBatch:
             "Date": None,
             "Scan number": 0,
             "Scan count": 0,
-            "Step size": 0.,
+            "Start frequency": None,
+            "End frequency": None,
+            "Step size": None,
+            "Cavity frequency": None,
             "Calibration count": 0,
             "Calibration": False,
             "Type": batch_type,                  # The batch file type
@@ -194,20 +203,21 @@ class FTBatch:
             "Calibration list": list(),          # List of calibration scans
             "Calibration objects": dict()        # Dictionary of calibration objects
         }
-        if fidsettings is not None:
-            # Take the FID processing settings
-            self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
-            self.fidsettings.update(fidsettings)
+        if peek is False:
+            if fidsettings is not None:
+                # Take the FID processing settings
+                self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
+                self.fidsettings.update(fidsettings)
 
         if filepath is not None:
             # Open and parse the batch file
-            self.parse_batch(filepath)
+            self.parse_batch(filepath, peek)
 
-        if len(fidsettings) != 0:
-            # If the FID config was changed, reload and reprocess all the FIDs
-            self.convert_objects()
+            if len(fidsettings) != 0:
+                # If the FID config was changed, reload and reprocess all the FIDs
+                self.convert_objects()
 
-    def parse_batch(self, filepath):
+    def parse_batch(self, filepath, peek=True):
         """ Generic parser for QtFTM batch files """
         comments = list()
         spectrum = list()
@@ -238,7 +248,7 @@ class FTBatch:
                         self.settings["Calibration list"].append(int(line))
                     except ValueError:
                         pass
-                if read_spectrum is True:
+                if read_spectrum is True and peek is False:
                     # Start reading the spectrum in
                     try:
                         split_line = line.split()
@@ -256,11 +266,23 @@ class FTBatch:
                 if "surveycal" in line or "drcal" in line:
                     # Flag the calibration scan numbers to be read
                     read_calscans = True
+            for comment in comments:
+                if "FT freq" in line:
+                    self.settings["Cavity frequency"] = float(comment.split()[2])
+                if "Start freq" in line:
+                    self.settings["Start frequency"] = float(comment.split()[2])
+                if "End freq" in line:
+                    self.settings["End frequency"] = float(comment.split()[2])
+                if "Step size" in line:
+                    self.settings["Step size"] = float(comment.split()[2])
+                if "Date" in line:
+                    self.settings["Date"] = FTDateTime(line)
             # Convert the parsed data into a pandas dataframe
-            self.spectrum = pd.DataFrame(
-                data=spectrum,
-                #columns=["Frequency"] + ["Intensity" + str(index) for index in range(1,len(spectrum[0]))]
-            )
+            if peek is False:
+                self.spectrum = pd.DataFrame(
+                    data=spectrum,
+                    columns=["Frequency", "Intensity"]
+                )
 
     def build_dir_paths(self):
         # Build up the directory paths for all of the scans
@@ -269,6 +291,8 @@ class FTBatch:
             self.settings[scan_id] = self.root_path + "/" + self.batch_type + "/*/" + str(scan_id) + ".txt"
 
     def convert_objects(self):
+        # Class method for taking all of the scan IDs and subsequently serialize
+        # all of them to FTData objects, processing them with the same settings
         self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
         for scan_id in self.settings["Scan list"]:
             if os.path.isfile(self.settings["Scan paths"][scan_id]) is False:
@@ -284,7 +308,7 @@ class FTBatch:
                 self.settings["Scan objects"][scan_id] = instance
 
     def process_all_fids(self):
-        # This routine will reprocess all of the FIDs
+        # Class method for re-processing all of the FIDs without re-parsing
         self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
         for scan in self.settings["Scan objects"]:
             self.settings["Scan objects"][scan].fid2fft(
