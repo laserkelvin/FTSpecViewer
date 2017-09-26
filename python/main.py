@@ -584,7 +584,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         else:
             for scan in self.dir[choice]:
                 scans.append(scan.split("/")[-1].split(".")[0])
-        scans = sorted(scans)
+        scans = sorted(scans, key=int)
         for index, scan in enumerate(scans):
             self.tableWidgetScanChooser.setItem(index, 0, QTableWidgetItem(str(scan)))
         self.tableWidgetScanChooser.verticalHeader().setVisible(False)
