@@ -2,6 +2,8 @@
 A dedicated batch viewer class. This class is called by the main window when
 a specific batch/survey is selected via the ScanChooserWindow.
 """
+
+# PIP and system modules
 import sys
 import os
 import pandas as pd
@@ -11,12 +13,17 @@ from uncertainties import ufloat, unumpy
 from pyqtgraph import PlotWidget, LinearRegionItem, GraphicsLayoutWidget
 from glob import glob
 
+# Non-PIP modules
+
 from ftclass import FTData
 import fittingroutines as fr
+
+# Qt modules
 
 from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QApplication, qApp,
                              QTableWidgetItem)
 from qtbatch import Ui_BatchViewer
+from fonts_rc import *
 
 class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
     def __init__(self, parent=None, batch_object=None):

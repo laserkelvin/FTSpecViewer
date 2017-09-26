@@ -12,10 +12,12 @@ import fittingroutines as fr
 
 # Qt related modules
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
+from PyQt5.QtCore import QDate
 from batchviewer import BatchViewerWindow
 from qtmain import Ui_MainWindow
 from qtsettings import Ui_SettingsForm
 from qtchooser import Ui_ScanChooser
+from fonts_rc import *
 
 ################# Main Window #################
 
@@ -474,6 +476,9 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.spinBoxHighPass.valueChanged.connect(self.update_config)
         self.spinBoxExpFilter.valueChanged.connect(self.update_config)
 
+    #def configure_calendars(self):
+    #    self.calendarWidgetStartDate.setMaximumDate
+
     def update_config(self):
         for key, box in zip(["exponential", "high pass", "delay"],
                             [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxDelay]
@@ -507,7 +512,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.tableWidgetScanChooser.setRowCount(len(self.dir[choice]))
         self.tableWidgetScanChooser.setColumnCount(1)
 
-        for index, file in enumerate(self.dir[choice]):
+        for index, file in enumerate(sorted(self.dir[choice])):
             filename = file.split("/")[-1]      # Get the filename with extension
             filename = filename.split(".")[0]   # Strip extension
             self.tableWidgetScanChooser.insertRow(index)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../Qt/BatchViewer.ui'
+# Form implementation generated from reading ui file 'BatchViewer.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
@@ -18,12 +18,14 @@ class Ui_BatchViewer(object):
         sizePolicy.setHeightForWidth(BatchViewer.sizePolicy().hasHeightForWidth())
         BatchViewer.setSizePolicy(sizePolicy)
         BatchViewer.setStyleSheet("QMainWindow {\n"
-" background-color: #ffffff\n"
+" background-color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar {\n"
 " background-color: #ffffff;\n"
-" color: #ffffff\n"
+" color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar::item {\n"
@@ -37,6 +39,22 @@ class Ui_BatchViewer(object):
 " color: #2c7fb8\n"
 "}\n"
 "\n"
+"QPushButton {\n"
+" background-color: #FFFFFF;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-weight: 500;\n"
+"font-size: 15px;\n"
+"color: #2c7fb8;\n"
+"}\n"
+"\n"
 "QWidget {\n"
 " background-color: #ffffff\n"
 "}\n"
@@ -46,7 +64,8 @@ class Ui_BatchViewer(object):
 "}\n"
 "\n"
 "QLabel {\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QDoubleSpinBox {\n"
@@ -61,6 +80,7 @@ class Ui_BatchViewer(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QSpinBox {\n"
@@ -75,6 +95,7 @@ class Ui_BatchViewer(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QComboBox {\n"
@@ -89,6 +110,7 @@ class Ui_BatchViewer(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QTabWidget::pane { /* The tab widget frame */\n"
@@ -107,10 +129,13 @@ class Ui_BatchViewer(object):
 "border-top-right-radius: 4px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
 "background: #edf8b1;\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\';\n"
+"font-weight: 600\n"
 "}\n"
 "QTabBar::tab:selected {\n"
 "border-color: #edf8b1;\n"
@@ -138,9 +163,7 @@ class Ui_BatchViewer(object):
         self.label_6 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label_6.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_6.setFont(font)
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
@@ -149,7 +172,7 @@ class Ui_BatchViewer(object):
         self.formLayout_2.setObjectName("formLayout_2")
         self.label_7 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
@@ -165,7 +188,7 @@ class Ui_BatchViewer(object):
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.comboBoxWindowFunction)
         self.label_8 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_8)
@@ -178,7 +201,7 @@ class Ui_BatchViewer(object):
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxExpFilter)
         self.label_9 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_9)
@@ -188,7 +211,7 @@ class Ui_BatchViewer(object):
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxHighPass)
         self.label_10 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_10)
@@ -213,9 +236,7 @@ class Ui_BatchViewer(object):
         self.label = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.label.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
@@ -224,7 +245,7 @@ class Ui_BatchViewer(object):
         self.formLayout_4.setObjectName("formLayout_4")
         self.label_16 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_16.setFont(font)
         self.label_16.setObjectName("label_16")
         self.formLayout_4.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_16)
@@ -234,7 +255,7 @@ class Ui_BatchViewer(object):
         self.formLayout_4.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.checkBoxDetectPeaks_3)
         self.label_14 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_14.setFont(font)
         self.label_14.setObjectName("label_14")
         self.formLayout_4.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_14)
@@ -246,7 +267,7 @@ class Ui_BatchViewer(object):
         self.formLayout_4.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.doubleSpinBoxPeakSNRThres_3)
         self.label_15 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.formLayout_4.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_15)
@@ -258,9 +279,7 @@ class Ui_BatchViewer(object):
         self.label_2 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.label_2.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")

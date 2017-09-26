@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../Qt/MainWindow.ui'
+# Form implementation generated from reading ui file 'MainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
@@ -13,12 +13,14 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 780)
         MainWindow.setStyleSheet("QMainWindow {\n"
-" background-color: #ffffff\n"
+" background-color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar {\n"
 " background-color: #ffffff;\n"
-" color: #ffffff\n"
+" color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar::item {\n"
@@ -32,6 +34,22 @@ class Ui_MainWindow(object):
 " color: #2c7fb8\n"
 "}\n"
 "\n"
+"QPushButton {\n"
+" background-color: #FFFFFF;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-weight: 500;\n"
+"font-size: 15px;\n"
+"color: #2c7fb8;\n"
+"}\n"
+"\n"
 "QWidget {\n"
 " background-color: #ffffff\n"
 "}\n"
@@ -41,7 +59,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QLabel {\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QDoubleSpinBox {\n"
@@ -56,6 +75,7 @@ class Ui_MainWindow(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QSpinBox {\n"
@@ -70,6 +90,7 @@ class Ui_MainWindow(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QComboBox {\n"
@@ -84,6 +105,7 @@ class Ui_MainWindow(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QTabWidget::pane { /* The tab widget frame */\n"
@@ -102,10 +124,13 @@ class Ui_MainWindow(object):
 "border-top-right-radius: 4px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
 "background: #edf8b1;\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\';\n"
+"font-weight: 600\n"
 "}\n"
 "QTabBar::tab:selected {\n"
 "border-color: #edf8b1;\n"
@@ -156,9 +181,7 @@ class Ui_MainWindow(object):
         self.label_16 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
         self.label_16.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_16.setFont(font)
         self.label_16.setStyleSheet("")
         self.label_16.setAlignment(QtCore.Qt.AlignCenter)
@@ -168,7 +191,7 @@ class Ui_MainWindow(object):
         self.formLayout_3.setObjectName("formLayout_3")
         self.label_12 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_12.setFont(font)
         self.label_12.setObjectName("label_12")
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_12)
@@ -182,7 +205,7 @@ class Ui_MainWindow(object):
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelScanNum)
         self.label_13 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_13.setFont(font)
         self.label_13.setObjectName("label_13")
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_13)
@@ -195,7 +218,7 @@ class Ui_MainWindow(object):
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.labelShotCount)
         self.label_14 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_14.setFont(font)
         self.label_14.setObjectName("label_14")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_14)
@@ -208,7 +231,7 @@ class Ui_MainWindow(object):
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.labelTuning)
         self.label_15 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_15)
@@ -224,7 +247,7 @@ class Ui_MainWindow(object):
         self.tabFIDsettings = QtWidgets.QWidget()
         self.tabFIDsettings.setObjectName("tabFIDsettings")
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.tabFIDsettings)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 264, 511))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 282, 511))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -237,9 +260,7 @@ class Ui_MainWindow(object):
         self.label_6 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.label_6.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_6.setFont(font)
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
@@ -248,7 +269,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setObjectName("formLayout_2")
         self.label_7 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
@@ -264,7 +285,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.comboBoxWindowFunction)
         self.label_8 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_8)
@@ -277,7 +298,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxExpFilter)
         self.label_9 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_9)
@@ -287,7 +308,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxHighPass)
         self.label_10 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_10)
@@ -305,9 +326,7 @@ class Ui_MainWindow(object):
         self.label_11 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.label_11.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_11.setFont(font)
         self.label_11.setAlignment(QtCore.Qt.AlignCenter)
         self.label_11.setObjectName("label_11")
@@ -327,7 +346,7 @@ class Ui_MainWindow(object):
         self.formLayout_4.setObjectName("formLayout_4")
         self.label_17 = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_17.setFont(font)
         self.label_17.setObjectName("label_17")
         self.formLayout_4.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_17)
@@ -357,9 +376,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
@@ -368,19 +385,19 @@ class Ui_MainWindow(object):
         self.formLayout.setObjectName("formLayout")
         self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_3)
         self.label_4 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_4)
         self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_5)
@@ -407,9 +424,7 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label_2.setMaximumSize(QtCore.QSize(16777215, 30))
         font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Roboto,sans-serif")
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
@@ -538,7 +553,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuOverlays.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -617,3 +632,4 @@ class Ui_MainWindow(object):
         self.actionStick_spectrum.setText(_translate("MainWindow", "Stick spectrum"))
 
 from pyqtgraph import PlotWidget
+import fonts_rc

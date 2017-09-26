@@ -6,20 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>352</width>
-    <height>551</height>
+    <width>1000</width>
+    <height>640</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>352</width>
-    <height>551</height>
+    <width>1000</width>
+    <height>640</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>352</width>
-    <height>551</height>
+    <width>1000</width>
+    <height>640</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -27,21 +33,56 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
- background-color: #ffffff
+ background-color: #ffffff;
+ font-family: 'Roboto', sans-serif
 }
 
 QMenuBar {
  background-color: #ffffff;
- color: #ffffff
+ color: #ffffff;
+ font-family: 'Roboto', sans-serif
 }
 
 QMenuBar::item {
  background: transparent;
+ color: #2c7fb8;
  border-radius: 4px;
 }
 
 QMenuBar::item:selected {
- background: #E37222
+ background: #edf8b1;
+ color: #2c7fb8
+}
+
+QPushButton {
+ background-color: #FFFFFF;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+min-width: 10ex;
+padding: 2px;
+font-family: 'Roboto', sans-serif;
+font-weight: 500;
+font-size: 15px;
+color: #2c7fb8;
+}
+
+QCalendarWidget {
+	background-color: #FFFFFF;
+	color: #2c7fb8;
+	font-size: 12px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+min-width: 10ex;
+padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QWidget {
@@ -53,7 +94,9 @@ background-color: #ffffff
 }
 
 QLabel {
-color: #2c7fb8
+color: #2c7fb8;
+font-family: 'Roboto', sans-serif;
+font-size: 15px
 }
 
 QDoubleSpinBox {
@@ -68,6 +111,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 10ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QSpinBox {
@@ -82,6 +126,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 10ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QComboBox {
@@ -96,6 +141,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 8ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QTabWidget::pane { /* The tab widget frame */
@@ -114,10 +160,13 @@ border-top-left-radius: 4px;
 border-top-right-radius: 4px;
 min-width: 8ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 QTabBar::tab:selected, QTabBar::tab:hover {
 background: #edf8b1;
-color: #2c7fb8
+color: #2c7fb8;
+font-family: 'Roboto';
+font-weight: 600
 }
 QTabBar::tab:selected {
 border-color: #edf8b1;
@@ -125,50 +174,378 @@ border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
 margin-top: 2px; /* make non-selected tabs look smaller */
-}
-
-QPushButton {
-	background-color: #FFFFFF;
-	color: #2c7fb8;
-	font-size: 15px;
-border: 1.5px solid #C4C4C3;
-border-bottom-color: #C2C7CB; /* same as the pane color */
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
-border-bottom-left-radius: 5px;
-border-bottom-right-radius: 5px;
-min-width: 10ex;
-padding: 2px;
 }</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
+  <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>331</width>
-     <height>531</height>
+     <x>12</x>
+     <y>12</y>
+     <width>848</width>
+     <height>608</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
     <item>
-     <widget class="QComboBox" name="comboBoxScanChooser">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <property name="text">
-        <string>Surveys</string>
-       </property>
+       <widget class="QComboBox" name="comboBoxScanChooser">
+        <item>
+         <property name="text">
+          <string>Surveys</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Batch</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>DR Batch</string>
+         </property>
+        </item>
+       </widget>
       </item>
       <item>
-       <property name="text">
-        <string>Batch</string>
-       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Scan ID</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinBoxBatchNumber">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>88</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Specify the batch/scan number</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <property name="maximum">
+           <number>10000000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxSearchFreq">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>88</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>100000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QCalendarWidget" name="calendarWidgetEndDate">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>400</height>
+           </size>
+          </property>
+          <property name="gridVisible">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Search Frequency</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QCalendarWidget" name="calendarWidgetStartDate">
+          <property name="toolTip">
+           <string>Start Date</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_3">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>End Search Date</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Start Search Date</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <property name="text">
-        <string>DR Batch</string>
-       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="pushButtonSearchFreq">
+          <property name="toolTip">
+           <string>Search for a specified frequency in the survey/batch.</string>
+          </property>
+          <property name="text">
+           <string>Search</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-     </widget>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Roboto,sans-serif</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>FID Processing</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Window Function</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBoxWindowFunction">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="statusTip">
+           <string>Apply a window function to the FID.</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>none</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>blackman</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>blackmanharris</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>boxcar</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>hanning</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>bartlett</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Exponential Filter</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinBoxExpFilter">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="toolTipDuration">
+           <number>2</number>
+          </property>
+          <property name="statusTip">
+           <string>Apply an exponential filter (microseconds)</string>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="singleStep">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="spinBoxHighPass">
+          <property name="statusTip">
+           <string>Apply a high-pass filter (microseconds)</string>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Delay</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="spinBoxDelay">
+          <property name="statusTip">
+           <string>Delay the FID processing (microseconds)</string>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="font">
+           <font>
+            <family>Roboto,sans-serif</family>
+            <pointsize>-1</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>High-Pass Filter</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+        <property name="spacing">
+         <number>-1</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMaximumSize</enum>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="pushButtonCloseChooser">
+          <property name="text">
+           <string>Close</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonOpenScan">
+          <property name="text">
+           <string>Open</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QTableWidget" name="tableWidgetScanChooser">
@@ -178,221 +555,12 @@ padding: 2px;
        </font>
       </property>
       <property name="toolTip">
-       <string>Specify the scan/batch number</string>
+       <string>Lists the scan numbers that satisfy the search conditions.</string>
       </property>
      </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="spinBoxBatchNumber">
-      <property name="toolTip">
-       <string>Specify the batch/scan number</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-      <property name="maximum">
-       <number>10000000</number>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_5">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>25</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>FID Processing</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Window Function</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBoxWindowFunction">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="statusTip">
-         <string>Apply a window function to the FID.</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>none</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>blackman</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>blackmanharris</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>boxcar</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>hanning</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>bartlett</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Exponential Filter</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="spinBoxExpFilter">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="toolTipDuration">
-         <number>2</number>
-        </property>
-        <property name="statusTip">
-         <string>Apply an exponential filter (microseconds)</string>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="singleStep">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="spinBoxHighPass">
-        <property name="statusTip">
-         <string>Apply a high-pass filter (microseconds)</string>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Delay</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="spinBoxDelay">
-        <property name="statusTip">
-         <string>Delay the FID processing (microseconds)</string>
-        </property>
-        <property name="suffix">
-         <string/>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>High-Pass Filter</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
-      <property name="spacing">
-       <number>-1</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMaximumSize</enum>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="pushButtonCloseChooser">
-        <property name="text">
-         <string>Close</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonOpenScan">
-        <property name="text">
-         <string>Open</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>
-  <zorder>label_9</zorder>
-  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <resources/>
  <connections/>

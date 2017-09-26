@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../Qt/ScanChooser.ui'
+# Form implementation generated from reading ui file 'ScanChooser.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
@@ -11,25 +11,65 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ScanChooser(object):
     def setupUi(self, ScanChooser):
         ScanChooser.setObjectName("ScanChooser")
-        ScanChooser.resize(352, 551)
-        ScanChooser.setMinimumSize(QtCore.QSize(352, 551))
-        ScanChooser.setMaximumSize(QtCore.QSize(352, 551))
+        ScanChooser.resize(1000, 640)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(ScanChooser.sizePolicy().hasHeightForWidth())
+        ScanChooser.setSizePolicy(sizePolicy)
+        ScanChooser.setMinimumSize(QtCore.QSize(1000, 640))
+        ScanChooser.setMaximumSize(QtCore.QSize(1000, 640))
         ScanChooser.setStyleSheet("QMainWindow {\n"
-" background-color: #ffffff\n"
+" background-color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar {\n"
 " background-color: #ffffff;\n"
-" color: #ffffff\n"
+" color: #ffffff;\n"
+" font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QMenuBar::item {\n"
 " background: transparent;\n"
+" color: #2c7fb8;\n"
 " border-radius: 4px;\n"
 "}\n"
 "\n"
 "QMenuBar::item:selected {\n"
-" background: #E37222\n"
+" background: #edf8b1;\n"
+" color: #2c7fb8\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+" background-color: #FFFFFF;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-weight: 500;\n"
+"font-size: 15px;\n"
+"color: #2c7fb8;\n"
+"}\n"
+"\n"
+"QCalendarWidget {\n"
+"    background-color: #FFFFFF;\n"
+"    color: #2c7fb8;\n"
+"    font-size: 12px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QWidget {\n"
@@ -41,7 +81,9 @@ class Ui_ScanChooser(object):
 "}\n"
 "\n"
 "QLabel {\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-size: 15px\n"
 "}\n"
 "\n"
 "QDoubleSpinBox {\n"
@@ -56,6 +98,7 @@ class Ui_ScanChooser(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QSpinBox {\n"
@@ -70,6 +113,7 @@ class Ui_ScanChooser(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 10ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QComboBox {\n"
@@ -84,6 +128,7 @@ class Ui_ScanChooser(object):
 "border-bottom-right-radius: 5px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "\n"
 "QTabWidget::pane { /* The tab widget frame */\n"
@@ -102,10 +147,13 @@ class Ui_ScanChooser(object):
 "border-top-right-radius: 4px;\n"
 "min-width: 8ex;\n"
 "padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
 "background: #edf8b1;\n"
-"color: #2c7fb8\n"
+"color: #2c7fb8;\n"
+"font-family: \'Roboto\';\n"
+"font-weight: 600\n"
 "}\n"
 "QTabBar::tab:selected {\n"
 "border-color: #edf8b1;\n"
@@ -113,65 +161,109 @@ class Ui_ScanChooser(object):
 "}\n"
 "QTabBar::tab:!selected {\n"
 "margin-top: 2px; /* make non-selected tabs look smaller */\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"    background-color: #FFFFFF;\n"
-"    color: #2c7fb8;\n"
-"    font-size: 15px;\n"
-"border: 1.5px solid #C4C4C3;\n"
-"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
-"border-top-left-radius: 5px;\n"
-"border-top-right-radius: 5px;\n"
-"border-bottom-left-radius: 5px;\n"
-"border-bottom-right-radius: 5px;\n"
-"min-width: 10ex;\n"
-"padding: 2px;\n"
 "}")
-        self.verticalLayoutWidget = QtWidgets.QWidget(ScanChooser)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 331, 531))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayoutWidget_2 = QtWidgets.QWidget(ScanChooser)
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(12, 12, 848, 608))
+        self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.comboBoxScanChooser = QtWidgets.QComboBox(self.verticalLayoutWidget)
+        self.comboBoxScanChooser = QtWidgets.QComboBox(self.horizontalLayoutWidget_2)
         self.comboBoxScanChooser.setObjectName("comboBoxScanChooser")
         self.comboBoxScanChooser.addItem("")
         self.comboBoxScanChooser.addItem("")
         self.comboBoxScanChooser.addItem("")
         self.verticalLayout.addWidget(self.comboBoxScanChooser)
-        self.tableWidgetScanChooser = QtWidgets.QTableWidget(self.verticalLayoutWidget)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.tableWidgetScanChooser.setFont(font)
-        self.tableWidgetScanChooser.setObjectName("tableWidgetScanChooser")
-        self.tableWidgetScanChooser.setColumnCount(0)
-        self.tableWidgetScanChooser.setRowCount(0)
-        self.verticalLayout.addWidget(self.tableWidgetScanChooser)
-        self.spinBoxBatchNumber = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.formLayout = QtWidgets.QFormLayout()
+        self.formLayout.setObjectName("formLayout")
+        self.label = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
+        self.label.setObjectName("label")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label)
+        self.spinBoxBatchNumber = QtWidgets.QSpinBox(self.horizontalLayoutWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.spinBoxBatchNumber.sizePolicy().hasHeightForWidth())
+        self.spinBoxBatchNumber.setSizePolicy(sizePolicy)
+        self.spinBoxBatchNumber.setMinimumSize(QtCore.QSize(88, 0))
         self.spinBoxBatchNumber.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.spinBoxBatchNumber.setMaximum(10000000)
         self.spinBoxBatchNumber.setObjectName("spinBoxBatchNumber")
-        self.verticalLayout.addWidget(self.spinBoxBatchNumber)
-        self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.label_5.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxBatchNumber)
+        self.doubleSpinBoxSearchFreq = QtWidgets.QDoubleSpinBox(self.horizontalLayoutWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.doubleSpinBoxSearchFreq.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBoxSearchFreq.setSizePolicy(sizePolicy)
+        self.doubleSpinBoxSearchFreq.setMinimumSize(QtCore.QSize(88, 0))
+        self.doubleSpinBoxSearchFreq.setDecimals(3)
+        self.doubleSpinBoxSearchFreq.setMaximum(100000.0)
+        self.doubleSpinBoxSearchFreq.setObjectName("doubleSpinBoxSearchFreq")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.doubleSpinBoxSearchFreq)
+        self.calendarWidgetEndDate = QtWidgets.QCalendarWidget(self.horizontalLayoutWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.calendarWidgetEndDate.sizePolicy().hasHeightForWidth())
+        self.calendarWidgetEndDate.setSizePolicy(sizePolicy)
+        self.calendarWidgetEndDate.setMaximumSize(QtCore.QSize(400, 400))
+        self.calendarWidgetEndDate.setGridVisible(True)
+        self.calendarWidgetEndDate.setObjectName("calendarWidgetEndDate")
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.calendarWidgetEndDate)
+        self.label_2 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
+        self.label_2.setObjectName("label_2")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_2)
+        self.calendarWidgetStartDate = QtWidgets.QCalendarWidget(self.horizontalLayoutWidget_2)
+        self.calendarWidgetStartDate.setObjectName("calendarWidgetStartDate")
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.calendarWidgetStartDate)
+        self.label_3 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(25)
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         font.setBold(True)
         font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.label_3)
+        self.label_4 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_4)
+        self.verticalLayout.addLayout(self.formLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButtonSearchFreq = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
+        self.pushButtonSearchFreq.setObjectName("pushButtonSearchFreq")
+        self.horizontalLayout_2.addWidget(self.pushButtonSearchFreq)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.label_5 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
+        self.label_5.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         self.label_5.setFont(font)
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         self.verticalLayout.addWidget(self.label_5)
         self.formLayout_3 = QtWidgets.QFormLayout()
         self.formLayout_3.setObjectName("formLayout_3")
-        self.label_7 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_7 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
-        self.comboBoxWindowFunction = QtWidgets.QComboBox(self.verticalLayoutWidget)
+        self.comboBoxWindowFunction = QtWidgets.QComboBox(self.horizontalLayoutWidget_2)
         self.comboBoxWindowFunction.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.comboBoxWindowFunction.setObjectName("comboBoxWindowFunction")
         self.comboBoxWindowFunction.addItem("")
@@ -181,42 +273,45 @@ class Ui_ScanChooser(object):
         self.comboBoxWindowFunction.addItem("")
         self.comboBoxWindowFunction.addItem("")
         self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.comboBoxWindowFunction)
-        self.label_8 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_8 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_8)
-        self.spinBoxExpFilter = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinBoxExpFilter = QtWidgets.QSpinBox(self.horizontalLayoutWidget_2)
         self.spinBoxExpFilter.setToolTip("")
         self.spinBoxExpFilter.setToolTipDuration(2)
         self.spinBoxExpFilter.setMaximum(1000)
         self.spinBoxExpFilter.setSingleStep(10)
         self.spinBoxExpFilter.setObjectName("spinBoxExpFilter")
         self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBoxExpFilter)
-        self.spinBoxHighPass = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinBoxHighPass = QtWidgets.QSpinBox(self.horizontalLayoutWidget_2)
         self.spinBoxHighPass.setMaximum(1000)
         self.spinBoxHighPass.setObjectName("spinBoxHighPass")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxHighPass)
-        self.label_10 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_10 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_10)
-        self.spinBoxDelay = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinBoxDelay = QtWidgets.QSpinBox(self.horizontalLayoutWidget_2)
         self.spinBoxDelay.setSuffix("")
         self.spinBoxDelay.setMaximum(1000)
         self.spinBoxDelay.setObjectName("spinBoxDelay")
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBoxDelay)
-        self.label_9 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_9 = QtWidgets.QLabel(self.horizontalLayoutWidget_2)
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setFamily("Roboto,sans-serif")
+        font.setPointSize(-1)
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_9)
         self.verticalLayout.addLayout(self.formLayout_3)
-        self.line = QtWidgets.QFrame(self.verticalLayoutWidget)
+        self.line = QtWidgets.QFrame(self.horizontalLayoutWidget_2)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
@@ -225,15 +320,22 @@ class Ui_ScanChooser(object):
         self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
         self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButtonCloseChooser = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pushButtonCloseChooser = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
         self.pushButtonCloseChooser.setObjectName("pushButtonCloseChooser")
         self.horizontalLayout.addWidget(self.pushButtonCloseChooser)
-        self.pushButtonOpenScan = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pushButtonOpenScan = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
         self.pushButtonOpenScan.setObjectName("pushButtonOpenScan")
         self.horizontalLayout.addWidget(self.pushButtonOpenScan)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.label_9.raise_()
-        self.verticalLayoutWidget.raise_()
+        self.horizontalLayout_3.addLayout(self.verticalLayout)
+        self.tableWidgetScanChooser = QtWidgets.QTableWidget(self.horizontalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.tableWidgetScanChooser.setFont(font)
+        self.tableWidgetScanChooser.setObjectName("tableWidgetScanChooser")
+        self.tableWidgetScanChooser.setColumnCount(0)
+        self.tableWidgetScanChooser.setRowCount(0)
+        self.horizontalLayout_3.addWidget(self.tableWidgetScanChooser)
 
         self.retranslateUi(ScanChooser)
         QtCore.QMetaObject.connectSlotsByName(ScanChooser)
@@ -244,8 +346,14 @@ class Ui_ScanChooser(object):
         self.comboBoxScanChooser.setItemText(0, _translate("ScanChooser", "Surveys"))
         self.comboBoxScanChooser.setItemText(1, _translate("ScanChooser", "Batch"))
         self.comboBoxScanChooser.setItemText(2, _translate("ScanChooser", "DR Batch"))
-        self.tableWidgetScanChooser.setToolTip(_translate("ScanChooser", "Specify the scan/batch number"))
+        self.label.setText(_translate("ScanChooser", "Scan ID"))
         self.spinBoxBatchNumber.setToolTip(_translate("ScanChooser", "Specify the batch/scan number"))
+        self.label_2.setText(_translate("ScanChooser", "Search Frequency"))
+        self.calendarWidgetStartDate.setToolTip(_translate("ScanChooser", "Start Date"))
+        self.label_3.setText(_translate("ScanChooser", "End Search Date"))
+        self.label_4.setText(_translate("ScanChooser", "Start Search Date"))
+        self.pushButtonSearchFreq.setToolTip(_translate("ScanChooser", "Search for a specified frequency in the survey/batch."))
+        self.pushButtonSearchFreq.setText(_translate("ScanChooser", "Search"))
         self.label_5.setText(_translate("ScanChooser", "FID Processing"))
         self.label_7.setText(_translate("ScanChooser", "Window Function"))
         self.comboBoxWindowFunction.setStatusTip(_translate("ScanChooser", "Apply a window function to the FID."))
@@ -263,4 +371,5 @@ class Ui_ScanChooser(object):
         self.label_9.setText(_translate("ScanChooser", "High-Pass Filter"))
         self.pushButtonCloseChooser.setText(_translate("ScanChooser", "Close"))
         self.pushButtonOpenScan.setText(_translate("ScanChooser", "Open"))
+        self.tableWidgetScanChooser.setToolTip(_translate("ScanChooser", "Lists the scan numbers that satisfy the search conditions."))
 
