@@ -493,7 +493,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             for batch_type in ["dr", "surveys", "batch"]:
                 subdir = os.path.join(self.root_path, batch_type)
                 self.dir[batch_type] = glob(
-                    subdir + "/*/*.txt"
+                    subdir + "/*/*/*.txt"
                 )
 
     def update_scan_table(self):
