@@ -26,13 +26,11 @@ QMenuBar {
 }
 
 QMenuBar::item {
- background: transparent;
  color: #2c7fb8;
- border-radius: 4px;
+ border-radius: 4px
 }
 
 QMenuBar::item:selected {
- background: #edf8b1;
  color: #2c7fb8
 }
 
@@ -219,7 +217,7 @@ font-size: 15px
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">

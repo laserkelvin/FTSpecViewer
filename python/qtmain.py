@@ -138,6 +138,26 @@ class Ui_MainWindow(object):
 "}\n"
 "QTabBar::tab:!selected {\n"
 "margin-top: 2px; /* make non-selected tabs look smaller */\n"
+"}\n"
+"QTableWidget {\n"
+" background-color: #FFFFFF;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-weight: 500;\n"
+"font-size: 15px;\n"
+"color: #2c7fb8;\n"
+"}\n"
+"\n"
+"QGraphicsView {\n"
+"font-family: \'Robot\', sans-serif;\n"
+"font-size: 15px\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -524,6 +544,8 @@ class Ui_MainWindow(object):
         self.actionSave_peaks_2.setObjectName("actionSave_peaks_2")
         self.actionStick_spectrum = QtWidgets.QAction(MainWindow)
         self.actionStick_spectrum.setObjectName("actionStick_spectrum")
+        self.actionCompress_data = QtWidgets.QAction(MainWindow)
+        self.actionCompress_data.setObjectName("actionCompress_data")
         self.menuLoad.addAction(self.actionSpectrum)
         self.menuLoad.addAction(self.actionFID)
         self.menuLoad.addSeparator()
@@ -553,7 +575,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuOverlays.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -630,6 +652,7 @@ class Ui_MainWindow(object):
         self.actionFTB.setText(_translate("MainWindow", "FTB"))
         self.actionSave_peaks_2.setText(_translate("MainWindow", "ASCII"))
         self.actionStick_spectrum.setText(_translate("MainWindow", "Stick spectrum"))
+        self.actionCompress_data.setText(_translate("MainWindow", "Compress data"))
 
 from pyqtgraph import PlotWidget
 import fonts_rc

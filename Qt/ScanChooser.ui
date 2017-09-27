@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>900</width>
-    <height>660</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>900</width>
-    <height>660</height>
+    <height>720</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>900</width>
-    <height>660</height>
+    <height>720</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -190,21 +190,6 @@ border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
 margin-top: 2px; /* make non-selected tabs look smaller */
-}
-QTableWidget {
- background-color: #FFFFFF;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
-border-bottom-left-radius: 5px;
-border-bottom-right-radius: 5px;
-border: 1.5px solid #C4C4C3;
-border-bottom-color: #C2C7CB; /* same as the pane color */
-min-width: 10ex;
-padding: 2px;
-font-family: 'Roboto', sans-serif;
-font-weight: 500;
-font-size: 15px;
-color: #2c7fb8;
 }</string>
   </property>
   <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -213,7 +198,7 @@ color: #2c7fb8;
      <x>12</x>
      <y>12</y>
      <width>848</width>
-     <height>636</height>
+     <height>669</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -390,18 +375,35 @@ color: #2c7fb8;
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QToolButton" name="toolButtonCacheData">
-          <property name="toolTip">
-           <string>Compresses all of the data into a HDF5 file; this pre-caching will speed up browsing significantly, although if performed for the first time will take a long time.</string>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="rightMargin">
+           <number>0</number>
           </property>
-          <property name="text">
-           <string>...</string>
+          <property name="bottomMargin">
+           <number>0</number>
           </property>
-          <property name="icon">
-           <iconset resource="icons.qrc">
-            <normaloff>:/icons/icons/project-8x.png</normaloff>:/icons/icons/project-8x.png</iconset>
-          </property>
-         </widget>
+          <item>
+           <widget class="QToolButton" name="toolButtonCacheData">
+            <property name="toolTip">
+             <string>Compresses all of the data into a HDF5 file; this pre-caching will speed up browsing significantly, although if performed for the first time will take a long time.</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/icons/icons/project-8x.png</normaloff>:/icons/icons/project-8x.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBarCompression">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_11">
@@ -615,10 +617,7 @@ color: #2c7fb8;
      <widget class="QTableWidget" name="tableWidgetScanChooser">
       <property name="font">
        <font>
-        <family>Roboto,sans-serif</family>
-        <pointsize>-1</pointsize>
-        <weight>62</weight>
-        <bold>true</bold>
+        <pointsize>15</pointsize>
        </font>
       </property>
       <property name="toolTip">

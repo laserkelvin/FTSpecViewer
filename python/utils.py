@@ -11,7 +11,8 @@ import h5py
 import os
 import socket
 import ntpath
-from ftclass import FTData, FTBatch
+from ftclass import *
+import numpy as np
 
 
 def FTDateTime(datestring):
@@ -121,7 +122,7 @@ def CreateDatabase(filepath):
         h5file.close()
 
 
-def CompressData(filedict, database_filepath):
+def CompressData(filedict, database_filepath, progress_obj=None):
     """
         Takes a Dictionary with the filepaths to scans/batchs organized as
         keys, and creates database entries for every one of them. This is
@@ -134,6 +135,8 @@ def CompressData(filedict, database_filepath):
     if os.path.isfile(database_filepath) is False:
         # If the database doesn't exist already, create it.
         CreateDatabase(filepath)
+    totalitems = np.sum([len(self.dir[group]) for group in self.dir])
+    counter = 0
     with h5py.File(filepath, "a") as h5file:
         for group in filedict:
             for entry in filedict[group]:
@@ -142,4 +145,7 @@ def CompressData(filedict, database_filepath):
                     group,
                     filedict[group][entry]
                 )
+                counter += 1
+                if progress_obj is not None:
+                    progress_obj.setValue(counter / totalitems * 100.)
         h5file.close()

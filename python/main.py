@@ -9,17 +9,21 @@ from glob import glob
 
 from ftclass import FTData, FTBatch
 import fittingroutines as fr
+from utils import CreateDatabase, CompressData, AddDatabaseEntry
 
 # Qt related modules
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication, qApp, QTableWidgetItem
+from PyQt5.QtWidgets import (QMainWindow, QFileDialog,
+                             QApplication, qApp, QTableWidgetItem)
 from PyQt5.QtCore import QDate
 from batchviewer import BatchViewerWindow
 from qtmain import Ui_MainWindow
 from qtsettings import Ui_SettingsForm
 from qtchooser import Ui_ScanChooser
 from fonts_rc import *
+from icons_rc import *
 
 ################# Main Window #################
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -482,7 +486,9 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.calendarWidgetEndDate.clicked.connect(self.configure_calendar_range)
         self.calendarWidgetStartDate.clicked.connect(self.configure_calendar_range)
         # Filter updating
-        self.checkBoxFilter.valueChanged.connect(self.toggle_filter_bool)
+        self.checkBoxFilter.stateChanged.connect(self.toggle_filter_bool)
+        # Caching
+        self.toolButtonCacheData.clicked.connect(self.compress_data)
 
     def configure_calendar_range(self, move_dates=False):
         # Initialize the calendars so that dates that can be selected are
@@ -504,6 +510,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         )
 
     def toggle_filter_bool(self):
+        # Whether or not to filter the search results
         self.filter = not self.filter
 
     def update_config(self):
@@ -520,6 +527,22 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         if selected:
             scan_number = int(selected.text())
             self.spinBoxBatchNumber.setValue(scan_number)
+
+    def compress_data(self):
+        # Uses H5Py routines to compress all of the FT data into a single HDF5
+        # file. Has a progress bar that will indicate progress.
+        database_filepath = QFileDialog.getSaveFileName(
+            self,
+            "Choose the location to save the HDF5 database.",
+            os.getcwd(),
+            "HDF5 files (*.h5)"
+        )
+        if len(database_filepath[0]) > 1:
+            CompressData(
+                self.dir,
+                database_filepath[0],
+                self.progressBarCompression
+            )
 
     def read_latest(self):
         # Method for finding out what the most recent scan is for each Batch
