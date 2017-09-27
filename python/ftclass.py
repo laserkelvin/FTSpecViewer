@@ -7,6 +7,7 @@ import peakutils
 
 from utils import FTDateTime
 from fittingroutines import gaussian_func
+from filters import *
 
 
 class FTData:
@@ -114,7 +115,7 @@ class FTData:
                 if read_int is True:
                     intensities += line.split()
 
-    def fid2fft(self, window_function=None, dc_offset=True, exp_filter=None, delay=None):
+    def fid2fft(self, window_function=None, band_pass=None, exp_filter=None, delay=None):
         """ Perform the DFT of an FID using NumPy's FFT package. """
         available_windows = [
             "blackmanharris",
@@ -128,6 +129,14 @@ class FTData:
         self.fid_df = None
         # Make a copy of the original FID
         proc_fid = np.copy(self.fid)
+        if band_pass is not None:
+            # Apply a band-pass filter to the FID signal.
+            proc_fid = apply_butter_filter(
+                proc_fid,
+                band_pass[0],
+                band_pass[1],
+                1. / self.settings["FID spacing"]
+            )
         # Set the FID time points to zero
         if delay is not None:
             for index in range(delay):

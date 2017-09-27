@@ -217,7 +217,7 @@ font-size: 15px
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -432,7 +432,7 @@ font-size: 15px
           <x>0</x>
           <y>0</y>
           <width>282</width>
-          <height>511</height>
+          <height>674</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -567,14 +567,20 @@ font-size: 15px
            <item row="2" column="1">
             <widget class="QSpinBox" name="spinBoxHighPass">
              <property name="statusTip">
-              <string>Apply a high-pass filter (microseconds)</string>
+              <string>Apply a high-pass filter (kHz)</string>
              </property>
              <property name="maximum">
               <number>1000</number>
              </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_10">
              <property name="font">
               <font>
@@ -586,7 +592,7 @@ font-size: 15px
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="4" column="1">
             <widget class="QSpinBox" name="spinBoxDelay">
              <property name="statusTip">
               <string>Delay the FID processing (microseconds)</string>
@@ -596,6 +602,34 @@ font-size: 15px
              </property>
              <property name="maximum">
               <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="spinBoxLowPass">
+             <property name="statusTip">
+              <string>Apply a low-pass filter (kHz)</string>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_18">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Low-Pass Filter</string>
              </property>
             </widget>
            </item>
@@ -631,6 +665,12 @@ font-size: 15px
          </item>
          <item>
           <widget class="PlotWidget" name="graphicsViewFID">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>250</height>
+            </size>
+           </property>
            <property name="statusTip">
             <string>FID trace</string>
            </property>

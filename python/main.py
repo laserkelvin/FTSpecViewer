@@ -70,6 +70,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Processing the FIDs
         self.comboBoxWindowFunction.currentTextChanged.connect(self.process_fid)
         self.spinBoxExpFilter.valueChanged.connect(self.process_fid)
+        self.spinBoxHighPass.valueChanged.connect(self.process_fid)
+        self.spinBoxLowPass.valueChanged.connect(self.process_fid)
         self.spinBoxDelay.valueChanged.connect(self.process_fid)
         self.actionFit_Gaussian.triggered.connect(self.fit_fft)
 
@@ -170,15 +172,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             exp_filter = float(self.spinBoxExpFilter.value())
             window = str(self.comboBoxWindowFunction.currentText())
             delay = int(self.spinBoxDelay.value())
+            high_pass = float(self.spinBoxHighPass.value())
+            low_pass = float(self.spinBoxLowPass.value())
 
             if window == "none":
                 window = None
             if exp_filter <= 0:
                 exp_filter = None
+            band_pass = None
+            if high_pass != 0. or low_pass != 0.:
+                band_pass = [low_pass, high_pass]
             if delay <= 0:
                 delay = None
             self.data.fid2fft(
                 window_function=window,
+                band_pass=band_pass,
                 exp_filter=exp_filter,
                 delay=delay
             )
@@ -515,8 +523,8 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
 
     def update_config(self):
         # Class method for updating the FID processing settings
-        for key, box in zip(["exponential", "high pass", "delay"],
-                            [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxDelay]
+        for key, box in zip(["exponential", "high pass", "low pass", "delay"],
+                            [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxLowPass, self.spinBoxDelay]
                             ):
             self.config[key] = float(box.value())
         self.config["window function"] = str(self.comboBoxWindowFunction.currentText())
