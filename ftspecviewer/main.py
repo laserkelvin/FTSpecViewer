@@ -8,7 +8,7 @@ import pyqtgraph
 from glob import glob
 
 from ftclass import FTData, FTBatch
-from fittingroutines import *
+import fittingroutines as fr
 from utils import CreateDatabase, CompressData, AddDatabaseEntry
 
 # Qt related modules
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index, pair in enumerate(self.doppler_sets):
             frequencies = [pair[0][0], pair[1][0]]
             intensity = np.average([pair[0][1], pair[1][1]])
-            self.doppler_param[index] = fit_doppler_pair(self.data.spectrum, frequencies)
+            self.doppler_param[index] = fr.fit_doppler_pair(self.data.spectrum, frequencies)
             self.peaks_df = self.peaks_df.append(
                 {"Frequency": self.doppler_param[index]["Frequency"].n,
                  "Intensity": intensity},
@@ -138,15 +138,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.peaks.append([self.doppler_param[index]["Frequency"].n, intensity])
         self.update_peak_table()
         self.update_plot()
-        self.labelCenterFrequency.setText(
-            self.format_uncertainty(self.doppler_param[0]["Frequency"])
-        )
-        self.labelDopplerSplitting.setText(
-            self.format_uncertainty(self.doppler_param[0]["Doppler-width"])
-        )
-        self.labelFWHM.setText(
-            self.format_uncertainty(self.doppler_param[0]["W1"] * 2.355)
-        )
+        print(self.peaks_df)
 
     def detect_peaks(self):
         # Peak detection signal event. If the checkbox for peak detection is
@@ -156,7 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.detect_peaks_bool is True:
             self.peaks = 0                               # Reset the peak data
             self.statusBar.showMessage("Finding peaks...")
-            peak_freqs, peak_intensities = find_peaks(
+            peak_freqs, peak_intensities = fr.find_peaks(
                 self.data.spectrum["Frequency"],
                 self.data.spectrum["Intensity"],
                 thres=float(self.doubleSpinBoxPeakSNRThres.value()),
@@ -329,7 +321,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def fit_fft(self):
         # Function to perform an automatic fit to the FFT spectrum
         if self.fid is True:
-            peakfreq, peakint = find_peaks(
+            peakfreq, peakint = fr.find_peaks(
                 self.data.spectrum["Frequency"].astype(float),
                 self.data.spectrum["Intensity"].astype(float)
             )
@@ -338,13 +330,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 peakfreq = None
             # Call the fitting function
             try:
-                popt, pcov = fit_lineshape(
-                    arb_gaussian_func,
+                popt, pcov = fr.fit_lineshape(
+                    fr.arb_gaussian_func,
                     self.data.spectrum["Frequency"].astype(float),
                     self.data.spectrum["Intensity"].astype(float),
                     peakfreq
                 )
-                self.data.spectrum["Fit"] = arb_gaussian_func(
+                self.data.spectrum["Fit"] = fr.arb_gaussian_func(
                     self.data.spectrum["Frequency"].astype(float),
                     *popt
                 )

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>780</height>
+    <height>849</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,23 +15,39 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
- background-color: #ffffff
+ background-color: #ffffff;
+ font-family: 'Roboto', sans-serif
 }
 
 QMenuBar {
  background-color: #ffffff;
- color: #ffffff
+ color: #ffffff;
+ font-family: 'Roboto', sans-serif
 }
 
 QMenuBar::item {
- background: transparent;
  color: #2c7fb8;
- border-radius: 4px;
+ border-radius: 4px
 }
 
 QMenuBar::item:selected {
- background: #edf8b1;
  color: #2c7fb8
+}
+
+QPushButton {
+ background-color: #FFFFFF;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+min-width: 10ex;
+padding: 2px;
+font-family: 'Roboto', sans-serif;
+font-weight: 500;
+font-size: 15px;
+color: #2c7fb8;
 }
 
 QWidget {
@@ -43,7 +59,8 @@ background-color: #ffffff
 }
 
 QLabel {
-color: #2c7fb8
+color: #2c7fb8;
+font-family: 'Roboto', sans-serif
 }
 
 QDoubleSpinBox {
@@ -58,6 +75,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 10ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QSpinBox {
@@ -72,6 +90,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 10ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QComboBox {
@@ -86,6 +105,7 @@ border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
 min-width: 8ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 
 QTabWidget::pane { /* The tab widget frame */
@@ -104,10 +124,13 @@ border-top-left-radius: 4px;
 border-top-right-radius: 4px;
 min-width: 8ex;
 padding: 2px;
+font-family: 'Roboto', sans-serif
 }
 QTabBar::tab:selected, QTabBar::tab:hover {
 background: #edf8b1;
-color: #2c7fb8
+color: #2c7fb8;
+font-family: 'Roboto';
+font-weight: 600
 }
 QTabBar::tab:selected {
 border-color: #edf8b1;
@@ -115,6 +138,26 @@ border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
 margin-top: 2px; /* make non-selected tabs look smaller */
+}
+QTableWidget {
+ background-color: #FFFFFF;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+min-width: 10ex;
+padding: 2px;
+font-family: 'Roboto', sans-serif;
+font-weight: 500;
+font-size: 15px;
+color: #2c7fb8;
+}
+
+QGraphicsView {
+font-family: 'Robot', sans-serif;
+font-size: 15px
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -174,7 +217,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -207,9 +250,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
+             <family>Roboto,sans-serif</family>
             </font>
            </property>
            <property name="styleSheet">
@@ -229,7 +270,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_12">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -269,7 +310,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_13">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -306,7 +347,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_14">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -343,7 +384,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_15">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -390,8 +431,8 @@ margin-top: 2px; /* make non-selected tabs look smaller */
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>264</width>
-          <height>511</height>
+          <width>282</width>
+          <height>750</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -412,9 +453,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
+             <family>Roboto,sans-serif</family>
             </font>
            </property>
            <property name="text">
@@ -427,11 +466,11 @@ margin-top: 2px; /* make non-selected tabs look smaller */
          </item>
          <item>
           <layout class="QFormLayout" name="formLayout_2">
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QLabel" name="label_7">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -439,7 +478,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="1" column="1">
             <widget class="QComboBox" name="comboBoxWindowFunction">
              <property name="maximumSize">
               <size>
@@ -482,11 +521,11 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </item>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_8">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -494,7 +533,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="2" column="1">
             <widget class="QSpinBox" name="spinBoxExpFilter">
              <property name="toolTip">
               <string/>
@@ -513,11 +552,11 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_9">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -525,21 +564,55 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="3" column="1">
             <widget class="QSpinBox" name="spinBoxHighPass">
              <property name="statusTip">
-              <string>Apply a high-pass filter (microseconds)</string>
+              <string>Apply a high-pass filter (kHz)</string>
              </property>
              <property name="maximum">
               <number>1000</number>
              </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_18">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Low-Pass Filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QSpinBox" name="spinBoxLowPass">
+             <property name="statusTip">
+              <string>Apply a low-pass filter (kHz)</string>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
             <widget class="QLabel" name="label_10">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -547,7 +620,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="5" column="1">
             <widget class="QSpinBox" name="spinBoxDelay">
              <property name="statusTip">
               <string>Delay the FID processing (microseconds)</string>
@@ -557,6 +630,25 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
              <property name="maximum">
               <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="spinBoxScanID">
+             <property name="maximum">
+              <number>10000000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_19">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Scan ID</string>
              </property>
             </widget>
            </item>
@@ -579,9 +671,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
+             <family>Roboto,sans-serif</family>
             </font>
            </property>
            <property name="text">
@@ -594,6 +684,18 @@ margin-top: 2px; /* make non-selected tabs look smaller */
          </item>
          <item>
           <widget class="PlotWidget" name="graphicsViewFID">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>180</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>180</height>
+            </size>
+           </property>
            <property name="statusTip">
             <string>FID trace</string>
            </property>
@@ -625,7 +727,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_17">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -658,6 +760,86 @@ margin-top: 2px; /* make non-selected tabs look smaller */
              </property>
              <property name="textInteractionFlags">
               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="labelDopplerSplitting">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_20">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Doppler-Splitting</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="labelFWHM">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="margin">
+              <number>50</number>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>FWHM</string>
              </property>
             </widget>
            </item>
@@ -697,9 +879,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
+             <family>Roboto,sans-serif</family>
             </font>
            </property>
            <property name="text">
@@ -716,7 +896,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_3">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -728,7 +908,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_4">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -740,7 +920,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
             <widget class="QLabel" name="label_5">
              <property name="font">
               <font>
-               <pointsize>15</pointsize>
+               <family>Roboto,sans-serif</family>
               </font>
              </property>
              <property name="text">
@@ -803,9 +983,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
            </property>
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
+             <family>Roboto,sans-serif</family>
             </font>
            </property>
            <property name="text">
@@ -882,6 +1060,7 @@ QMenuBar::item:pressed {
      <addaction name="actionSave_peaks_2"/>
      <addaction name="actionStick_spectrum"/>
     </widget>
+    <addaction name="actionCreate_batch"/>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
     <addaction name="actionSave_FID"/>
@@ -1048,6 +1227,21 @@ QMenuBar::item:pressed {
     <string>Stick spectrum</string>
    </property>
   </action>
+  <action name="actionCompress_data">
+   <property name="text">
+    <string>Compress data</string>
+   </property>
+  </action>
+  <action name="actionQtFTMScan">
+   <property name="text">
+    <string>QtFTM Scan</string>
+   </property>
+  </action>
+  <action name="actionCreate_batch">
+   <property name="text">
+    <string>Create batch</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1056,6 +1250,8 @@ QMenuBar::item:pressed {
    <header>pyqtgraph</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="fonts.qrc"/>
+ </resources>
  <connections/>
 </ui>

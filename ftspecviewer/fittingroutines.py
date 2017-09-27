@@ -62,8 +62,8 @@ def fit_doppler_pair(fft_df, center=None):
         center = (fft_df["Frequency"].min() + fft_df["Frequency"].max()) / 2.
     initial = [0.5, 0.5, 0.01, 0.01, center, 0.001, 0.]
     bounds = (
-        [0., 0., 1e-4, 1e-4, center - 0.01, 0., -np.inf],
-        [np.inf, np.inf, 0.016, 0.016, center + 0.01, 0.1, np.inf]
+        [0., 0., 1e-4, 1e-4, center - 0.1, 0., -np.inf],
+        [np.inf, np.inf, 0.05, 0.05, center + 0.1, 0.7, np.inf]
     )
     # Call the scipy fitting wrapper
     popt, pcov = curve_fit(
