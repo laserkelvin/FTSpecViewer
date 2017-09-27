@@ -630,7 +630,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.batch_window = BatchViewerWindow(self, batch_object=self.batch_object)
         self.batch_window.show()
 
-        self.close_dialog()
+        #self.close_dialog()
 
     def close_dialog(self):
         self.close()

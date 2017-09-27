@@ -29,13 +29,11 @@ class Ui_BatchViewer(object):
 "}\n"
 "\n"
 "QMenuBar::item {\n"
-" background: transparent;\n"
 " color: #2c7fb8;\n"
-" border-radius: 4px;\n"
+" border-radius: 4px\n"
 "}\n"
 "\n"
 "QMenuBar::item:selected {\n"
-" background: #edf8b1;\n"
 " color: #2c7fb8\n"
 "}\n"
 "\n"
@@ -143,6 +141,26 @@ class Ui_BatchViewer(object):
 "}\n"
 "QTabBar::tab:!selected {\n"
 "margin-top: 2px; /* make non-selected tabs look smaller */\n"
+"}\n"
+"QTableWidget {\n"
+" background-color: #FFFFFF;\n"
+"border-top-left-radius: 5px;\n"
+"border-top-right-radius: 5px;\n"
+"border-bottom-left-radius: 5px;\n"
+"border-bottom-right-radius: 5px;\n"
+"border: 1.5px solid #C4C4C3;\n"
+"border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"min-width: 10ex;\n"
+"padding: 2px;\n"
+"font-family: \'Roboto\', sans-serif;\n"
+"font-weight: 500;\n"
+"font-size: 15px;\n"
+"color: #2c7fb8;\n"
+"}\n"
+"\n"
+"QGraphicsView {\n"
+"font-family: \'Robot\', sans-serif;\n"
+"font-size: 15px\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(BatchViewer)
         self.centralwidget.setObjectName("centralwidget")
@@ -155,7 +173,7 @@ class Ui_BatchViewer(object):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.tab)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 231, 331))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 231, 561))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -224,6 +242,58 @@ class Ui_BatchViewer(object):
         self.pushButtonReprocess = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.pushButtonReprocess.setObjectName("pushButtonReprocess")
         self.verticalLayout.addWidget(self.pushButtonReprocess)
+        self.pushButtonFitDR = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pushButtonFitDR.setObjectName("pushButtonFitDR")
+        self.verticalLayout.addWidget(self.pushButtonFitDR)
+        self.formLayout_3 = QtWidgets.QFormLayout()
+        self.formLayout_3.setObjectName("formLayout_3")
+        self.label_4 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_4.setObjectName("label_4")
+        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_4)
+        self.checkBoxConfine = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkBoxConfine.setText("")
+        self.checkBoxConfine.setObjectName("checkBoxConfine")
+        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.checkBoxConfine)
+        self.spinBoxSavgolWindow = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinBoxSavgolWindow.setMinimumSize(QtCore.QSize(40, 0))
+        self.spinBoxSavgolWindow.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.spinBoxSavgolWindow.setMaximum(21)
+        self.spinBoxSavgolWindow.setSingleStep(1)
+        self.spinBoxSavgolWindow.setObjectName("spinBoxSavgolWindow")
+        self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBoxSavgolWindow)
+        self.label_11 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_11.setObjectName("label_11")
+        self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_11)
+        self.label_12 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_12.setObjectName("label_12")
+        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_12)
+        self.spinBoxSavgolPolynomial = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinBoxSavgolPolynomial.setMinimumSize(QtCore.QSize(40, 0))
+        self.spinBoxSavgolPolynomial.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.spinBoxSavgolPolynomial.setMaximum(19)
+        self.spinBoxSavgolPolynomial.setSingleStep(1)
+        self.spinBoxSavgolPolynomial.setObjectName("spinBoxSavgolPolynomial")
+        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBoxSavgolPolynomial)
+        self.verticalLayout.addLayout(self.formLayout_3)
+        self.formLayout = QtWidgets.QFormLayout()
+        self.formLayout.setObjectName("formLayout")
+        self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_3.setObjectName("label_3")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_3)
+        self.labelDRFreq = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.labelDRFreq.setMinimumSize(QtCore.QSize(100, 0))
+        self.labelDRFreq.setText("")
+        self.labelDRFreq.setObjectName("labelDRFreq")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelDRFreq)
+        self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_5.setObjectName("label_5")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_5)
+        self.labelFWHM = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.labelFWHM.setMinimumSize(QtCore.QSize(100, 0))
+        self.labelFWHM.setText("")
+        self.labelFWHM.setObjectName("labelFWHM")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.labelFWHM)
+        self.verticalLayout.addLayout(self.formLayout)
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
@@ -358,6 +428,14 @@ class Ui_BatchViewer(object):
         self.label_10.setText(_translate("BatchViewer", "Delay"))
         self.spinBoxDelay.setStatusTip(_translate("BatchViewer", "Delay the FID processing (microseconds)"))
         self.pushButtonReprocess.setText(_translate("BatchViewer", "Reprocess FIDs"))
+        self.pushButtonFitDR.setText(_translate("BatchViewer", "Fit DR Depletion"))
+        self.label_4.setText(_translate("BatchViewer", "Confine fitting region?"))
+        self.spinBoxSavgolWindow.setToolTip(_translate("BatchViewer", "The window length used for the Savitsky-Golay filter. Must be a positive odd integer."))
+        self.label_11.setText(_translate("BatchViewer", "Smoothing Window"))
+        self.label_12.setText(_translate("BatchViewer", "Soothing Polynomial"))
+        self.spinBoxSavgolPolynomial.setToolTip(_translate("BatchViewer", "The polynomial order used for the Savitsky-Golay filter. Must be an odd, positive integer small than the window length."))
+        self.label_3.setText(_translate("BatchViewer", "DR Frequency"))
+        self.label_5.setText(_translate("BatchViewer", "FWHM"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("BatchViewer", "Details"))
         self.label.setText(_translate("BatchViewer", "Detection Settings"))
         self.label_16.setText(_translate("BatchViewer", "Detect peaks"))

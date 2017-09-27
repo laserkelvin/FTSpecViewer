@@ -3,6 +3,7 @@ from scipy.optimize import curve_fit
 from uncertainties import ufloat, unumpy
 import numpy as np
 
+
 def find_peaks(xdata, ydata, thres=0.3, min_dist=1):
     # Finds the peak intensities in ydata, and returns the
     # corresponding frequencies
@@ -11,19 +12,23 @@ def find_peaks(xdata, ydata, thres=0.3, min_dist=1):
     peak_intensities = np.array(ydata[indexes].astype(float))
     return peak_frequencies, peak_intensities
 
+
 def center_cavity(xdata, ydata, thres):
     # Calculates the center cavity frequency by taking the average
     # of the two Doppler horns
     center, intensity = np.average(find_peaks(xdata, ydata, thres), axis=1)
     return center, intensity
 
+
 def gaussian_func(x, amplitude, center, width, offset):
     # Stock Gaussian
     return amplitude / np.sqrt(width**2. * 2. * np.pi) * (np.exp(-(x - center)**2. / (2. * width**2.))) + offset
 
+
 def lorentzian_func(x, amplitude, center, width, offset):
     # Stock Lorenztian
     return amplitude / np.pi * (0.5 * width)/((x - center)**2. + (0.5 * width)**2.)
+
 
 def arb_gaussian_func(x, *params):
     """ Fit an arbtirary number of Gaussian line profiles to data.
@@ -39,10 +44,12 @@ def arb_gaussian_func(x, *params):
         y += gaussian_func(x, amplitude, center, width, offset)
     return y
 
+
 def doppler_pair(x, a1, a2, w1, w2, center, doppler_splitting, offset):
     """ Function for a pair of Doppler peaks """
     return lorentzian_func(x, a1, center - doppler_splitting, w1, offset) + \
            lorentzian_func(x, a2, center + doppler_splitting, w2, offset)
+
 
 def fit_doppler_pair(fft_df, center=None):
     if "Fit" not in list(fft_df.keys()):
@@ -56,7 +63,7 @@ def fit_doppler_pair(fft_df, center=None):
     initial = [0.5, 0.5, 0.01, 0.01, center, 0.001, 0.]
     bounds = (
         [0., 0., 1e-4, 1e-4, center - 0.1, 0., -np.inf],
-        [np.inf, np.inf, 0.05, 0.05, center + 0.1, 0.1, np.inf]
+        [np.inf, np.inf, 0.05, 0.05, center + 0.1, 0.7, np.inf]
     )
     # Call the scipy fitting wrapper
     popt, pcov = curve_fit(
@@ -74,6 +81,7 @@ def fit_doppler_pair(fft_df, center=None):
     for name, value, sigma in zip(names, popt, sigmas):
         fit_results[name] = ufloat(value, sigma)
     return fit_results
+
 
 def fit_lineshape(func, xdata, ydata, peak_guesses=None):
     """ A wrapper for curve_fit function of SciPy.
@@ -110,6 +118,7 @@ def fit_lineshape(func, xdata, ydata, peak_guesses=None):
     # Return the diagonal of the covariance matrix
     pcov = np.diag(pcov)
     return popt, pcov
+
 
 def flatten_list(nested_list):
     # Silly little function that will flatten a nested list into a single list

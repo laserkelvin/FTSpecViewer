@@ -119,7 +119,7 @@ def CreateDatabase(filepath):
         h5file.attrs["HDF5 version"] = h5py.version.hdf5_version
         h5file.attrs["H5Py version"] = h5py.version.version
 
-        for group in ["dr", "batch", "scans", "surveys", "chirp"]:
+        for group in ["dr", "batch", "scans", "surveys", "chirp", "compilation"]:
             # Create all the "headers"
             h5file.create_group(group)
         h5file.close()

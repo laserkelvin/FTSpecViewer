@@ -1,8 +1,12 @@
 import numpy as np
 import pandas as pd
 from scipy import signal as spsig
+from scipy.optimize import curve_fit
+from uncertainties import ufloat, unumpy
 import peakutils
+
 from utils import FTDateTime
+from fittingroutines import gaussian_func
 
 
 class FTData:
@@ -281,9 +285,12 @@ class FTBatch:
                     self.settings["Date"] = FTDateTime(line)
             # Convert the parsed data into a pandas dataframe
             if peek is False:
+                spectrum = np.array(spectrum)
+                ncols = spectrum.shape[1] - 1       # Get number of columns
+                columns = ["Frequency"] + ["Trace " + str(col) for col in range(ncols)]
                 self.spectrum = pd.DataFrame(
                     data=spectrum,
-                    columns=["Frequency", "Intensity"]
+                    columns=columns
                 )
 
     def build_dir_paths(self):
@@ -322,3 +329,54 @@ class FTBatch:
                 self.settings["Scan objects"][scan].spectrum,
                 ignore_index=True
             )
+
+    def preprocess_dr(self, savgol=[0, 0]):
+        # Class method for doing all of the cleaning before the DR spectra are
+        # fit.
+        # First up is coaveraging the columns
+        intensity_cols = [key for key in list(self.spectrum.keys()) if key != "Frequency" and key != "Average"]
+        self.spectrum["Average"] = self.spectrum[intensity_cols].mean(axis=1)
+        if savgol == [0, 0]:
+            pass
+        else:
+            try:
+            # If your filter isn't being applied, you're using it wrong.
+                self.spectrum["Average"] = spsig.savgol_filter(
+                    self.spectrum["Average"],
+                    savgol[0],
+                    savgol[1]
+                )
+            except ValueError:
+                pass
+
+    def fit_dr(self, freq_range=None, savgol=[0, 0]):
+        # First clean the DR
+        self.preprocess_dr(savgol=savgol)
+        # If we truncate the spectrum
+        if freq_range is None:
+            freq_range = [0., np.inf]
+        truncated = self.spectrum.loc[(self.spectrum.Frequency >= min(freq_range)) & (self.spectrum["Frequency"] <= max(freq_range))]
+        # First find the lowest point in depletion spectrum
+        peak_guess = float(truncated.loc[truncated["Average"] == truncated["Average"].min()]["Frequency"])
+        bounds = (
+            [-np.inf, peak_guess - 1., 0.2, -np.inf],
+            [0., peak_guess + 1., 10., np.inf]
+        )
+        p0 = [-1., peak_guess, 1., 0.]
+        # Fit the truncated part of the spectrum
+        popt, pcov = curve_fit(
+            gaussian_func,
+            truncated["Frequency"],
+            truncated["Average"],
+            p0=p0,
+            bounds=bounds
+        )
+        # Generate the model Gaussian
+        self.spectrum["Fit"] = gaussian_func(
+            self.spectrum["Frequency"],
+            *popt
+        )
+        self.fit_results = dict()
+        errors = np.sqrt(np.diag(pcov))
+        for param, opt, std in zip(["A", "Center", "Width", "Offset"], popt, errors):
+            self.fit_results[param] = ufloat(opt, std)

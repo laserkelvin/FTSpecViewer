@@ -24,13 +24,11 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QMenuBar::item {\n"
-" background: transparent;\n"
 " color: #2c7fb8;\n"
-" border-radius: 4px;\n"
+" border-radius: 4px\n"
 "}\n"
 "\n"
 "QMenuBar::item:selected {\n"
-" background: #edf8b1;\n"
 " color: #2c7fb8\n"
 "}\n"
 "\n"
@@ -575,7 +573,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuOverlays.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
