@@ -481,6 +481,8 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         # Calendar updating
         self.calendarWidgetEndDate.clicked.connect(self.configure_calendar_range)
         self.calendarWidgetStartDate.clicked.connect(self.configure_calendar_range)
+        # Filter updating
+        self.checkBoxFilter.valueChanged.connect(self.toggle_filter_bool)
 
     def configure_calendar_range(self, move_dates=False):
         # Initialize the calendars so that dates that can be selected are
@@ -500,6 +502,9 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             QDate.fromString("2010-01-01"),
             self.calendarWidgetEndDate.selectedDate()
         )
+
+    def toggle_filter_bool(self):
+        self.filter = not self.filter
 
     def update_config(self):
         # Class method for updating the FID processing settings

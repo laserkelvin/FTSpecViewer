@@ -21,10 +21,9 @@ I've tried to minimize the number of additional packages required for the sake o
 Usage is pretty straightforward - load an experimental spectrum, look for peaks,
 get quantitative values, etc.
 
-The theming was done using Qt stylesheets - the colors were chosen/inspired by
- "Mathemagiker", created by Benedict Leicht.
+The font used throughout the program is Roboto - freely available from the open source font repository: http://www.fonts.google.com
 
-http://www.awwwards.com/best-websites/mathemagiker/
+The icons used are pulled from the Open Iconic project: https://useiconic.com/open
 
 ## Features
 

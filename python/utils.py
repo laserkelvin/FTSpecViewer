@@ -7,6 +7,11 @@
 
 from datetime import datetime
 from PyQt5.QtCore import QDate
+import h5py
+import os
+import socket
+import ntpath
+from ftclass import FTData, FTBatch
 
 
 def FTDateTime(datestring):
@@ -21,3 +26,120 @@ def FTDateTime(datestring):
 def Py2QtDateTime(datetime_obj):
     # Takes a python datetime object and serializes a QDate object.
     return QDate.fromString(datetime_obj.strftime("%Y-%m-%d"))
+
+
+"""
+    H5Py routines
+    The data can be compressed and stored into a single HDF5 file, which
+    ensures portability and hopefully means we can have copies of all of the
+    FT data for offline processing, without encumbering our computers.
+
+    File structure:
+
+    db.h5
+    +-- dr
+    |   +--- dr_id    (group)
+    +-- survey
+    +-- scans         (group)
+    |   +--- scan_id  (group)
+    |        +--- FID (dataset)
+    |        +--- FFT (dataset)
+    +-- chirp
+    +-- batch
+
+    The parameters used for taking the data are stored as attributes to each
+    respective group/dataset.
+
+"""
+
+
+def LoadDatabase(Database):
+    """ Attempts to load a database with exception catching.
+        If the database doesn't exist, raise an error.
+
+        Returns the loaded database
+    """
+    try:
+        DB = h5py.File(Database, "r+")
+        return DB
+    except IOError:
+        print("Database does not exist.")
+
+
+def AddDatabaseEntry(database, group, filepath):
+    """ Used to add a file to a database. """
+    scan_id = ntpath.splitext(filepath)[0]
+    if scan_id not in list(database[group].keys()):
+        entry_instance = database[group].create_group(scan_id)
+        if group == "scan":
+            # This case is for FIDs
+            ft_obj = FTData(filepath, fid=True)
+            FID = entry_instance.create_dataset(
+                "FID",
+                data=ft_obj.fid,
+                compression="gzip",
+                compression_opts=9,
+            )
+            FFT = entry_instance.create_dataset(
+                "FFT",
+                data=ft_obj.spectrum,
+                compression="gzip",
+                compression_opts=9
+            )
+            for parameter in FTData.settings:
+                FID.attrs[parameter] = FTData.settings[parameter]
+        elif group == "chirp":
+            raise NotImplementedError("Chirp support not implemented yet.")
+        else:
+            # For every other case
+            ft_obj = FTBatch(filepath, batch_type=group, peek=False)
+            spectrum = entry_instance.create_dataset(
+                "Spectrum",
+                data=FTBatch.spectrum,
+                compression="gzip",
+                compression_opts=9
+            )
+            for parameter in FTBatch.settings:
+                spectrum.attrs[parameter] = FTBatch.settings[paramter]
+    database.attrs["modified"] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+
+
+def CreateDatabase(filepath):
+    """ Function for initializing a HDF5 database for storing FTMW data. """
+    with h5py.File(filepath, "w") as h5file:
+        h5file.attrs["filename"] = filepath
+        h5file.attrs["creation date"] = datetime.now().strftime(
+            '%m/%d/%Y %H:%M:%S'
+        )
+        h5file.attrs["creator"] = socket.gethostname()
+        h5file.attrs["HDF5 version"] = h5py.version.hdf5_version
+        h5file.attrs["H5Py version"] = h5py.version.version
+
+        for group in ["dr", "batch", "scans", "survey", "chirp"]:
+            # Create all the "headers"
+            h5file.create_group(group)
+        h5file.close()
+
+
+def CompressData(filedict, database_filepath):
+    """
+        Takes a Dictionary with the filepaths to scans/batchs organized as
+        keys, and creates database entries for every one of them. This is
+        designed to interface with the batch file reader, which already has
+        all of this information.
+
+        The check for whether or not the entry already exists is done within
+        the AddDatabaseEntry function.
+    """
+    if os.path.isfile(database_filepath) is False:
+        # If the database doesn't exist already, create it.
+        CreateDatabase(filepath)
+    with h5py.File(filepath, "a") as h5file:
+        for group in filedict:
+            for entry in filedict[group]:
+                AddDatabaseEntry(
+                    h5file,
+                    group,
+                    filedict[group][entry]
+                )
+        h5file.close()

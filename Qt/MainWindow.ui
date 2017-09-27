@@ -140,6 +140,26 @@ border-bottom-color: #C2C7CB; /* same as pane color */
 }
 QTabBar::tab:!selected {
 margin-top: 2px; /* make non-selected tabs look smaller */
+}
+QTableWidget {
+ background-color: #FFFFFF;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 1.5px solid #C4C4C3;
+border-bottom-color: #C2C7CB; /* same as the pane color */
+min-width: 10ex;
+padding: 2px;
+font-family: 'Roboto', sans-serif;
+font-weight: 500;
+font-size: 15px;
+color: #2c7fb8;
+}
+
+QGraphicsView {
+font-family: 'Robot', sans-serif;
+font-size: 15px
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -199,7 +219,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabScansettings">
        <attribute name="title">
@@ -1061,6 +1081,11 @@ QMenuBar::item:pressed {
   <action name="actionStick_spectrum">
    <property name="text">
     <string>Stick spectrum</string>
+   </property>
+  </action>
+  <action name="actionCompress_data">
+   <property name="text">
+    <string>Compress data</string>
    </property>
   </action>
  </widget>
