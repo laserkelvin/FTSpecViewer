@@ -961,7 +961,6 @@ QMenuBar::item:pressed {
       <string>Load...</string>
      </property>
      <addaction name="actionSpectrum"/>
-     <addaction name="actionQtFTMScan"/>
      <addaction name="actionFID"/>
      <addaction name="separator"/>
      <addaction name="actionBatch"/>

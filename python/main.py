@@ -56,7 +56,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         # File I/O actions
         self.actionSpectrum.triggered.connect(self.load_spectrum)
-        self.actionFID.triggered.connect(self.load_FID)
+        self.actionFID.triggered.connect(self.dialog_load_FID)
         self.actionSave_spectrum.triggered.connect(self.save_spectrum)
         self.actionSave_FID.triggered.connect(self.save_fid)
         self.actionSave_peaks.triggered.connect(self.save_peaks)
@@ -98,11 +98,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pick_peaks = not self.pick_peaks
 
     def load_scan(self):
-        search = self.settings_dialog.config["paths"]["qtftm_path"] + "*/*" + \
+        search = self.settings_dialog.config["paths"]["qtftm_path"] + "/scans/*/*/" + \
                  str(self.spinBoxScanID.value()) + ".txt"
         filepath = glob(search)
+        print(search)
         if len(filepath) == 1:
-            self.load_FID(filepath)
+            self.load_FID(filepath[0])
         else:
             pass
 
@@ -367,15 +368,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except FileNotFoundError:
             self.statusBar.showMessage("File not found!")
 
-    def load_FID(self, filepath=None):
+    def dialog_load_FID(self):
         # Method to load an FID from file
-        if filepath is None:
-            filepath = QFileDialog.getOpenFileName(self, "Open a FID file")
+        filepath = QFileDialog.getOpenFileName(self, "Open a FID file")[0]
+        self.load_FID(filepath)
 
+    def load_FID(self, filepath):
         try:
             self.initialize_plot()
             self.statusBar.showMessage("Loading FID...")
-            self.data = FTData(filepath[0], fid=True)
+            self.data = FTData(filepath, fid=True)
             if self.data.fid.size > 10:
                 # This case checks to see if there IS an FID loaded; if not,
                 # give up on doing anymore analysis to prevent crashing

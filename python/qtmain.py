@@ -572,7 +572,6 @@ class Ui_MainWindow(object):
         self.actionQtFTMScan = QtWidgets.QAction(MainWindow)
         self.actionQtFTMScan.setObjectName("actionQtFTMScan")
         self.menuLoad.addAction(self.actionSpectrum)
-        self.menuLoad.addAction(self.actionQtFTMScan)
         self.menuLoad.addAction(self.actionFID)
         self.menuLoad.addSeparator()
         self.menuLoad.addAction(self.actionBatch)
