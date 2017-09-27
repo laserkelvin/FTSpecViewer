@@ -35,6 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.doppler_count = 0
         self.doppler_param = dict()
         self.data = None
+
         self.peaks = None
         self.peaks_df = None
 
@@ -68,6 +69,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionExit.triggered.connect(qApp.quit)
 
         # Processing the FIDs
+        self.spinBoxScanID.valueChanged.connect(self.load_scan)
         self.comboBoxWindowFunction.currentTextChanged.connect(self.process_fid)
         self.spinBoxExpFilter.valueChanged.connect(self.process_fid)
         self.spinBoxHighPass.valueChanged.connect(self.process_fid)
@@ -94,6 +96,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def pick_peaks_bool_update(self):
         # Toggles peak picking on and off
         self.pick_peaks = not self.pick_peaks
+
+    def load_scan(self):
+        search = self.settings_dialog.config["paths"]["qtftm_path"] + "*/*" + \
+                 str(self.spinBoxScanID.value()) + ".txt"
+        filepath = glob(search)
+        if len(filepath) == 1:
+            self.load_FID(filepath)
+        else:
+            pass
 
     def manual_doppler_fit(self):
         self.doppler_count = 0
@@ -356,9 +367,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except FileNotFoundError:
             self.statusBar.showMessage("File not found!")
 
-    def load_FID(self):
+    def load_FID(self, filepath=None):
         # Method to load an FID from file
-        filepath = QFileDialog.getOpenFileName(self, "Open a FID file")
+        if filepath is None:
+            filepath = QFileDialog.getOpenFileName(self, "Open a FID file")
 
         try:
             self.initialize_plot()
