@@ -974,6 +974,7 @@ QMenuBar::item:pressed {
      <addaction name="actionSave_peaks_2"/>
      <addaction name="actionStick_spectrum"/>
     </widget>
+    <addaction name="actionCreate_batch"/>
     <addaction name="menuLoad"/>
     <addaction name="separator"/>
     <addaction name="actionSave_FID"/>
@@ -1148,6 +1149,11 @@ QMenuBar::item:pressed {
   <action name="actionQtFTMScan">
    <property name="text">
     <string>QtFTM Scan</string>
+   </property>
+  </action>
+  <action name="actionCreate_batch">
+   <property name="text">
+    <string>Create batch</string>
    </property>
   </action>
  </widget>

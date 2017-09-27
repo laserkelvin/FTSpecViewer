@@ -32,6 +32,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # initialize some class data
         self.detect_peaks_bool = False
         self.pick_peaks = False
+        self.fid = False
+
         self.doppler_count = 0
         self.doppler_param = dict()
         self.data = None
@@ -101,7 +103,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         search = self.settings_dialog.config["paths"]["qtftm_path"] + "/scans/*/*/" + \
                  str(self.spinBoxScanID.value()) + ".txt"
         filepath = glob(search)
-        print(search)
         if len(filepath) == 1:
             self.load_FID(filepath[0])
         else:
@@ -385,9 +386,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Perform initial FFT
                 self.statusBar.showMessage("Performing FFT...")
                 self.data.fid2fft()
+                self.process_fid()
                 # Plot the data
                 self.statusBar.showMessage("Displaying plot.")
-                self.update_plot()
+                #self.update_plot()
                 # Update the scan details
                 self.labelTuning.setText(str(self.data.settings["Tuning voltage"]))
                 self.labelScanNum.setText(str(self.data.settings["ID"]))
