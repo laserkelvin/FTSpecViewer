@@ -11,7 +11,7 @@ import h5py
 import os
 import socket
 import ntpath
-from ftclass import *
+import ftclass
 import numpy as np
 
 
@@ -69,12 +69,15 @@ def LoadDatabase(Database):
 
 def AddDatabaseEntry(database, group, filepath):
     """ Used to add a file to a database. """
-    scan_id = ntpath.splitext(filepath)[0]
-    if scan_id not in list(database[group].keys()):
-        entry_instance = database[group].create_group(scan_id)
+    scan_id = str(filepath.split("/")[-1].split(".")[0])
+    if scan_id not in list(database[group].keys()) is True:
+        entry_instance = database[group].create_group(str(scan_id))
+        entry_instance.attrs["created"] = datetime.now().strftime(
+            '%m/%d/%Y %H:%M:%S'
+        )
         if group == "scan":
             # This case is for FIDs
-            ft_obj = FTData(filepath, fid=True)
+            ft_obj = ftclass.FTData(filepath, fid=True)
             FID = entry_instance.create_dataset(
                 "FID",
                 data=ft_obj.fid,
@@ -89,19 +92,19 @@ def AddDatabaseEntry(database, group, filepath):
             )
             for parameter in FTData.settings:
                 FID.attrs[parameter] = FTData.settings[parameter]
-        elif group == "chirp":
-            raise NotImplementedError("Chirp support not implemented yet.")
-        else:
+        elif group == "surveys" is True:
             # For every other case
-            ft_obj = FTBatch(filepath, batch_type=group, peek=False)
+            ft_obj = ftclass.FTBatch(filepath, batch_type=group, peek=False)
             spectrum = entry_instance.create_dataset(
                 "Spectrum",
-                data=FTBatch.spectrum,
+                data=ft_obj.spectrum,
                 compression="gzip",
                 compression_opts=9
             )
             for parameter in FTBatch.settings:
                 spectrum.attrs[parameter] = FTBatch.settings[paramter]
+        elif group == "chirp":
+            raise NotImplementedError("Chirp support not implemented yet.")
     database.attrs["modified"] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
 
 
@@ -116,7 +119,7 @@ def CreateDatabase(filepath):
         h5file.attrs["HDF5 version"] = h5py.version.hdf5_version
         h5file.attrs["H5Py version"] = h5py.version.version
 
-        for group in ["dr", "batch", "scans", "survey", "chirp"]:
+        for group in ["dr", "batch", "scans", "surveys", "chirp"]:
             # Create all the "headers"
             h5file.create_group(group)
         h5file.close()
@@ -134,16 +137,16 @@ def CompressData(filedict, database_filepath, progress_obj=None):
     """
     if os.path.isfile(database_filepath) is False:
         # If the database doesn't exist already, create it.
-        CreateDatabase(filepath)
-    totalitems = np.sum([len(self.dir[group]) for group in self.dir])
+        CreateDatabase(database_filepath)
+    totalitems = np.sum([len(filedict[group]) for group in filedict])
     counter = 0
-    with h5py.File(filepath, "a") as h5file:
+    with h5py.File(database_filepath, "a") as h5file:
         for group in filedict:
             for entry in filedict[group]:
                 AddDatabaseEntry(
                     h5file,
                     group,
-                    filedict[group][entry]
+                    entry
                 )
                 counter += 1
                 if progress_obj is not None:

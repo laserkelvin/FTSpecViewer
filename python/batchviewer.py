@@ -25,6 +25,7 @@ from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QApplication, qApp,
 from qtbatch import Ui_BatchViewer
 from fonts_rc import *
 
+
 class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
     def __init__(self, parent=None, batch_object=None):
         super(BatchViewerWindow, self).__init__(parent)
@@ -62,7 +63,7 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         self.PlotRegion = LinearRegionItem()
         self.PlotRegion.setZValue(10)
         self.Overview.addItem(self.PlotRegion, ignoreBounds = True)
-        center_freq = self.batch_object.spectrum[0].mean()
+        center_freq = self.batch_object.spectrum["Frequency"].mean()
         # Set the region to +/- 5% in the center
         self.PlotRegion.setRegion(
             [
@@ -86,13 +87,13 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
     def update_plot(self):
         # ROI updating
         self.Overview.plot(
-            self.batch_object.spectrum[0].astype(float),
-            self.batch_object.spectrum[1].astype(float),
+            self.batch_object.spectrum["Frequency"].astype(float),
+            self.batch_object.spectrum["Intensity"].astype(float),
             pen=(44,127,184)
         )
         self.ROI.plot(
-            self.batch_object.spectrum[0].astype(float),
-            self.batch_object.spectrum[1].astype(float),
+            self.batch_object.spectrum["Frequency"].astype(float),
+            self.batch_object.spectrum["Intensity"].astype(float),
             pen=(44,127,184)
         )
 

@@ -4,6 +4,7 @@ from scipy import signal as spsig
 import peakutils
 from utils import FTDateTime
 
+
 class FTData:
     """ A general class for processing FTMW and FTCP data.
         A file is specified, with the argument `fid` that will determine
@@ -208,14 +209,15 @@ class FTBatch:
                 # Take the FID processing settings
                 self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
                 self.fidsettings.update(fidsettings)
+                self.convert_objects()
 
         if filepath is not None:
             # Open and parse the batch file
             self.parse_batch(filepath, peek)
 
-            if len(fidsettings) != 0:
+#            if len(list(fidsettings.keys())) != 0:
                 # If the FID config was changed, reload and reprocess all the FIDs
-                self.convert_objects()
+#                self.convert_objects()
 
     def parse_batch(self, filepath, peek=True):
         """ Generic parser for QtFTM batch files """
