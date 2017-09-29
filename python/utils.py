@@ -19,9 +19,9 @@ def FTDateTime(datestring):
     # Takes the comment line from a QtFTM batch containing the date
     # and serializes a datetime object for use between QtFTM and the
     # Qt calendar widget
-    datelist = datestring.split()[:-1]         # Skip the comment flag
+    datelist = datestring.split()[1:]         # Skip the comment flag
     datestring = " ".join(datelist)            # Reform the datestring
-    return datetime.strptime(datestring, "%a %b %e %H:%M:%S %Y")
+    return datetime.strptime(datestring, "%a %b %d %H:%M:%S %Y")
 
 
 def Py2QtDateTime(datetime_obj):

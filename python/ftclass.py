@@ -282,16 +282,16 @@ class FTBatch:
                     # Flag the calibration scan numbers to be read
                     read_calscans = True
             for comment in comments:
-                if "FT freq" in line:
+                if "FT freq" in comment:
                     self.settings["Cavity frequency"] = float(comment.split()[2])
-                if "Start freq" in line:
+                if "Start freq" in comment:
                     self.settings["Start frequency"] = float(comment.split()[2])
-                if "End freq" in line:
+                if "End freq" in comment:
                     self.settings["End frequency"] = float(comment.split()[2])
-                if "Step size" in line:
+                if "Step size" in comment:
                     self.settings["Step size"] = float(comment.split()[2])
-                if "Date" in line:
-                    self.settings["Date"] = FTDateTime(line)
+                if "Date" in comment:
+                    self.settings["Date"] = FTDateTime(comment)
             # Convert the parsed data into a pandas dataframe
             if peek is False:
                 spectrum = np.array(spectrum)
