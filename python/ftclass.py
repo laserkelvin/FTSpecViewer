@@ -226,12 +226,12 @@ class FTBatch:
             "Calibration objects": dict()        # Dictionary of calibration objects
         }
         if peek is False:
-            self.build_dir_paths()
             if fidsettings is not None:
                 # Take the FID processing settings
                 self.fidsettings = {
                     key: None for key in ["exponential", "window function", "delay", "high pass", "low pass"]
                 }
+                self.build_dir_paths()
                 self.fidsettings.update(fidsettings)
                 self.convert_objects()
 

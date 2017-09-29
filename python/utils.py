@@ -152,7 +152,6 @@ def CompressData(filedict, database_filepath, progress_obj=None):
     with h5py.File(database_filepath, "a") as h5file:
         for group in filedict:
             for entry in filedict[group]:
-                print(entry)
                 AddDatabaseEntry(
                     h5file,
                     group,
