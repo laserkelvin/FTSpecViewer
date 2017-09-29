@@ -5,6 +5,8 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 from uncertainties import ufloat, unumpy
 import peakutils
+import os
+from glob import glob
 
 from utils import FTDateTime
 from fittingroutines import gaussian_func
@@ -136,18 +138,19 @@ class FTData:
         proc_fid = np.copy(self.fid)
         if band_pass is not None:
             # Apply a band-pass filter to the FID signal.
-            proc_fid = apply_butter_filter(
-                proc_fid,
-                band_pass[0],
-                band_pass[1],
-                1. / self.settings["FID spacing"]
-            )
+            if band_pass[0] < band_pass[1]:
+                # Make sure the low pass frequency doesn't exceed the high pass
+                proc_fid = apply_butter_filter(
+                    proc_fid,
+                    band_pass[0],
+                    band_pass[1],
+                    1. / self.settings["FID spacing"]
+                )
         # Set the FID time points to zero
-        if delay is not None:
-            for index in range(delay):
-                proc_fid[index] = 0.
+        if delay is not None and delay > 0.:
+            proc_fid[int(delay):] = 0.
         # Use a scipy.signal window function to process the FID signal
-        if window_function is not None:
+        if window_function is not None and window_function != "none":
             if window_function not in available_windows:
                 print("Incorrect choice for window function.")
                 print("Available:")
@@ -155,7 +158,7 @@ class FTData:
             else:
                 proc_fid *= spsig.get_window(window_function, proc_fid.size)
         # Apply the exponential filter to smooth
-        if exp_filter is not None:
+        if exp_filter is not None and exp_filter > 0.:
             proc_fid *= spsig.exponential(proc_fid.size, tau=exp_filter)
         # Perform the FFT
         amplitude = np.fft.fft(proc_fid)
@@ -204,9 +207,9 @@ class FTBatch:
     def __init__(self, filepath=None, batch_type=None,
                  fidsettings=None, rootpath=None, peek=True):
         self.fidsettings = dict()
-        self.root_path = rootpath
 
         self.settings = {
+            "Root path": rootpath,
             "Date": None,
             "Scan number": 0,
             "Scan count": 0,
@@ -223,9 +226,12 @@ class FTBatch:
             "Calibration objects": dict()        # Dictionary of calibration objects
         }
         if peek is False:
+            self.build_dir_paths()
             if fidsettings is not None:
                 # Take the FID processing settings
-                self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass", "low pass"]}
+                self.fidsettings = {
+                    key: None for key in ["exponential", "window function", "delay", "high pass", "low pass"]
+                }
                 self.fidsettings.update(fidsettings)
                 self.convert_objects()
 
@@ -248,7 +254,7 @@ class FTBatch:
                 if "#" in line:
                     comments.append(line)
                     continue
-                if line == "\n":
+                if line == os.linesep:
                     # If we encounter a blank line, stop reading everything
                     read_spectrum = False
                     read_scans = False
@@ -306,8 +312,9 @@ class FTBatch:
     def build_dir_paths(self):
         # Build up the directory paths for all of the scans
         self.settings["Scan paths"] = dict()
+        path = self.settings["Root path"] + "/scans/*/*/"
         for scan_id in self.settings["Scan list"]:
-            self.settings[scan_id] = self.root_path + "/" + self.batch_type + "/*/" + str(scan_id) + ".txt"
+            self.settings["Scan paths"][scan_id] = glob(path + str(scan_id) + ".txt")[0]
 
     def stitch_spectra(self):
         """

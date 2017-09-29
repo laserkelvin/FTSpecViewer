@@ -577,6 +577,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             os.getcwd(),
             "HDF5 files (*.h5)"
         )
+        print(self.dir)
         if len(database_filepath[0]) > 1:
             CompressData(
                 self.dir,
@@ -637,7 +638,6 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
                             elif choice == "surveys" and self.batch_objects[choice][batch_object].settings["Start frequency"] is not None:
                                 # If we're looking at surveys, we want to see if the
                                 # specified frequency has been covered in these surveys
-                                print(self.batch_objects[choice][batch_object].settings["Start frequency"])
                                 frequencies = [self.batch_objects[choice][batch_object].settings["Start frequency"],
                                                self.batch_objects[choice][batch_object].settings["End frequency"]
                                                ]

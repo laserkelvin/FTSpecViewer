@@ -114,6 +114,7 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
                 self.batch_object.spectrum["Frequency"].max()
             ]
         )
+        print(self.batch_object.settings["Scan list"])
         freq_range = np.abs(
             self.batch_object.spectrum["Frequency"].min() - \
             self.batch_object.spectrum["Frequency"].max()

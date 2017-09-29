@@ -198,7 +198,7 @@ margin-top: 2px; /* make non-selected tabs look smaller */
      <x>12</x>
      <y>12</y>
      <width>848</width>
-     <height>672</height>
+     <height>698</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">

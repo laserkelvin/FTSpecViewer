@@ -78,7 +78,7 @@ def LoadDatabase(Database):
 def AddDatabaseEntry(database, group, filepath):
     """ Used to add a file to a database. """
     scan_id = str(filepath.split("/")[-1].split(".")[0])
-    if scan_id not in list(database[group].keys()) is True:
+    if scan_id not in list(database[group].keys()):
         entry_instance = database[group].create_group(str(scan_id))
         entry_instance.attrs["created"] = datetime.now().strftime(
             '%m/%d/%Y %H:%M:%S'
@@ -100,17 +100,18 @@ def AddDatabaseEntry(database, group, filepath):
             )
             for parameter in FTData.settings:
                 FID.attrs[parameter] = FTData.settings[parameter]
-        elif group == "surveys" is True:
+        elif group == "surveys":
             # For every other case
-            ft_obj = ftclass.FTBatch(filepath, batch_type=group, peek=False)
-            spectrum = entry_instance.create_dataset(
-                "Spectrum",
-                data=ft_obj.spectrum,
-                compression="gzip",
-                compression_opts=9
-            )
-            for parameter in FTBatch.settings:
-                spectrum.attrs[parameter] = FTBatch.settings[paramter]
+            if filepath is not None:
+                ft_obj = ftclass.FTBatch(filepath, batch_type=group, peek=False)
+                spectrum = entry_instance.create_dataset(
+                    "Spectrum",
+                    data=ft_obj.spectrum,
+                    compression="gzip",
+                    compression_opts=9
+                )
+                for parameter in FTBatch.settings:
+                    spectrum.attrs[parameter] = FTBatch.settings[parameter]
         elif group == "chirp":
             raise NotImplementedError("Chirp support not implemented yet.")
     database.attrs["modified"] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
@@ -151,6 +152,7 @@ def CompressData(filedict, database_filepath, progress_obj=None):
     with h5py.File(database_filepath, "a") as h5file:
         for group in filedict:
             for entry in filedict[group]:
+                print(entry)
                 AddDatabaseEntry(
                     h5file,
                     group,
