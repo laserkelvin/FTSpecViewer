@@ -29,6 +29,14 @@ def Py2QtDateTime(datetime_obj):
     return QDate.fromString(datetime_obj.strftime("%Y-%m-%d"))
 
 
+def search_array(array, value):
+    # Function that finds the closest value to a specified value within an array
+    # Returns: the closest value, and its array index
+    difference = np.abs(array - value)
+    min_diff = np.min(difference)
+    index = difference[min_diff]
+    return array[index], index
+
 """
     H5Py routines
     The data can be compressed and stored into a single HDF5 file, which

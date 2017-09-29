@@ -77,6 +77,9 @@ class FTData:
                         elif "Probe" in line:
                             # The probe frequency, in MHz
                             self.settings["Probe frequency"] = float(split_line[2])
+                        elif "DR freq" in line:
+                            # Double resonance frequency in MHz
+                            self.settings["DR frequency"] = float(split_line[2])
                     if read_fid is True:
                         self.fid.append(float(line))
                     if "fid" in line:
@@ -385,6 +388,27 @@ class FTBatch:
         fitted values back to the user.
 
     """
+
+    def generate_depletion_spectrum(self, ranges=None):
+        # Class method for generating the depletion spectrum using the
+        # specified integration ranges.
+        if ranges is not None:
+            self.spectrum = None             # Reset the current spectrum
+            spectra = dict()
+            frequency = list()
+            for index, int_range in enumerate(ranges):
+                spectra[index] = list()
+                for scan_id in self.settings["Scan objects"]:
+                    dr_freq = self.settings["Scan objects"][scan_id].settings["DR frequency"]
+                    if dr_freq not in frequency:
+                        frequency.append(dr_freq)
+                    spectra[index].append(
+                        self.settings["Scan objects"][scan_id].spectrum.iloc[int_range]["Intensity"].sum()
+                    )
+            self.spectrum = pd.DataFrame.from_dict(
+                spectra
+            )
+            self.spectrum["Frequencies"] = frequency
 
     def preprocess_dr(self, savgol=[0, 0]):
         # Class method for doing all of the cleaning before the DR spectra are
