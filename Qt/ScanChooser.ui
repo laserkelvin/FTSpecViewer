@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>870</width>
     <height>720</height>
    </rect>
   </property>
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>900</width>
+    <width>870</width>
     <height>720</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>900</width>
+    <width>870</width>
     <height>720</height>
    </size>
   </property>
@@ -649,6 +649,9 @@ margin-top: 2px; /* make non-selected tabs look smaller */
       <property name="columnCount">
        <number>1</number>
       </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
       <column/>
      </widget>
     </item>

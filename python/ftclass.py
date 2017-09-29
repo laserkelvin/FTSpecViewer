@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy import signal as spsig
 from scipy.optimize import curve_fit
+from scipy.interpolate import interp1d
 from uncertainties import ufloat, unumpy
 import peakutils
 
@@ -21,6 +22,7 @@ class FTData:
     """
     def __init__(self, filepath=None, fid=False, mmw=False):
         self.settings = dict()
+        self.settings["Calibration"] = False
         if fid is True:
             self.fid = list()
             with open(filepath, "r") as fid_file:
@@ -220,7 +222,7 @@ class FTBatch:
         if peek is False:
             if fidsettings is not None:
                 # Take the FID processing settings
-                self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
+                self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass", "low pass"]}
                 self.fidsettings.update(fidsettings)
                 self.convert_objects()
 
@@ -308,6 +310,42 @@ class FTBatch:
         for scan_id in self.settings["Scan list"]:
             self.settings[scan_id] = self.root_path + "/" + self.batch_type + "/*/" + str(scan_id) + ".txt"
 
+    def stitch_spectra(self):
+        """
+            Class method for stitching a spectrum together from all of the
+            individual scans.
+
+            The way it works is via interpolation - each frequency window is
+            interpolated into the same frequency bins, and the intensity is
+            averaged across.
+
+            The intensity outside of the original frequency range is set to NaN
+            which allows me to take advantage of the fact that the final
+            intensity does not take into account regions that have no measured
+            intensity. There may be a better way of doing this...
+        """
+        full_freq = np.arange(
+            self.settings["Start frequency"],
+            self.settings["End frequency"],
+            self.settings["Step size"]
+        )
+        self.interpolants = list()
+        for scan_id in self.settings["Scan objects"]:
+            # Loop over all the scans and
+            self.interpolants.append(
+                interp1d(
+                    self.settings["Scan objects"][scan_id].spectrum["Frequency"],
+                    self.settings["Scan objects"][scan_id].spectrum["Intensity"],
+                    bounds_error=False,
+                    fill_value=np.nan
+                )(full_freq)
+            )
+        intensity = np.nanmean(self.interpolants)
+        np.nan_to_num(intensity, copy=False)
+        self.spectrum["Frequency"] = full_freq
+        self.spectrum["Intensity"] = intensity
+
+
     def convert_objects(self):
         # Class method for taking all of the scan IDs and subsequently serialize
         # all of them to FTData objects, processing them with the same settings
@@ -320,6 +358,7 @@ class FTBatch:
                 instance.fid2fft(
                     window_function = self.fidsettings["window function"],
                     delay = self.fidsettings["delay"],
+                    band_pass=[self.fidsettings["high pass"], self.fidsettings["low pass"]],
                     exp_filter = self.fidsettings["exponential"],
                 )
                 self.spectrum = self.spectrum.append(instance.spectrum, ignore_index=True)
@@ -332,12 +371,20 @@ class FTBatch:
             self.settings["Scan objects"][scan].fid2fft(
                 window_function = self.fidsettings["window function"],
                 delay = self.fidsettings["delay"],
+                band_pass=[self.fidsettings["high pass"], self.fidsettings["low pass"]],
                 exp_filter = self.fidsettings["exponential"],
             )
-            self.spectrum = self.spectrum.append(
-                self.settings["Scan objects"][scan].spectrum,
-                ignore_index=True
-            )
+        # Generate the full spectrum
+        self.stitch_spectra()
+
+    """
+        Double Resonance Class Methods
+
+        These methods will be used for double resonance instances; first to
+        preprocess the depletion spectra, then to fit them and report the
+        fitted values back to the user.
+
+    """
 
     def preprocess_dr(self, savgol=[0, 0]):
         # Class method for doing all of the cleaning before the DR spectra are

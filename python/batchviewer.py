@@ -157,7 +157,17 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         rgn = viewRange[0]
         self.PlotRegion.setRegion(rgn)
 
+    def update_config(self):
+        # Class method for updating the FID processing settings
+        for key, box in zip(["exponential", "high pass", "low pass", "delay"],
+                            [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxLowPass, self.spinBoxDelay]
+                            ):
+            self.config[key] = float(box.value())
+        self.config["window function"] = str(self.comboBoxWindowFunction.currentText())
+
     def reprocess_fids(self):
+        self.update_config()
+        self.batch_object.fidsettings.update(self.config)
         self.batch_object.process_all_fids()
 
     def toggle_confine_bool(self):

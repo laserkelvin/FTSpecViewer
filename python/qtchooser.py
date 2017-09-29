@@ -11,14 +11,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ScanChooser(object):
     def setupUi(self, ScanChooser):
         ScanChooser.setObjectName("ScanChooser")
-        ScanChooser.resize(900, 720)
+        ScanChooser.resize(870, 720)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(ScanChooser.sizePolicy().hasHeightForWidth())
         ScanChooser.setSizePolicy(sizePolicy)
-        ScanChooser.setMinimumSize(QtCore.QSize(900, 720))
-        ScanChooser.setMaximumSize(QtCore.QSize(900, 720))
+        ScanChooser.setMinimumSize(QtCore.QSize(870, 720))
+        ScanChooser.setMaximumSize(QtCore.QSize(870, 720))
         ScanChooser.setStyleSheet("QMainWindow {\n"
 " background-color: #ffffff;\n"
 " font-family: \'Roboto\', sans-serif\n"
@@ -378,6 +378,7 @@ class Ui_ScanChooser(object):
         self.tableWidgetScanChooser.setColumnCount(1)
         self.tableWidgetScanChooser.setObjectName("tableWidgetScanChooser")
         self.tableWidgetScanChooser.setRowCount(0)
+        self.tableWidgetScanChooser.horizontalHeader().setVisible(False)
         self.horizontalLayout_3.addWidget(self.tableWidgetScanChooser)
 
         self.retranslateUi(ScanChooser)
