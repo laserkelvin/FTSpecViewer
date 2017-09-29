@@ -233,10 +233,6 @@ class FTBatch:
             # Open and parse the batch file
             self.parse_batch(filepath, peek)
 
-#            if len(list(fidsettings.keys())) != 0:
-                # If the FID config was changed, reload and reprocess all the FIDs
-#                self.convert_objects()
-
     def parse_batch(self, filepath, peek=True):
         """ Generic parser for QtFTM batch files """
         comments = list()
@@ -327,32 +323,31 @@ class FTBatch:
             intensity does not take into account regions that have no measured
             intensity. There may be a better way of doing this...
         """
-        full_freq = np.arange(
-            self.settings["Start frequency"],
-            self.settings["End frequency"],
-            self.settings["Step size"]
-        )
-        self.interpolants = list()
-        for scan_id in self.settings["Scan objects"]:
-            # Loop over all the scans and
-            self.interpolants.append(
-                interp1d(
-                    self.settings["Scan objects"][scan_id].spectrum["Frequency"],
-                    self.settings["Scan objects"][scan_id].spectrum["Intensity"],
-                    bounds_error=False,
-                    fill_value=np.nan
-                )(full_freq)
+        if self.settings["Start frequency"] is not None:
+            full_freq = np.arange(
+                self.settings["Start frequency"],
+                self.settings["End frequency"],
+                self.settings["Step size"]
             )
-        intensity = np.nanmean(self.interpolants)
-        np.nan_to_num(intensity, copy=False)
-        self.spectrum["Frequency"] = full_freq
-        self.spectrum["Intensity"] = intensity
-
+            self.interpolants = list()
+            for scan_id in self.settings["Scan objects"]:
+                # Loop over all the scans and
+                self.interpolants.append(
+                    interp1d(
+                        self.settings["Scan objects"][scan_id].spectrum["Frequency"],
+                        self.settings["Scan objects"][scan_id].spectrum["Intensity"],
+                        bounds_error=False,
+                        fill_value=np.nan
+                    )(full_freq)
+                )
+            intensity = np.nanmean(self.interpolants)
+            np.nan_to_num(intensity, copy=False)
+            self.spectrum["Frequency"] = full_freq
+            self.spectrum["Intensity"] = intensity
 
     def convert_objects(self):
         # Class method for taking all of the scan IDs and subsequently serialize
         # all of them to FTData objects, processing them with the same settings
-        self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
         for scan_id in self.settings["Scan list"]:
             if os.path.isfile(self.settings["Scan paths"][scan_id]) is False:
                 pass
@@ -364,8 +359,9 @@ class FTBatch:
                     band_pass=[self.fidsettings["high pass"], self.fidsettings["low pass"]],
                     exp_filter = self.fidsettings["exponential"],
                 )
-                self.spectrum = self.spectrum.append(instance.spectrum, ignore_index=True)
                 self.settings["Scan objects"][scan_id] = instance
+        if self.settings["Type"] == "surveys":
+            self.stitch_spectra()
 
     def process_all_fids(self):
         # Class method for re-processing all of the FIDs without re-parsing
@@ -378,7 +374,8 @@ class FTBatch:
                 exp_filter = self.fidsettings["exponential"],
             )
         # Generate the full spectrum
-        self.stitch_spectra()
+        if self.settings["Type"] == "surveys":
+            self.stitch_spectra()
 
     """
         Double Resonance Class Methods
@@ -457,6 +454,7 @@ class FTBatch:
             *popt
         )
         self.fit_results = dict()
+        # Errors as the sqrt of the diagonal of the covariance matrix
         errors = np.sqrt(np.diag(pcov))
         for param, opt, std in zip(["A", "Center", "Width", "Offset"], popt, errors):
             self.fit_results[param] = ufloat(opt, std)

@@ -176,7 +176,7 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         # Plot the FFT now
         scan_ID = int(self.spinBoxScanNumber.value())
         try:
-            if "FFT" not in self.plotitems.keys():
+            if "FFT" not in list(self.plotitems.keys()):
                 self.plotitems["FFT"] = self.FFT.plot(
                     self.batch_object.settings["Scan objects"][scan_ID].spectrum["Frequency"],
                     self.batch_object.settings["Scan objects"][scan_ID].spectrum["Intensity"],
@@ -216,6 +216,9 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         self.update_config()
         self.batch_object.fidsettings.update(self.config)
         self.batch_object.process_all_fids()
+        print("Reprocessed all the FIDs.")
+        if self.batch_object.settings["Type"] == "dr":
+            self.batch_object.generate_depletion_spectrum()
         self.update_plot()
 
     def toggle_confine_bool(self):
