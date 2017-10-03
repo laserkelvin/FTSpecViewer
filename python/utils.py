@@ -11,8 +11,9 @@ import h5py
 import os
 import socket
 import ntpath
-import ftclass
 import numpy as np
+
+from parser import *
 
 
 def FTDateTime(datestring):
@@ -52,7 +53,6 @@ def search_array(array, value):
     +-- scans         (group)
     |   +--- scan_id  (group)
     |        +--- FID (dataset)
-    |        +--- FFT (dataset)
     +-- chirp
     +-- batch
 
@@ -79,39 +79,42 @@ def AddDatabaseEntry(database, group, filepath):
     """ Used to add a file to a database. """
     scan_id = str(filepath.split("/")[-1].split(".")[0])
     if scan_id not in list(database[group].keys()):
+        settings = None
+        spectrum = None
         entry_instance = database[group].create_group(str(scan_id))
         entry_instance.attrs["created"] = datetime.now().strftime(
             '%m/%d/%Y %H:%M:%S'
         )
         if group == "scan":
             # This case is for FIDs
-            ft_obj = ftclass.FTData(filepath, fid=True)
-            FID = entry_instance.create_dataset(
+            settings, fid = parse_fid(filepath)
+            FID_entry = entry_instance.create_dataset(
                 "FID",
-                data=ft_obj.fid,
+                data=np.array(fid),
                 compression="gzip",
                 compression_opts=9,
             )
-            FFT = entry_instance.create_dataset(
-                "FFT",
-                data=ft_obj.spectrum,
-                compression="gzip",
-                compression_opts=9
-            )
-            for parameter in FTData.settings:
-                FID.attrs[parameter] = FTData.settings[parameter]
-        elif group == "surveys":
+            for parameter in settings:
+                if parameter == "Date":
+                    FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
+                else:
+                    FID_entry.attrs[parameter] = settings[parameter]
+        elif group in ["surveys", "dr", "batch"]:
             # For every other case
             if filepath is not None:
-                ft_obj = ftclass.FTBatch(filepath, batch_type=group, peek=False)
-                spectrum = entry_instance.create_dataset(
-                    "Spectrum",
-                    data=ft_obj.spectrum,
-                    compression="gzip",
-                    compression_opts=9
-                )
-                for parameter in FTBatch.settings:
-                    spectrum.attrs[parameter] = FTBatch.settings[parameter]
+                settings, spectrum = parse_batch(filepath, peek=False)
+                for key in spectrum.keys():
+                    entry_instance.create_dataset(
+                        key,
+                        data=spectrum[key].astype(float),
+                        compression="gzip",
+                        compression_opts=9
+                    )
+                for parameter in settings:
+                    if parameter == "Date":
+                        FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
+                    else:
+                        FID_entry.attrs[parameter] = settings[parameter]
         elif group == "chirp":
             raise NotImplementedError("Chirp support not implemented yet.")
     database.attrs["modified"] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
@@ -134,7 +137,7 @@ def CreateDatabase(filepath):
         h5file.close()
 
 
-def CompressData(filedict, database_filepath, progress_obj=None):
+def CompressData(database_filepath, data_rootpath, progress_obj=None):
     """
         Takes a Dictionary with the filepaths to scans/batchs organized as
         keys, and creates database entries for every one of them. This is
@@ -147,17 +150,13 @@ def CompressData(filedict, database_filepath, progress_obj=None):
     if os.path.isfile(database_filepath) is False:
         # If the database doesn't exist already, create it.
         CreateDatabase(database_filepath)
-    totalitems = np.sum([len(filedict[group]) for group in filedict])
-    counter = 0
     with h5py.File(database_filepath, "a") as h5file:
-        for group in filedict:
-            for entry in filedict[group]:
+        for group in ["dr", "surveys", "scans", "batch"]:
+            filelist = data_rootpath + "/" + group + "/*/*/*.txt"
+            for file in filelist:
                 AddDatabaseEntry(
                     h5file,
                     group,
-                    entry
+                    file
                 )
-                counter += 1
-                if progress_obj is not None:
-                    progress_obj.setValue(counter / totalitems * 100.)
         h5file.close()

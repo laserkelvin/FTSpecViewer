@@ -103,7 +103,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         search = self.settings_dialog.config["paths"]["qtftm_path"] + "/scans/*/*/" + \
                  str(self.spinBoxScanID.value()) + ".txt"
         filepath = glob(search)
-        if len(filepath) == 1:
+        if len(filepath) > 0:
             self.load_FID(filepath[0])
         else:
             pass
