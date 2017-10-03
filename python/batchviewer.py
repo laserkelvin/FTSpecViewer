@@ -35,18 +35,44 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         self.detect_peaks_bool = False
         self.peaks = None
         self.peaks_df = None
+        self.config = dict()
 
         self.batch_object = batch_object
         self.confine_fit_region = False
 
         self.plotitems = {"ROI": dict(), "Overview": dict()}
         self.setupUi(self)
+        self.disable_widgets()
+
+        # Setup the plots
+        self.initialize_plot()
+        self.update_plot()
+
+        # Become interactive
         self.link_ui_actions()
 
         self.menubar.setNativeMenuBar(False)
 
-        self.initialize_plot()
-        self.update_plot()
+        # Restrict the scan IDs
+        self.spinBoxScanNumber.setMaximum(
+            max(self.batch_object.settings["Scan list"])
+        )
+        self.spinBoxScanNumber.setMinimum(
+            min(self.batch_object.settings["Scan list"])
+        )
+
+    def disable_widgets(self):
+        dr_widgets = [
+            self.pushButtonFitDR,
+            self.pushButtonAddRegion,
+            self.pushButtonRemoveRegion,
+            self.checkBoxConfine,
+            self.spinBoxSavgolWindow,
+            self.spinBoxSavgolPolynomial,
+        ]
+        if self.batch_object.settings["Type"] != "dr":
+            for widget in dr_widgets:
+                widget.setEnabled(False)
 
     def link_ui_actions(self):
         # Currently not working!
@@ -55,9 +81,10 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         self.pushButtonReprocess.clicked.connect(self.reprocess_fids)
         # Fit DR buttons
         self.pushButtonFitDR.clicked.connect(self.fit_dr)
+        # Scan number changed
+        self.spinBoxScanNumber.valueChanged.connect(self.update_FFT)
 
     def initialize_plot(self):
-
         # Add two main docks
         self.Overview = self.graphicsViewLayoutWidget.addPlot(
             row=1,
@@ -70,6 +97,7 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
             row=3,
             col=1
         )
+        self.FFT.regions = dict()
         self.ROI = self.graphicsViewLayoutWidget.addPlot(
             title="Region of interest",
             row=3,
@@ -86,6 +114,7 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
                 self.batch_object.spectrum["Frequency"].max()
             ]
         )
+        print(self.batch_object.settings["Scan list"])
         freq_range = np.abs(
             self.batch_object.spectrum["Frequency"].min() - \
             self.batch_object.spectrum["Frequency"].max()
@@ -142,7 +171,26 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
                     pen=color[:-1].astype(int),
                     name=plot
                 )
+        self.update_FFT()
 
+    def update_FFT(self):
+        # Plot the FFT now
+        scan_ID = int(self.spinBoxScanNumber.value())
+        try:
+            if "FFT" not in list(self.plotitems.keys()):
+                self.plotitems["FFT"] = self.FFT.plot(
+                    self.batch_object.settings["Scan objects"][scan_ID].spectrum["Frequency"],
+                    self.batch_object.settings["Scan objects"][scan_ID].spectrum["Intensity"],
+                    pen=(7, 136, 155),
+                )
+            else:
+                self.plotitems["FFT"].setData(
+                    self.batch_object.settings["Scan objects"][scan_ID].spectrum["Frequency"],
+                    self.batch_object.settings["Scan objects"][scan_ID].spectrum["Intensity"],
+                    pen=(7, 136, 155),
+                )
+        except KeyError:
+            pass
 
     def update_roi(self):
         # Update the region-of-interest plot when the region is changed in the
@@ -157,8 +205,22 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
         rgn = viewRange[0]
         self.PlotRegion.setRegion(rgn)
 
+    def update_config(self):
+        # Class method for updating the FID processing settings
+        for key, box in zip(["exponential", "high pass", "low pass", "delay"],
+                            [self.spinBoxExpFilter, self.spinBoxHighPass, self.spinBoxLowPass, self.spinBoxDelay]
+                            ):
+            self.config[key] = float(box.value())
+        self.config["window function"] = str(self.comboBoxWindowFunction.currentText())
+
     def reprocess_fids(self):
+        self.update_config()
+        self.batch_object.fidsettings.update(self.config)
         self.batch_object.process_all_fids()
+        print("Reprocessed all the FIDs.")
+        if self.batch_object.settings["Type"] == "dr":
+            self.batch_object.generate_depletion_spectrum()
+        self.update_plot()
 
     def toggle_confine_bool(self):
         self.confine_fit_region = not self.confine_fit_region
@@ -195,3 +257,12 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
             filepath = QFileDialog.getSaveFileName(self, "Save the spectrum")
             if filepath:
                 self.batch_object.spectrum.to_csv(filepath[0], index=False)
+
+    def add_dr_region(self):
+        next_region = max(list(self.FFT.regions.keys())) + 1
+        self.FFT.regions[next_region] = LinearRegionItem()
+        self.FFT.regions[next_region].setZValue(10)
+
+    def remove_dr_region(self):
+        last_region = max(list(self.FFT.regions.keys()))
+        del self.FFT.regions[next_region]

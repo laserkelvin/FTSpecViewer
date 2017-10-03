@@ -500,6 +500,11 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
 
         self.setupUi(self)
         self.init_actions()
+
+        # Initialize calendar dates
+        self.calendarWidgetStartDate.setSelectedDate(QDate(2010, 1, 1))
+        self.calendarWidgetEndDate.setSelectedDate(QDate.currentDate())
+
         self.configure_calendar_range()
         self.read_latest()
         self.update_scan_table()
@@ -519,16 +524,17 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         self.calendarWidgetStartDate.clicked.connect(self.configure_calendar_range)
         # Filter updating
         self.checkBoxFilter.stateChanged.connect(self.toggle_filter_bool)
+        self.doubleSpinBoxSearchFreq.valueChanged.connect(self.update_scan_table)
         # Caching
         self.toolButtonCacheData.clicked.connect(self.compress_data)
 
-    def configure_calendar_range(self, move_dates=False):
+    def configure_calendar_range(self):
         # Initialize the calendars so that dates that can be selected are
         # sensible
         # Programmatically change the default date to some early time
         #if move_dates is True:
-        self.calendarWidgetStartDate.setSelectedDate(QDate(2010, 1, 1))
-        self.calendarWidgetEndDate.setSelectedDate(QDate.currentDate())
+        #self.calendarWidgetStartDate.setSelectedDate(QDate(2010, 1, 1))
+        #self.calendarWidgetEndDate.setSelectedDate(QDate.currentDate())
         # The End Date Calendar range depends on the Start Date - you can't
         # select an end date before the start.
         self.calendarWidgetEndDate.setDateRange(
@@ -540,10 +546,12 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             QDate.fromString("2010-01-01"),
             self.calendarWidgetEndDate.selectedDate()
         )
+        self.update_scan_table()
 
     def toggle_filter_bool(self):
         # Whether or not to filter the search results
         self.filter = not self.filter
+        self.update_scan_table()
 
     def update_config(self):
         # Class method for updating the FID processing settings
@@ -569,6 +577,7 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
             os.getcwd(),
             "HDF5 files (*.h5)"
         )
+        print(self.dir)
         if len(database_filepath[0]) > 1:
             CompressData(
                 self.dir,
@@ -615,32 +624,30 @@ class ScanChooserWindow(QMainWindow, Ui_ScanChooser):
         # Loop over all the objects to check that they fall within the range
         if self.filter is True:
             for batch_object in (self.batch_objects[choice]):
-                try:
-                    hit = False
-                    if self.batch_objects[batch_object]["Date"] >= dates[0] is True \
-                    and self.batch_objects[batch_object]["Date"] <= dates[1] is True:
+                hit = False
+                if self.batch_objects[choice][batch_object].settings["Date"] is not None:
+                    if self.batch_objects[choice][batch_object].settings["Date"].date() > dates[0]\
+                     and self.batch_objects[choice][batch_object].settings["Date"].date() <= dates[1]:
                         if search_freq != 0.:
                             # only if a search frequency is specified
-                            if choice == "dr":
+                            if choice == "dr" and self.batch_objects[choice][batch_object].settings["Cavity frequency"] is not None:
                                 # For DR, we want to match the cavity frequency as the
                                 # search criteria.
-                                if np.abs(self.batch_objects[batch_object]["Cavity frequency"] - search_freq) <= 0.2:
+                                if np.abs(self.batch_objects[choice][batch_object].settings["Cavity frequency"] - search_freq) <= 0.2:
                                     hit = True
-                            elif choice == "survey":
+                            elif choice == "surveys" and self.batch_objects[choice][batch_object].settings["Start frequency"] is not None:
                                 # If we're looking at surveys, we want to see if the
                                 # specified frequency has been covered in these surveys
-                                frequencies = [self.batch_objects[batch_object]["Start frequency"],
-                                               self.batch_objects[batch_object]["End frequency"]
+                                frequencies = [self.batch_objects[choice][batch_object].settings["Start frequency"],
+                                               self.batch_objects[choice][batch_object].settings["End frequency"]
                                                ]
                                 if search_freq >= min(frequencies) and search_freq <= max(frequencies):
                                     hit = True
                         else:
                             # If we're ignoring the search frequency, just use the date
                             hit = True
-                    if hit is True:
-                        scans.append(batch_object["Scan ID"])
-                except KeyError:
-                    pass
+                if hit is True:
+                    scans.append(batch_object)
         else:
             for scan in self.dir[choice]:
                 scans.append(scan.split("/")[-1].split(".")[0])

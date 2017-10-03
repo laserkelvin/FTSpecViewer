@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 from scipy import signal as spsig
 from scipy.optimize import curve_fit
+from scipy.interpolate import interp1d
 from uncertainties import ufloat, unumpy
 import peakutils
+import os
+from glob import glob
 
 from utils import FTDateTime
 from fittingroutines import gaussian_func
@@ -21,6 +24,7 @@ class FTData:
     """
     def __init__(self, filepath=None, fid=False, mmw=False):
         self.settings = dict()
+        self.settings["Calibration"] = False
         if fid is True:
             self.fid = list()
             with open(filepath, "r") as fid_file:
@@ -75,6 +79,9 @@ class FTData:
                         elif "Probe" in line:
                             # The probe frequency, in MHz
                             self.settings["Probe frequency"] = float(split_line[2])
+                        elif "DR freq" in line:
+                            # Double resonance frequency in MHz
+                            self.settings["DR frequency"] = float(split_line[2])
                     if read_fid is True:
                         self.fid.append(float(line))
                     if "fid" in line:
@@ -131,18 +138,19 @@ class FTData:
         proc_fid = np.copy(self.fid)
         if band_pass is not None:
             # Apply a band-pass filter to the FID signal.
-            proc_fid = apply_butter_filter(
-                proc_fid,
-                band_pass[0],
-                band_pass[1],
-                1. / self.settings["FID spacing"]
-            )
+            if band_pass[0] < band_pass[1]:
+                # Make sure the low pass frequency doesn't exceed the high pass
+                proc_fid = apply_butter_filter(
+                    proc_fid,
+                    band_pass[0],
+                    band_pass[1],
+                    1. / self.settings["FID spacing"]
+                )
         # Set the FID time points to zero
-        if delay is not None:
-            for index in range(delay):
-                proc_fid[index] = 0.
+        if delay is not None and delay > 0.:
+            proc_fid[int(delay):] = 0.
         # Use a scipy.signal window function to process the FID signal
-        if window_function is not None:
+        if window_function is not None and window_function != "none":
             if window_function not in available_windows:
                 print("Incorrect choice for window function.")
                 print("Available:")
@@ -150,7 +158,7 @@ class FTData:
             else:
                 proc_fid *= spsig.get_window(window_function, proc_fid.size)
         # Apply the exponential filter to smooth
-        if exp_filter is not None:
+        if exp_filter is not None and exp_filter > 0.:
             proc_fid *= spsig.exponential(proc_fid.size, tau=exp_filter)
         # Perform the FFT
         amplitude = np.fft.fft(proc_fid)
@@ -199,9 +207,9 @@ class FTBatch:
     def __init__(self, filepath=None, batch_type=None,
                  fidsettings=None, rootpath=None, peek=True):
         self.fidsettings = dict()
-        self.root_path = rootpath
 
         self.settings = {
+            "Root path": rootpath,
             "Date": None,
             "Scan number": 0,
             "Scan count": 0,
@@ -220,17 +228,16 @@ class FTBatch:
         if peek is False:
             if fidsettings is not None:
                 # Take the FID processing settings
-                self.fidsettings = {key: None for key in ["exponential", "window function", "delay", "high pass"]}
+                self.fidsettings = {
+                    key: None for key in ["exponential", "window function", "delay", "high pass", "low pass"]
+                }
+                self.build_dir_paths()
                 self.fidsettings.update(fidsettings)
                 self.convert_objects()
 
         if filepath is not None:
             # Open and parse the batch file
             self.parse_batch(filepath, peek)
-
-#            if len(list(fidsettings.keys())) != 0:
-                # If the FID config was changed, reload and reprocess all the FIDs
-#                self.convert_objects()
 
     def parse_batch(self, filepath, peek=True):
         """ Generic parser for QtFTM batch files """
@@ -247,7 +254,7 @@ class FTBatch:
                 if "#" in line:
                     comments.append(line)
                     continue
-                if line == "\n":
+                if line == os.linesep:
                     # If we encounter a blank line, stop reading everything
                     read_spectrum = False
                     read_scans = False
@@ -282,16 +289,16 @@ class FTBatch:
                     # Flag the calibration scan numbers to be read
                     read_calscans = True
             for comment in comments:
-                if "FT freq" in line:
+                if "FT freq" in comment:
                     self.settings["Cavity frequency"] = float(comment.split()[2])
-                if "Start freq" in line:
+                if "Start freq" in comment:
                     self.settings["Start frequency"] = float(comment.split()[2])
-                if "End freq" in line:
+                if "End freq" in comment:
                     self.settings["End frequency"] = float(comment.split()[2])
-                if "Step size" in line:
+                if "Step size" in comment:
                     self.settings["Step size"] = float(comment.split()[2])
-                if "Date" in line:
-                    self.settings["Date"] = FTDateTime(line)
+                if "Date" in comment:
+                    self.settings["Date"] = FTDateTime(comment)
             # Convert the parsed data into a pandas dataframe
             if peek is False:
                 spectrum = np.array(spectrum)
@@ -305,13 +312,49 @@ class FTBatch:
     def build_dir_paths(self):
         # Build up the directory paths for all of the scans
         self.settings["Scan paths"] = dict()
+        path = self.settings["Root path"] + "/scans/*/*/"
         for scan_id in self.settings["Scan list"]:
-            self.settings[scan_id] = self.root_path + "/" + self.batch_type + "/*/" + str(scan_id) + ".txt"
+            self.settings["Scan paths"][scan_id] = glob(path + str(scan_id) + ".txt")[0]
+
+    def stitch_spectra(self):
+        """
+            Class method for stitching a spectrum together from all of the
+            individual scans.
+
+            The way it works is via interpolation - each frequency window is
+            interpolated into the same frequency bins, and the intensity is
+            averaged across.
+
+            The intensity outside of the original frequency range is set to NaN
+            which allows me to take advantage of the fact that the final
+            intensity does not take into account regions that have no measured
+            intensity. There may be a better way of doing this...
+        """
+        if self.settings["Start frequency"] is not None:
+            full_freq = np.arange(
+                self.settings["Start frequency"],
+                self.settings["End frequency"],
+                self.settings["Step size"]
+            )
+            self.interpolants = list()
+            for scan_id in self.settings["Scan objects"]:
+                # Loop over all the scans and
+                self.interpolants.append(
+                    interp1d(
+                        self.settings["Scan objects"][scan_id].spectrum["Frequency"],
+                        self.settings["Scan objects"][scan_id].spectrum["Intensity"],
+                        bounds_error=False,
+                        fill_value=np.nan
+                    )(full_freq)
+                )
+            intensity = np.nanmean(self.interpolants)
+            np.nan_to_num(intensity, copy=False)
+            self.spectrum["Frequency"] = full_freq
+            self.spectrum["Intensity"] = intensity
 
     def convert_objects(self):
         # Class method for taking all of the scan IDs and subsequently serialize
         # all of them to FTData objects, processing them with the same settings
-        self.spectrum = pd.DataFrame(columns=["Frequency", "Intensity"])
         for scan_id in self.settings["Scan list"]:
             if os.path.isfile(self.settings["Scan paths"][scan_id]) is False:
                 pass
@@ -320,10 +363,12 @@ class FTBatch:
                 instance.fid2fft(
                     window_function = self.fidsettings["window function"],
                     delay = self.fidsettings["delay"],
+                    band_pass=[self.fidsettings["high pass"], self.fidsettings["low pass"]],
                     exp_filter = self.fidsettings["exponential"],
                 )
-                self.spectrum = self.spectrum.append(instance.spectrum, ignore_index=True)
                 self.settings["Scan objects"][scan_id] = instance
+        if self.settings["Type"] == "surveys":
+            self.stitch_spectra()
 
     def process_all_fids(self):
         # Class method for re-processing all of the FIDs without re-parsing
@@ -332,12 +377,42 @@ class FTBatch:
             self.settings["Scan objects"][scan].fid2fft(
                 window_function = self.fidsettings["window function"],
                 delay = self.fidsettings["delay"],
+                band_pass=[self.fidsettings["high pass"], self.fidsettings["low pass"]],
                 exp_filter = self.fidsettings["exponential"],
             )
-            self.spectrum = self.spectrum.append(
-                self.settings["Scan objects"][scan].spectrum,
-                ignore_index=True
+        # Generate the full spectrum
+        if self.settings["Type"] == "surveys":
+            self.stitch_spectra()
+
+    """
+        Double Resonance Class Methods
+
+        These methods will be used for double resonance instances; first to
+        preprocess the depletion spectra, then to fit them and report the
+        fitted values back to the user.
+
+    """
+
+    def generate_depletion_spectrum(self, ranges=None):
+        # Class method for generating the depletion spectrum using the
+        # specified integration ranges.
+        if ranges is not None:
+            self.spectrum = None             # Reset the current spectrum
+            spectra = dict()
+            frequency = list()
+            for index, int_range in enumerate(ranges):
+                spectra[index] = list()
+                for scan_id in self.settings["Scan objects"]:
+                    dr_freq = self.settings["Scan objects"][scan_id].settings["DR frequency"]
+                    if dr_freq not in frequency:
+                        frequency.append(dr_freq)
+                    spectra[index].append(
+                        self.settings["Scan objects"][scan_id].spectrum.iloc[int_range]["Intensity"].sum()
+                    )
+            self.spectrum = pd.DataFrame.from_dict(
+                spectra
             )
+            self.spectrum["Frequencies"] = frequency
 
     def preprocess_dr(self, savgol=[0, 0]):
         # Class method for doing all of the cleaning before the DR spectra are
@@ -386,6 +461,7 @@ class FTBatch:
             *popt
         )
         self.fit_results = dict()
+        # Errors as the sqrt of the diagonal of the covariance matrix
         errors = np.sqrt(np.diag(pcov))
         for param, opt, std in zip(["A", "Center", "Width", "Offset"], popt, errors):
             self.fit_results[param] = ufloat(opt, std)

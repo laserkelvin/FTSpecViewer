@@ -312,7 +312,7 @@ font-size: 15px
           <widget class="QSpinBox" name="spinBoxExpFilter">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>88</width>
              <height>0</height>
             </size>
            </property>
@@ -355,7 +355,7 @@ font-size: 15px
           <widget class="QSpinBox" name="spinBoxHighPass">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>88</width>
              <height>0</height>
             </size>
            </property>
@@ -369,7 +369,7 @@ font-size: 15px
             <string>Apply a high-pass filter (microseconds)</string>
            </property>
            <property name="maximum">
-            <number>1000</number>
+            <number>190</number>
            </property>
           </widget>
          </item>
@@ -389,7 +389,7 @@ font-size: 15px
           <widget class="QSpinBox" name="spinBoxDelay">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>88</width>
              <height>0</height>
             </size>
            </property>
@@ -414,7 +414,7 @@ font-size: 15px
           <widget class="QSpinBox" name="spinBoxScanNumber">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>88</width>
              <height>0</height>
             </size>
            </property>
@@ -449,7 +449,7 @@ font-size: 15px
           <widget class="QSpinBox" name="spinBoxLowPass">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>88</width>
              <height>0</height>
             </size>
            </property>
@@ -463,7 +463,7 @@ font-size: 15px
             <string>Apply a high-pass filter (microseconds)</string>
            </property>
            <property name="maximum">
-            <number>1000</number>
+            <number>190</number>
            </property>
           </widget>
          </item>
