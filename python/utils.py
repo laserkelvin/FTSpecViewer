@@ -76,7 +76,16 @@ def LoadDatabase(Database):
 
 
 def AddDatabaseEntry(database, group, filepath):
-    """ Used to add a file to a database. """
+    """
+        Used to add a file to a database.
+
+        This routine is designed to add data to an existing database, only
+        if it doesn't exist already.
+
+        The rationale behind this is that the raw data shouldn't be changed
+        normally, and all we should be doing when manipulating the database is
+        appending to it.
+    """
     scan_id = str(filepath.split("/")[-1].split(".")[0])
     if scan_id not in list(database[group].keys()):
         settings = None
@@ -96,6 +105,8 @@ def AddDatabaseEntry(database, group, filepath):
             )
             for parameter in settings:
                 if parameter == "Date":
+                    # Date is a special case, where we should convert it
+                    # into an datetime object first.
                     FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
                 else:
                     FID_entry.attrs[parameter] = settings[parameter]
@@ -112,6 +123,8 @@ def AddDatabaseEntry(database, group, filepath):
                     )
                 for parameter in settings:
                     if parameter == "Date":
+                        # Date is a special case, where we should convert it
+                        # into an datetime object first.
                         FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
                     else:
                         FID_entry.attrs[parameter] = settings[parameter]
@@ -127,6 +140,7 @@ def CreateDatabase(filepath):
         h5file.attrs["creation date"] = datetime.now().strftime(
             '%m/%d/%Y %H:%M:%S'
         )
+        # Get the name of the computer that produced this database
         h5file.attrs["creator"] = socket.gethostname()
         h5file.attrs["HDF5 version"] = h5py.version.hdf5_version
         h5file.attrs["H5Py version"] = h5py.version.version
