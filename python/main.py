@@ -28,19 +28,7 @@ from icons_rc import *
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-
-        # initialize some class data
-        self.detect_peaks_bool = False
-        self.pick_peaks = False
-        self.fid = False
-
-        self.doppler_count = 0
-        self.doppler_param = dict()
-        self.data = None
-
-        self.peaks = None
-        self.peaks_df = None
-
+        self.reset_parameters()
         self.setupUi(self)
         self.settings_dialog = SettingsWindow(self)         # Settings Window
         self.batch_dialog = ScanChooserWindow(
@@ -50,6 +38,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menubar.setNativeMenuBar(False)
         self.link_ui_actions()
         self.initialize_plot()
+
+    def reset_parameters(self):
+        # initialize some class data
+        self.detect_peaks_bool = False
+        self.pick_peaks = False
+        self.fid = False
+
+        self.MainPlot = None
+        self.Line = None
+
+        self.doppler_count = 0
+        self.doppler_param = dict()
+        self.doppler_sets = list()
+        self.data = None
+
+        self.peaks = None
+        self.peaks_df = None
 
     def link_ui_actions(self):
         """ Method for consolidating all of the signal events in the UI
@@ -86,9 +91,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButtonAutofit.clicked.connect(self.auto_doppler)
 
         # Peak picking routine
-        if self.pick_peaks is True:
-            self.doppler_count = 0
-            self.graphcsViewMain.scene().sigMouseClicked.connect(self.manual_doppler_fit)
+        self.pushButtonPickDoppler.clicked.connect(self.pick_peaks_bool_update)
+        self.graphicsViewMain.scene().sigMouseClicked.connect(self.manual_doppler_fit)
+
+    def get_mouse_movement(self, evt):
+        # Gets the mouse cursor positions
+        if self.MainPlot is not None:
+            self.vb = self.MainPlot.getViewBox()
+            mousePoint = self.vb.mapSceneToView(evt[0])
+            self.xy = {
+                "x": np.round(mousePoint.x(), decimals=4),
+                "y": np.round(mousePoint.y(), decimals=4)
+            }
+            self.MainFrequencyLabel.setText(
+                "{x}, {y}".format_map(self.xy),
+            )
+            if self.Line is None:
+                self.Line = pyqtgraph.InfiniteLine(angle=90, movable=False)
+                self.graphicsViewMain.addItem(self.Line, ignoreBounds=True)
+            self.Line.setPos(self.xy["x"])
+
 
     def peak_detection_bool_update(self):
         # Toggles on and off
@@ -98,6 +120,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def pick_peaks_bool_update(self):
         # Toggles peak picking on and off
         self.pick_peaks = not self.pick_peaks
+        self.doppler_count = 0
+        self.pair = list()
+        self.picked_frequencies = list()
 
     def load_scan(self):
         search = self.settings_dialog.config["paths"]["qtftm_path"] + "/scans/*/*/" + \
@@ -109,8 +134,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def manual_doppler_fit(self):
-        self.doppler_count = 0
-        self.graphicsViewMain.scene()
+        if self.pick_peaks is True:
+            self.doppler_count+=1
+            self.pair.append(self.xy["x"])
+            if self.doppler_count % 2 == 0 and self.doppler_count != 0:
+                self.picked_frequencies.append(self.pair)
+                self.pair = list()
+                for index, pair in enumerate(self.picked_frequencies):
+                    self.doppler_param[index] = fit_doppler_pair(
+                        self.data.spectrum, pair
+                    )
+                self.update_doppler_table()
+                self.update_plot()
+
 
     def auto_doppler(self):
         # Detect peaks Automatically
@@ -136,17 +172,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 ignore_index=True
             )
             self.peaks.append([self.doppler_param[index]["Frequency"].n, intensity])
-        self.update_peak_table()
+        self.update_doppler_table()
         self.update_plot()
-        self.labelCenterFrequency.setText(
-            self.format_uncertainty(self.doppler_param[0]["Frequency"])
-        )
-        self.labelDopplerSplitting.setText(
-            self.format_uncertainty(self.doppler_param[0]["Doppler-width"])
-        )
-        self.labelFWHM.setText(
-            self.format_uncertainty(self.doppler_param[0]["W1"] * 2.355)
-        )
 
     def detect_peaks(self):
         # Peak detection signal event. If the checkbox for peak detection is
@@ -185,6 +212,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.tableWidgetPeakTable.insertRow(peak_num)
             for index, value in enumerate(peak):
                 self.tableWidgetPeakTable.setItem(peak_num, index, QTableWidgetItem("{:.4f}".format(value)))
+
+    def update_doppler_table(self):
+        # Method for updating the fitted Doppler peaks.
+        self.tableWidgetDopplerPeaks.clear()
+        self.tableWidgetDopplerPeaks.setRowCount(len(self.doppler_sets))
+        self.tableWidgetDopplerPeaks.setColumnCount(4)
+
+        for pair_index in self.doppler_param:
+            doppler_dict = {
+                "Frequency": self.doppler_param[pair_index]["Frequency"],
+                "Doppler-width": self.doppler_param[pair_index]["Doppler-width"],
+                "FWHM": self.doppler_param[pair_index]["W1"] * 2.355,
+                "Intensity": (self.doppler_param[pair_index]["A1"] + \
+                self.doppler_param[pair_index]["A1"]) / 2.
+            }
+            self.tableWidgetDopplerPeaks.insertRow(pair_index)
+            for index, header in enumerate(["Frequency", "Doppler-width", "FWHM", "Intensity"]):
+                self.tableWidgetDopplerPeaks.setHorizontalHeaderItem(index, QTableWidgetItem(header))
+                self.tableWidgetDopplerPeaks.setItem(
+                    pair_index,
+                    index,
+                    QTableWidgetItem("{:.4f}".format(doppler_dict[header]))
+                )
+
 
     def process_fid(self):
         # This routine is only run if a FID has been loaded
@@ -249,13 +300,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.graphicsViewFID.getAxis(axis).setLabel(label)
             self.graphicsViewFID.getAxis(axis).setPen((7,136,155))
 
+        # Add overlay mouse position
+        self.MainFrequencyLabel = pyqtgraph.LabelItem(justify = "right")
+        self.graphicsViewMain.addItem(self.MainFrequencyLabel)
+
+        self.proxy = pyqtgraph.SignalProxy(
+            self.graphicsViewMain.scene().sigMouseMoved,
+            rateLimit=60,
+            slot=self.get_mouse_movement
+        )
+
     def update_plot(self):
         # Method to plot the current spectrum
         self.graphicsViewMain.clear()
         self.graphicsViewFID.clear()
         self.graphicsViewMain.setAspectLocked(False)
         self.graphicsViewFID.setAspectLocked(False)
-        self.graphicsViewMain.plot(
+        self.MainPlot = self.graphicsViewMain.plot(
                 self.data.spectrum["Frequency"].astype(float),
                 self.data.spectrum["Intensity"].astype(float),
                 pen=(7,136,155),
@@ -288,6 +349,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 pen=(7,136,155),
                 name="FID"
             )
+
+        self.Line = None
+        self.proxy = pyqtgraph.SignalProxy(
+            self.graphicsViewMain.scene().sigMouseMoved,
+            rateLimit=60,
+            slot=self.get_mouse_movement
+        )
 
     def save_spectrum(self):
         if self.data:
@@ -351,7 +419,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Package the fitted parameters, and their uncertainties
                 # Calculate the center frequency
                 center_freq = np.average([popt[1] + popt[4]])
-                self.labelCenterFrequency.setText(str(round(center_freq, 4)))
                 self.update_plot()
 
             except RuntimeError:
@@ -367,6 +434,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filepath = QFileDialog.getOpenFileName(self, "Open a spectrum file")
 
         try:
+            self.reset_parameters()
             self.initialize_plot()
             self.statusBar.showMessage("Loading spectrum...")
             self.data = FTData(filepath[0], fid=False)
@@ -379,11 +447,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def dialog_load_FID(self):
         # Method to load an FID from file
-        filepath = QFileDialog.getOpenFileName(self, "Open a FID file")[0]
+        filepath = QFileDialog.getOpenFileNames(self, "Open a FID file")[0]
         self.load_FID(filepath)
 
     def load_FID(self, filepath):
         try:
+            self.reset_parameters()
             self.initialize_plot()
             self.statusBar.showMessage("Loading FID...")
             self.data = FTData(filepath, fid=True)

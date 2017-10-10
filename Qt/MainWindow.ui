@@ -191,11 +191,32 @@ font-size: 15px
        </widget>
       </item>
       <item>
-       <widget class="QGraphicsView" name="graphicsViewOverview">
+       <widget class="QLabel" name="label_11">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>150</height>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Roboto,sans-serif</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>FID trace</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="graphicsViewFID">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>230</height>
          </size>
         </property>
         <property name="statusTip">
@@ -209,7 +230,7 @@ font-size: 15px
      <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>270</width>
+        <width>285</width>
         <height>16777215</height>
        </size>
       </property>
@@ -662,52 +683,6 @@ font-size: 15px
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_11">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto,sans-serif</family>
-            </font>
-           </property>
-           <property name="text">
-            <string>FID trace</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="PlotWidget" name="graphicsViewFID">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>180</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>180</height>
-            </size>
-           </property>
-           <property name="statusTip">
-            <string>FID trace</string>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="lineWidth">
-            <number>2</number>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="pushButtonPickDoppler">
            <property name="text">
             <string>Manual Doppler fit</string>
@@ -722,128 +697,7 @@ font-size: 15px
           </widget>
          </item>
          <item>
-          <layout class="QFormLayout" name="formLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_17">
-             <property name="font">
-              <font>
-               <family>Roboto,sans-serif</family>
-              </font>
-             </property>
-             <property name="text">
-              <string>Center Frequency</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="labelCenterFrequency">
-             <property name="minimumSize">
-              <size>
-               <width>100</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>100</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="margin">
-              <number>50</number>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="labelDopplerSplitting">
-             <property name="minimumSize">
-              <size>
-               <width>100</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>100</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="margin">
-              <number>50</number>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_20">
-             <property name="font">
-              <font>
-               <family>Roboto,sans-serif</family>
-              </font>
-             </property>
-             <property name="text">
-              <string>Doppler-Splitting</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="labelFWHM">
-             <property name="minimumSize">
-              <size>
-               <width>100</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>100</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="margin">
-              <number>50</number>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_21">
-             <property name="font">
-              <font>
-               <family>Roboto,sans-serif</family>
-              </font>
-             </property>
-             <property name="text">
-              <string>FWHM</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QTableWidget" name="tableWidgetDopplerPeaks"/>
          </item>
         </layout>
        </widget>
@@ -1131,6 +985,12 @@ QMenuBar::item:pressed {
   <action name="actionFID">
    <property name="text">
     <string>FID</string>
+   </property>
+   <property name="toolTip">
+    <string>FID</string>
+   </property>
+   <property name="statusTip">
+    <string>Load FIDs. If several are loaded at the same time, it will co-average them.</string>
    </property>
   </action>
   <action name="actionCAT">

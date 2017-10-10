@@ -26,9 +26,16 @@ class FTData:
         self.settings = dict()
         self.settings["Calibration"] = False
         if fid is True:
-            self.fid = list()
-            self.settings, self.fid = parse_fid(filepath, mmw)
-            self.fid = np.array(self.fid)
+            if len(filepath) == 1:
+                self.settings, self.fid = parse_fid(filepath[0], mmw)
+                self.fid = np.array(self.fid)
+            elif len(filepath) > 1:
+                # For multi-FIDs, we want to co-average them
+                self.fids_bin = list()
+                for file in filepath:
+                    self.settings, fid = parse_fid(file, mmw)
+                    self.fids_bin.append(fid)
+                self.fid = np.average(self.fids_bin, axis=0)
         else:
             try:
                 self.spectrum = pd.read_csv(
@@ -67,7 +74,7 @@ class FTData:
                 )
         # Set the FID time points to zero
         if delay is not None and delay > 0.:
-            proc_fid[int(delay):] = 0.
+            proc_fid[:int(delay)] = 0.
         # Use a scipy.signal window function to process the FID signal
         if window_function is not None and window_function != "none":
             if window_function not in available_windows:

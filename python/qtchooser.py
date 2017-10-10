@@ -179,7 +179,7 @@ class Ui_ScanChooser(object):
 "margin-top: 2px; /* make non-selected tabs look smaller */\n"
 "}")
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(ScanChooser)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(12, 12, 848, 672))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(12, 12, 848, 698))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
