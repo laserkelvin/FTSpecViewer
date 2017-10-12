@@ -48,9 +48,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.MainPlot = None
         self.Line = None
 
-        self.doppler_count = 0
+        self.pair_count = 0
         self.doppler_param = dict()
         self.doppler_sets = list()
+        self.doppler_plotlines = dict()
         self.data = None
 
         self.peaks = None
@@ -120,7 +121,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def pick_peaks_bool_update(self):
         # Toggles peak picking on and off
         self.pick_peaks = not self.pick_peaks
-        self.doppler_count = 0
+        self.pair_count = 0
         self.pair = list()
         self.picked_frequencies = list()
 
@@ -134,16 +135,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def manual_doppler_fit(self):
+        # Routine for handling when manual peak picking is selected
+        # for every pair of peaks selected, the frequency is read
+        # and used as the initial guess for the fit
         if self.pick_peaks is True:
-            self.doppler_count+=1
+            self.pair_count+=1
             self.pair.append(self.xy["x"])
-            if self.doppler_count % 2 == 0 and self.doppler_count != 0:
-                self.picked_frequencies.append(self.pair)
-                self.pair = list()
-                for index, pair in enumerate(self.picked_frequencies):
-                    self.doppler_param[index] = fit_doppler_pair(
-                        self.data.spectrum, pair
-                    )
+            if self.pair_count % 2 == 0 and self.pair_count != 0:
+                self.picked_frequencies.append(np.average(self.pair))
+                self.pair = list()                  # reset the pair list
+                self.fit_model = FitModel(self.picked_frequencies)
+                self.fit_model.gas = "H2"           # placeholder for setting gas
+                self.fit_model.radical = False
+                self.fit_model.generate_func_input()
+                self.fit_model.fit_model(
+                    self.data.spectrum["Frequency"].values,
+                    self.data.spectrum["Intensity"].values
+                )
+                self.data.spectrum["Fit"] = self.fit_model.model
+                self.doppler_param = self.fit_model.results
                 self.update_doppler_table()
                 self.update_plot()
 
@@ -221,11 +231,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for pair_index in self.doppler_param:
             doppler_dict = {
-                "Frequency": self.doppler_param[pair_index]["Frequency"],
-                "Doppler-width": self.doppler_param[pair_index]["Doppler-width"],
+                "Frequency": self.doppler_param[pair_index]["center"],
+                "Doppler-width": self.doppler_param[pair_index]["doppler_splitting"],
                 "FWHM": self.doppler_param[pair_index]["W1"] * 2.355,
                 "Intensity": (self.doppler_param[pair_index]["A1"] + \
-                self.doppler_param[pair_index]["A1"]) / 2.
+                self.doppler_param[pair_index]["A2"]) / 2.
             }
             self.tableWidgetDopplerPeaks.insertRow(pair_index)
             for index, header in enumerate(["Frequency", "Doppler-width", "FWHM", "Intensity"]):

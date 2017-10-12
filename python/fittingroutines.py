@@ -46,10 +46,11 @@ def arb_gaussian_func(x, *params):
     return y
 
 
-def doppler_pair(x, a1, a2, w1, w2, center, doppler_splitting, offset):
+def doppler_pair(x, A1, A2, W1, W2, center, doppler_splitting, offset):
     """ Function for a pair of Doppler peaks """
-    return lorentzian_func(x, a1, center - doppler_splitting, w1, offset) + \
-           lorentzian_func(x, a2, center + doppler_splitting, w2, offset)
+    return lorentzian_func(x, A1, center - doppler_splitting, W1, offset) + \
+           lorentzian_func(x, A2, center + doppler_splitting, W2, offset)
+
 
 def arb_doppler_func(x, *params):
     """ 
@@ -60,8 +61,9 @@ def arb_doppler_func(x, *params):
          pair.
     """
     y = np.zeros(len(x))
-    for param in params:
-        y+=doppler_pair(x, **param)
+    for i in range(0, len(params), 7):
+        last_pos = i + 7
+        y+=doppler_pair(x, *params[i:last_pos])
     return y
 
 
@@ -160,32 +162,54 @@ class FitModel:
        program.
     """
     def __init__(self, guess_frequencies):
-        self.parameter_dict = dict()
-        self.guess_frequencies = list()
-        self.model = None
+        self.param_list = list()
+        self.guess_frequencies = guess_frequencies
+        self.model_func = None
+        self.model = np.array([])
         self.npairs = 0
         if len(self.guess_frequencies) > 0:
             self.npairs = len(self.guess_frequencies)
-        self.gas = None
+        self.gas = "Ne"
         self.radical = False
+
+    def fit_model(self, xdata, ydata):
+        # Wrapper for the scipy curve_fit call
+        if self.model_func is None:
+            self.generate_func_input()
+        try:
+            self.opt, self.cov = curve_fit(
+                self.model_func,
+                xdata,
+                ydata,
+                p0=self.param_list,
+                bounds=self.boundary_list
+            )
+            self.format_results()
+            self.model = arb_doppler_func(
+                xdata,
+                *self.opt
+            )
+        except RuntimeError:
+            # If the fitting fails, return None
+            self.opt, self.cov, self.results = None
 
     def generate_params(self):
         # Function to generate a dictionary of parameters using
         # class attributes
         param_dict = {
-            "a1": 1e-2,
-            "a2": 1e-2,
+            "A1": 1e-2,
+            "A2": 1e-2,
             "offset": 0.
         }
         # Calculate the Doppler splitting depending on what gas is used
-        param_dict["doppler_splitting"] = calculate_doppler() / 2.
+        param_dict["doppler_splitting"] = self.calculate_doppler()
         # Fat peaks for radicals
         if self.radical is True:
-            param_dict["w1"] = 0.13
-            param_dict["w2"] = 0.13
+            param_dict["W1"] = 0.05
+            param_dict["W2"] = 0.05
         else:
-            param_dict["w1"] = 0.05
-            param_dict["w2"] = 0.05
+            param_dict["W1"] = 0.025
+            param_dict["W2"] = 0.025
         return param_dict
 
     def generate_func_input(self):
@@ -197,17 +221,20 @@ class FitModel:
         upper_bounds = list()
         lower_bounds = list()
         for index, frequency in enumerate(self.guess_frequencies):
-            param_dict = generate_params()
+            param_dict = self.generate_params()
             param_dict["center"] = frequency
-            self.param_list.append(param_dict)
+            param = [param_dict[key] for key in ["A1", "A2", "W1", "W2", \
+                                                 "center", "doppler_splitting", \
+                                                 "offset"]]
+            self.param_list.append(param)
             upper_bounds.append(
                 [
                     np.inf,  # A1
                     np.inf,  # A2
-                    param_dict["w1"] + 0.03,   # W1
-                    param_dict["w2"] + 0.03,   # W2
+                    param_dict["W1"] + 0.01,   # W1
+                    param_dict["W2"] + 0.01,   # W2
                     param_dict["center"] + 0.1,
-                    param_dict["doppler_splitting"] + 0.1,
+                    param_dict["doppler_splitting"] + 0.05,
                     np.inf
                 ]
             )
@@ -215,32 +242,34 @@ class FitModel:
                 [
                     0.,  # A1
                     0.,  # A2
-                    param_dict["w1"] - 0.03,   # W1
-                    param_dict["w2"] - 0.03,   # W2
+                    param_dict["W1"] - 0.01,   # W1
+                    param_dict["W2"] - 0.01,   # W2
                     param_dict["center"] - 0.1,
-                    param_dict["doppler_splitting"] - 0.1,
+                    param_dict["doppler_splitting"] - 0.05,
                     -np.inf
                 ]
             )
         upper_bounds = flatten_list(upper_bounds)
         lower_bounds = flatten_list(lower_bounds)
         self.boundary_list = (lower_bounds, upper_bounds)
+        self.param_list = flatten_list(self.param_list)
+        self.model_func = arb_doppler_func
 
-   def format_results(self):
-       # Class method for taking the results of the fit and
-       # actually formatting them into a presentable dictionary
-       self.results = dict()
-       param_names = ["A1", "A2", "W1", "W2", "center", "doppler_splitting", "offset"]
-       self.variance = np.sqrt(np.diag(self.cov))
-       # Calculate the uncertainties of the parameters
-       if self.opt:
-           for i in range(0, len(self.opt), 7):
-               self.results[i] = dict()
-               for position, key in enumerate(param_names):
-                  self.results[i][key] = ufloat(
-                      self.opt[i + position],
-                      self.variance[i + position]
-                  )
+    def format_results(self):
+        # Class method for taking the results of the fit and
+        # actually formatting them into a presentable dictionary
+        self.results = dict()
+        param_names = ["A1", "A2", "W1", "W2", "center", "doppler_splitting", "offset"]
+        self.variance = np.sqrt(np.diag(self.cov))
+        # Calculate the uncertainties of the parameters
+        if self.opt is not None:
+            for index, i in enumerate(range(0, len(self.opt), 7)):
+                self.results[index] = dict()
+                for position, key in enumerate(param_names):
+                   self.results[index][key] = ufloat(
+                       self.opt[i + position],
+                       self.variance[i + position]
+                   )
 
     def calculate_doppler(self):
         # Function for approximating the Doppler splitting based
