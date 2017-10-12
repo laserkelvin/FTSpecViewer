@@ -73,3 +73,7 @@ The peak finding is done using the `peakutils` routines. Simple as that.
 ### Uncertainties
 
 Because I'm lazy and bad with estimating uncertainty, I rely on the `uncertainties` package to perform the error propagation in routines where fitting is done. The covariance matrix from `curve_fit` is used to estimate the variance, which is then packaged together with the optimized parameter as a `ufloat`.
+
+### Fitting routines
+
+Part of routine analysis is to determine the center frequency for a pair of Doppler peaks.

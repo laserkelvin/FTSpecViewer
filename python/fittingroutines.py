@@ -1,5 +1,6 @@
 import peakutils
 from scipy.optimize import curve_fit
+from scipy import constants
 from uncertainties import ufloat, unumpy
 import numpy as np
 
@@ -50,6 +51,19 @@ def doppler_pair(x, a1, a2, w1, w2, center, doppler_splitting, offset):
     return lorentzian_func(x, a1, center - doppler_splitting, w1, offset) + \
            lorentzian_func(x, a2, center + doppler_splitting, w2, offset)
 
+def arb_doppler_func(x, *params):
+    """ 
+         Fit an arbitrary number of Doppler pairs to data.
+
+         The argument params is given as a list of dictionaries,
+         each of which has the parameters for a particular Doppler
+         pair.
+    """
+    y = np.zeros(len(x))
+    for param in params:
+        y+=doppler_pair(x, **param)
+    return y
+
 
 def fit_doppler_pair(fft_df, center=None):
     if "Fit" not in list(fft_df.keys()):
@@ -63,7 +77,7 @@ def fit_doppler_pair(fft_df, center=None):
     initial = [5e-2, 5e-2, 0.01, 0.01, center, 0.001, 0.]
     bounds = (
         [0., 0., 1e-4, 1e-4, center - 0.01, 0., -np.inf],
-        [np.inf, np.inf, 0.025, 0.025, center + 0.01, 0.6, np.inf]
+        [np.inf, np.inf, 0.025, 0.025, center + 0.01, 1.0, np.inf]
     )
     # Call the scipy fitting wrapper
     popt, pcov = curve_fit(
@@ -128,3 +142,134 @@ def flatten_list(nested_list):
         for item in sublist:
             flattened_list.append(item)
     return flattened_list
+
+
+class FitModel:
+    """
+       FitModel class
+
+       This class acts as a medium between the spectral data, and a way
+       to actually fit the data in a flexible/physically meaningful manner.
+
+       This class will handle the number of Doppler peaks, and whatever
+       physical parameters that may be relevant (e.g. inert gas, radical)
+       in determining the line shape and fitting parameters.
+       Using these attributes, a fitting function will be dynamically
+       generated that can be fit to using a class method. The derived
+       parameters will be formatted before handing it back to the main
+       program.
+    """
+    def __init__(self, guess_frequencies):
+        self.parameter_dict = dict()
+        self.guess_frequencies = list()
+        self.model = None
+        self.npairs = 0
+        if len(self.guess_frequencies) > 0:
+            self.npairs = len(self.guess_frequencies)
+        self.gas = None
+        self.radical = False
+
+    def generate_params(self):
+        # Function to generate a dictionary of parameters using
+        # class attributes
+        param_dict = {
+            "a1": 1e-2,
+            "a2": 1e-2,
+            "offset": 0.
+        }
+        # Calculate the Doppler splitting depending on what gas is used
+        param_dict["doppler_splitting"] = calculate_doppler() / 2.
+        # Fat peaks for radicals
+        if self.radical is True:
+            param_dict["w1"] = 0.13
+            param_dict["w2"] = 0.13
+        else:
+            param_dict["w1"] = 0.05
+            param_dict["w2"] = 0.05
+        return param_dict
+
+    def generate_func_input(self):
+        # Function that will generate the model function, including
+        # the initial guess for parameters and the boundary conditions
+        self.param_list = list()
+        self.boundary_list = list()
+        # Parameters
+        upper_bounds = list()
+        lower_bounds = list()
+        for index, frequency in enumerate(self.guess_frequencies):
+            param_dict = generate_params()
+            param_dict["center"] = frequency
+            self.param_list.append(param_dict)
+            upper_bounds.append(
+                [
+                    np.inf,  # A1
+                    np.inf,  # A2
+                    param_dict["w1"] + 0.03,   # W1
+                    param_dict["w2"] + 0.03,   # W2
+                    param_dict["center"] + 0.1,
+                    param_dict["doppler_splitting"] + 0.1,
+                    np.inf
+                ]
+            )
+            lower_bounds.append(
+                [
+                    0.,  # A1
+                    0.,  # A2
+                    param_dict["w1"] - 0.03,   # W1
+                    param_dict["w2"] - 0.03,   # W2
+                    param_dict["center"] - 0.1,
+                    param_dict["doppler_splitting"] - 0.1,
+                    -np.inf
+                ]
+            )
+        upper_bounds = flatten_list(upper_bounds)
+        lower_bounds = flatten_list(lower_bounds)
+        self.boundary_list = (lower_bounds, upper_bounds)
+
+   def format_results(self):
+       # Class method for taking the results of the fit and
+       # actually formatting them into a presentable dictionary
+       self.results = dict()
+       param_names = ["A1", "A2", "W1", "W2", "center", "doppler_splitting", "offset"]
+       self.variance = np.sqrt(np.diag(self.cov))
+       # Calculate the uncertainties of the parameters
+       if self.opt:
+           for i in range(0, len(self.opt), 7):
+               self.results[i] = dict()
+               for position, key in enumerate(param_names):
+                  self.results[i][key] = ufloat(
+                      self.opt[i + position],
+                      self.variance[i + position]
+                  )
+
+    def calculate_doppler(self):
+        # Function for approximating the Doppler splitting based
+        # on the inert gas used in the expansion
+        # I assume a velocity of 1800 m/s for helium, and that the
+        # kinetic energy is the same regardless of the gas used.
+        # The Doppler shift is calculated for a frequency of 10 GHz.
+        if self.gas == "H2":
+            mass = 2.016
+        elif self.gas == "He":
+            mass = 4.0026
+        elif self.gas == "Ne":
+            mass = 20.1797
+        elif self.gas == "Ar":
+            mass = 39.948
+        elif self.gas == "Kr":
+            mass = 83.798
+        elif self.gas == "Xe":
+            mass = 131.29
+
+        if len(self.guess_frequencies) > 0:
+            # If frequencies are available, get the guess from them
+            frequency = np.average(self.guess_frequencies)
+        else:
+            # Otherwise, default to 10 GHz
+            frequency = 10000.
+        # Assuming same kinetic energy, calculate velocity
+        velocity = ((4.0026 * 1800.**2.) / mass)**0.5
+        # Calculate frequency shift in MHz
+        shift = (velocity * frequency) / constants.c
+        return shift
+
