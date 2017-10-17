@@ -145,8 +145,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.picked_frequencies.append(np.average(self.pair))
                 self.pair = list()                  # reset the pair list
                 self.fit_model = FitModel(self.picked_frequencies)
-                self.fit_model.gas = "H2"           # placeholder for setting gas
-                self.fit_model.radical = False
+                self.fit_model.gas = self.comboBoxRareGas.currentText()
+#                self.fit_model.radical = self.checkBoxRadical.currentState()   # not sure if correct
                 self.fit_model.generate_func_input()
                 self.fit_model.fit_model(
                     self.data.spectrum["Frequency"].values,
@@ -155,8 +155,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.data.spectrum["Fit"] = self.fit_model.model
                 self.doppler_param = self.fit_model.results
                 self.update_doppler_table()
+                for pairindex in self.doppler_param:
+                    doppler = self.doppler_param[pairindex]["doppler_splitting"] 
+                    center = self.doppler_param[pairindex]["center"]
+                    peaks = [doppler - center, doppler + center]
+                    self.doppler_plotlines[pairindex] = []
                 self.update_plot()
-
 
     def auto_doppler(self):
         # Detect peaks Automatically

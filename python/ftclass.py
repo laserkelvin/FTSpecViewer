@@ -62,16 +62,8 @@ class FTData:
         self.fid_df = None
         # Make a copy of the original FID
         proc_fid = np.copy(self.fid)
-        if band_pass is not None:
-            # Apply a band-pass filter to the FID signal.
-            if band_pass[0] < band_pass[1]:
-                # Make sure the low pass frequency doesn't exceed the high pass
-                proc_fid = apply_butter_filter(
-                    proc_fid,
-                    band_pass[0],
-                    band_pass[1],
-                    1. / self.settings["FID spacing"]
-                )
+        # Remove DC?
+        proc_fid = proc_fid - np.average(proc_fid)
         # Set the FID time points to zero
         if delay is not None and delay > 0.:
             proc_fid[:int(delay)] = 0.
@@ -86,6 +78,16 @@ class FTData:
         # Apply the exponential filter to smooth
         if exp_filter is not None and exp_filter > 0.:
             proc_fid *= spsig.exponential(proc_fid.size, tau=exp_filter)
+        if band_pass is not None:
+            # Apply a band-pass filter to the FID signal.
+            if band_pass[0] < band_pass[1]:
+                # Make sure the low pass frequency doesn't exceed the high pass
+                proc_fid = apply_butter_filter(
+                    proc_fid,
+                    band_pass[0],
+                    band_pass[1],
+                    1. / self.settings["FID spacing"]
+                )
         # Perform the FFT
         amplitude = np.fft.fft(proc_fid)
 

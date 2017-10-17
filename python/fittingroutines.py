@@ -234,7 +234,7 @@ class FitModel:
                     param_dict["W1"] + 0.01,   # W1
                     param_dict["W2"] + 0.01,   # W2
                     param_dict["center"] + 0.1,
-                    param_dict["doppler_splitting"] + 0.05,
+                    param_dict["doppler_splitting"] + 0.07,
                     np.inf
                 ]
             )
@@ -245,7 +245,7 @@ class FitModel:
                     param_dict["W1"] - 0.01,   # W1
                     param_dict["W2"] - 0.01,   # W2
                     param_dict["center"] - 0.1,
-                    param_dict["doppler_splitting"] - 0.05,
+                    param_dict["doppler_splitting"] - 0.07,
                     -np.inf
                 ]
             )
