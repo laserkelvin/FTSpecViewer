@@ -75,8 +75,8 @@ class BatchViewerWindow(QMainWindow, Ui_BatchViewer):
                 widget.setEnabled(False)
 
     def link_ui_actions(self):
-        # Currently not working!
         self.actionClose.triggered.connect(self.close)
+        self.actionSave_spectrum.connect(self.save_spectrum)
         # Reprocess FIDs button
         self.pushButtonReprocess.clicked.connect(self.reprocess_fids)
         # Fit DR buttons

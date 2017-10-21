@@ -10,7 +10,6 @@ def parse_batch(filepath, peek=True):
     read_spectrum = False
     read_scans = False
     read_calscans = False
-    spectrum = None                    # placeholder for the composite spectrum
     # Open file for reading
     with open(filepath, "r") as read_file:
         # General method for parsing details about a batch run
@@ -81,6 +80,8 @@ def parse_fid(filepath, mmw=False):
     read_fid = False
     settings = dict()
     comments = list()
+    gases = dict()
+    timings = dict()
     fid = list()
     with open(filepath, "r") as read_file:
         if mmw is False:
@@ -125,6 +126,28 @@ def parse_fid(filepath, mmw=False):
                 elif "DR freq" in comment:
                     # Double resonance frequency in MHz
                     settings["DR frequency"] = float(split_comment[2])
+                elif "DR power" in comment:
+                    settings["DR power"] = int(split_comment[2])
+                elif "Pressure" in comment:
+                    settings["Pressure"] = float(split_comment[1])
+                elif "Rep rate" in comment:
+                    settings["Rep rate"] = int(split_comment[2])
+                elif "Magnet" in comment:
+                    settings["Magnet"] = int(split_comment[2]) != 0
+                elif "Gas" in comment:
+                    if str(split_comment[1]) not in gases.keys():
+                        gases[str(split_comment[1])] = dict()
+                    try:
+                        if "name" in comment:
+                            gases[split_comment[1]]["Name"] = split_comment[3]
+                        elif "flow" in comment:
+                            gases[split_comment[1]]["Flow"] = split_comment[3]
+                    except IndexError:
+                        pass
+                elif "Pulse ch" in comment:
+                    if split_comment[2] not in timings.keys():
+                        timings[split_comment[2]] = dict()
+                    timings[split_comment[2]][split_comment[3]] = split_comment[4]
         elif mmw is True:
             read_params = False
             read_int = False

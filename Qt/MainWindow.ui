@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>849</height>
+    <width>1325</width>
+    <height>838</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -230,7 +230,7 @@ font-size: 15px
      <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>285</width>
+        <width>300</width>
         <height>16777215</height>
        </size>
       </property>
@@ -452,7 +452,7 @@ font-size: 15px
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>282</width>
+          <width>296</width>
           <height>750</height>
          </rect>
         </property>
@@ -697,7 +697,116 @@ font-size: 15px
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="tableWidgetDopplerPeaks"/>
+          <layout class="QFormLayout" name="formLayout_4">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="comboBoxRareGas">
+             <item>
+              <property name="text">
+               <string>Ne</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>H2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>He</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Ar</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Kr</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Xe</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_20">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Buffer Gas</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="spinBoxPeakNumber"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Remove Peak</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButtonRemovePeak">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/icons/icons/minus-8x.png</normalon>
+              </iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QCheckBox" name="checkBoxRadical">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_24">
+             <property name="font">
+              <font>
+               <family>Roboto,sans-serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Radical?</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidgetDopplerPeaks">
+           <property name="minimumSize">
+            <size>
+             <width>98</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -867,8 +976,8 @@ font-size: 15px
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
-     <height>22</height>
+     <width>1325</width>
+     <height>17</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -924,15 +1033,6 @@ QMenuBar::item:pressed {
     <addaction name="actionSettings"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuFitting">
-    <property name="title">
-     <string>Fitting</string>
-    </property>
-    <addaction name="actionFit_Gaussian"/>
-    <addaction name="actionManual_FFT_peaks"/>
-    <addaction name="actionPick_Gaussians"/>
-    <addaction name="separator"/>
-   </widget>
    <widget class="QMenu" name="menuOverlays">
     <property name="title">
      <string>Overlays</string>
@@ -948,7 +1048,6 @@ QMenuBar::item:pressed {
     <addaction name="actionOverlay_settings"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuFitting"/>
    <addaction name="menuOverlays"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -1112,6 +1211,7 @@ QMenuBar::item:pressed {
  </customwidgets>
  <resources>
   <include location="fonts.qrc"/>
+  <include location="icons.qrc"/>
  </resources>
  <connections/>
 </ui>

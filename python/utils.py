@@ -13,7 +13,7 @@ import socket
 import ntpath
 import numpy as np
 
-from parser import *
+from parsers import *
 
 
 def FTDateTime(datestring):
@@ -94,7 +94,7 @@ def AddDatabaseEntry(database, group, filepath):
         entry_instance.attrs["created"] = datetime.now().strftime(
             '%m/%d/%Y %H:%M:%S'
         )
-        if group == "scan":
+        if group == "scans":
             # This case is for FIDs
             settings, fid = parse_fid(filepath)
             FID_entry = entry_instance.create_dataset(
@@ -107,7 +107,9 @@ def AddDatabaseEntry(database, group, filepath):
                 if parameter == "Date":
                     # Date is a special case, where we should convert it
                     # into an datetime object first.
-                    FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
+                    FID_entry.attrs["Date"] = FTDateTime(settings["Date"]).strftime(
+                        '%m/%d/%Y %H:%M:%S'
+                    )
                 else:
                     FID_entry.attrs[parameter] = settings[parameter]
         elif group in ["surveys", "dr", "batch"]:
