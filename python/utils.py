@@ -104,14 +104,7 @@ def AddDatabaseEntry(database, group, filepath):
                 compression_opts=9,
             )
             for parameter in settings:
-                if parameter == "Date":
-                    # Date is a special case, where we should convert it
-                    # into an datetime object first.
-                    FID_entry.attrs["Date"] = FTDateTime(settings["Date"]).strftime(
-                        '%m/%d/%Y %H:%M:%S'
-                    )
-                else:
-                    FID_entry.attrs[parameter] = settings[parameter]
+                entry_instance.attrs[parameter] = settings[parameter]
         elif group in ["surveys", "dr", "batch"]:
             # For every other case
             if filepath is not None:
@@ -124,12 +117,7 @@ def AddDatabaseEntry(database, group, filepath):
                         compression_opts=9
                     )
                 for parameter in settings:
-                    if parameter == "Date":
-                        # Date is a special case, where we should convert it
-                        # into an datetime object first.
-                        FID_entry.attrs["Date"] = FTDateTime(settings["Date"])
-                    else:
-                        FID_entry.attrs[parameter] = settings[parameter]
+                    entry_instance.attrs[parameter] = settings[parameter]
         elif group == "chirp":
             raise NotImplementedError("Chirp support not implemented yet.")
     database.attrs["modified"] = datetime.now().strftime('%m/%d/%Y %H:%M:%S')

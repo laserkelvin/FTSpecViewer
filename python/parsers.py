@@ -99,6 +99,8 @@ def parse_fid(filepath, mmw=False):
                 if "Scan" in comment:
                     # Read in the scan ID
                     settings["ID"] = "-".join(split_comment[1:])
+                if "Date" in comment:
+                    settings["Date"] = comment
                 elif "Shots" in comment:
                     # Read in the number of Shots
                     settings["Shots"] = int(split_comment[1])
@@ -134,20 +136,6 @@ def parse_fid(filepath, mmw=False):
                     settings["Rep rate"] = int(split_comment[2])
                 elif "Magnet" in comment:
                     settings["Magnet"] = int(split_comment[2]) != 0
-                elif "Gas" in comment:
-                    if str(split_comment[1]) not in gases.keys():
-                        gases[str(split_comment[1])] = dict()
-                    try:
-                        if "name" in comment:
-                            gases[split_comment[1]]["Name"] = split_comment[3]
-                        elif "flow" in comment:
-                            gases[split_comment[1]]["Flow"] = split_comment[3]
-                    except IndexError:
-                        pass
-                elif "Pulse ch" in comment:
-                    if split_comment[2] not in timings.keys():
-                        timings[split_comment[2]] = dict()
-                    timings[split_comment[2]][split_comment[3]] = split_comment[4]
         elif mmw is True:
             read_params = False
             read_int = False
